@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Octopus Animation</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            background-image: url('./1.jg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            font-size: .66vh;
+            display: grid;
+            border: none;
+            overflow: hidden;
+        }
+
+        :where(body *),
+        .scene *::before,
+        .scene *::after {
+            position: absolute;
+        }
+
+        .scene {
+            height: 100em;
+            aspect-ratio: .5;
+            place-self: center;
+            perspective: 150em;
+        }
+
+        .pivot {
+            animation: twirl 12s ease-in-out alternate infinite;
+        }
+
+        @keyframes twirl {
+            100% {
+                rotate: y 720deg;
+            }
+        }
+
+        .octo {
+            display: grid;
+            animation: throttle 12s ease-in-out infinite;
+        }
+
+        @keyframes throttle {
+            0%, 100% {
+                transform: translateY(10%);
+            }
+            20% {
+                transform: translateY(-10%);
+            }
+        }
+
+        .head, .tentacles {
+            font-size: .5em;
+            width: 100em;
+            aspect-ratio: 1;
+            justify-self: center;
+            position: relative;
+        }
+
+        .scene *,
+        .scene *::before,
+        .scene *::after {
+            transform-style: preserve-3d;
+        }
+
+        .pivot, .octo, .head, .aux, .aux *, .diagonals, .quaTriangle, .base, .base > div,
+        .tentacles :not(.anchor)::before, .tentacles :not(.anchor)::after {
+            inset: 0;
+        }
+
+        :is(.quaTriangle,.diagonals, .quarters, .eights) div,
+        .anchor div::before {
+            background-color: hsl(calc(120deg + 12deg*var(--vColor)) 100% 25%);
+            filter: brightness(calc(1 - .25*var(--hDarken)));
+        }
+
+        .quaTriangle {
+            display: grid;
+            justify-items: center;
+            transform: var(--turn) translateZ(50em);
+        }
+
+        .quaTriangle:is(:nth-child(1),:nth-child(2)) {
+            --turn: rotateY(calc(90deg*(1 + var(--qDir))));
+            --qStep: 0;
+        }
+
+        .quaTriangle:is(:nth-child(3),:nth-child(4)) {
+            --turn: rotateY(calc(90deg*var(--qDir)));
+            --qStep: 2;
+        }
+
+        .quaTriangle:is(:nth-child(5),:nth-child(5)) {
+            --turn: rotateX(calc(90deg*var(--qDir)));
+            --qStep: 1;
+        }
+
+        .quaTriangle:nth-child(odd) {
+            --qDir: 1;
+        }
+        .quaTriangle:nth-child(2n) {
+            --qDir: -1;
+        }
+
+        :is(.quaTriangle,.diagonals) div {
+            --quatriH: calc(cos(asin(.25/(sin(22.5deg))))*sin(22.5deg));
+        }
+
+        .quaTriangle div {
+            width: 50em;
+            height: calc(var(--quatriH)*100em);
+            top: 50%;
+            clip-path: polygon(50% -1%, 101% 101%, -1% 101%);
+            transform-origin: 50% 0;
+            --quatriAngle: calc(-1*asin((1 - sin(45deg))/2/var(--quatriH) ) );
+            transform: rotate(calc(45deg + 90deg*var(--fStep))) rotateX(var(--quatriAngle));
+        }
+
+        .quaTriangle div:nth-child(1) {
+            --fStep: 0;
+        }
+
+        .quaTriangle div:nth-child(2) {
+            --fStep: 1;
+        }
+
+        .quaTriangle div:nth-child(3) {
+            --fStep: 2;
+        }
+
+        .quaTriangle div:nth-child(4) {
+            --fStep: 3;
+        }
+
+        /* DIAGONAL TRIANGLES / CORNERS */
+
+        .diagonals {
+            display: grid;
+            place-items: center;
+        }
+
+        .diagonals div {
+            transform: rotateY(calc(45deg + 90deg*var(--dStep))) rotateX(calc(var(--dDir)*asin(tan(30deg)))) translateZ(calc(sin(45deg)/sin(60deg)*50em));
+            width: calc(var(--quatriH)*200em);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            clip-path: polygon(
+                calc(50%*(1 + sin(0deg))) calc(50%*(1 + cos(0deg)*var(--dDir))),
+                calc(50%*(1 + sin(120deg))) calc(50%*(1 + cos(120deg)*var(--dDir))),
+                calc(50%*(1 + sin(240deg))) calc(50%*(1 + cos(240deg)*var(--dDir))) 
+            );
+            padding: .3%
+        }
+
+        :is(.diagonals,.eights,.tentacles) div:is(:nth-child(1),:nth-child(2)),
+        .quarters div:nth-child(1) {
+            --dStep: 0;
+        }
+
+        :is(.diagonals,.eights,.tentacles) div:is(:nth-child(3),:nth-child(4)),
+        .quarters div:nth-child(2) {
+            --dStep: 1;
+        }
+
+        :is(.diagonals,.eights,.tentacles) div:is(:nth-child(5),:nth-child(6)),
+        .quarters div:nth-child(3) {
+            --dStep: 2;
+        }
+
+        :is(.diagonals,.eights,.tentacles) div:is(:nth-child(7),:nth-child(8)),
+        .quarters div:nth-child(4) {
+            --dStep: 3;
+        }
+
+        :is(.diagonals,.eights,.tentacles) div:nth-child(odd) {
+            --dDir: 1;
+        }
+
+        :is(.diagonals,.eights,.tentacles) div:nth-child(2n) {
+            --dDir: -1;
+        }
+
+        .quaTriangle:nth-child(5) div:nth-child(4),
+        .diagonals div:is(:nth-child(1),:nth-child(2)),
+        .quarters div:nth-child(1),
+        :is(.eights div, .anchor) div:nth-child(2) {
+            --vColor: 0;
+        }
+
+        .quaTriangle:nth-child(3) div:is(:nth-child(1),:nth-child(2)),
+        .quaTriangle:nth-child(2) div:is(:nth-child(3),:nth-child(4)),
+        :is(.eights div, .anchor):is(:nth-child(1),:nth-child(4)) {
+            --vColor: 1.33;
+        }
+
+        .quaTriangle:nth-child(3) div:is(:nth-child(3),:nth-child(4)),
+        .quaTriangle:nth-child(2) div:is(:nth-child(1),:nth-child(2)),
+        .quarters div:nth-child(3),
+        :is(.eights div, .anchor):is(:nth-child(2),:nth-child(3)) {
+            --vColor: 2.66;
+        }
+
+        .quaTriangle:nth-child(5) div:is(:nth-child(1),:nth-child(3)),
+        .diagonals div:is(:nth-child(4n+3),:nth-child(4n+4)),
+        .quarters div:is(:nth-child(2),:nth-child(4)) {
+            --vColor: 4;
+        }
+
+        .quaTriangle:nth-child(1) div:is(:nth-child(1),:nth-child(2)),
+        .quaTriangle:nth-child(4) div:is(:nth-child(3),:nth-child(4)),
+        :is(.eights div, .anchor):is(:nth-child(6),:nth-child(7)) {
+            --vColor: 5.33;
+        }
+
+        .quaTriangle:nth-child(1) div:is(:nth-child(3),:nth-child(4)),
+        .quaTriangle:nth-child(4) div:is(:nth-child(1),:nth-child(2)),
+        :is(.eights div, .anchor):is(:nth-child(5),:nth-child(8)) {
+            --vColor: 6.66;
+        }
+
+        .quaTriangle:nth-child(5) div:nth-child(2),
+        .diagonals div:is(:nth-child(5),:nth-child(6)),
+        .quarters div:nth-child(3) {
+            --vColor: 8;
+        }
+
+        .quaTriangle:nth-child(5) div {
+            --hDarken: 0;
+        }
+
+        .diagonals div:nth-child(odd),
+        .quaTriangle:not(:nth-child(5)) div:is(:nth-child(2),:nth-child(3)) {
+            --hDarken: 1;
+        }
+
+        .eights div {
+            --hDarken: 1.5;
+        }
+
+        .diagonals div:nth-child(2n),
+        .quaTriangle:not(:nth-child(5)) div:is(:nth-child(1),:nth-child(4)) {
+            --hDarken: 2;
+        }
+
+        /* OCTOPUS FACIAL DETAILS */
+
+        /* the eyes */
+
+        .quaTriangle:nth-child(2) div:is(:nth-child(1),:nth-last-child(1)),
+        .diagonals div:is(:nth-child(2),:nth-child(8)) {
+            --eyes: conic-gradient(from var(--conAngle) at var(--conOrig), black 90deg, transparent 0), radial-gradient(circle at var(--radOrig), yellow 0 13em, transparent 0);
+            background-image: var(--eyes); 
+        }
+
+        .quaTriangle:nth-child(2) div:is(:nth-child(1),:nth-last-child(1)) {
+            --radOrig: 50% 100%;
+            --conOrig: 50% 75%;
+            --conAngle: 135deg;
+            animation: frown 12s ease-in-out alternate infinite;
+        }
+
+        @keyframes frown {
+            0%, 30%, 70%, 100% {
+                background-image: var(--eyes);
+            }
+            50% {
+                background-image: none;
+            }
+        }
+
+        .diagonals div:is(:nth-child(2),:nth-child(8)) {
+            --radOrig: calc(50%*(1 + var(--graDir)*sin(60deg)/2)) calc(50%*(1 - cos(60deg)/2));
+            --conOrig: calc(50% + 16%*var(--graDir)) 48%;
+            --conAngle: calc(-45deg*(1 - var(--graDir)));
+        }
+
+        .diagonals div:nth-child(8) {
+            --graDir: 1;
+        }
+
+        .diagonals div:nth-child(2) {
+            --graDir: -1;
+        }
+
+        /* THE "NECK "*/
+
+        .quarters div {
+            inset-inline: 25em;
+            height: calc(sin(45deg)*100em*(1 - sin(45deg))*sin(60deg));
+            --qAngle: calc(atan(sin(45deg)));
+            top: calc(50em*(1 + sin(45deg)));
+            transform-origin: 50% 0;
+            transform: rotateY(calc(45deg + 90deg*var(--dStep))) translateZ(25em) rotateX(var(--qAngle));
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+        }
+
+        .quarters::before {
+            content: '';
+            position: absolute;
+            inset: calc(50em*(1 - sin(45deg)));
+            transform: rotateX(-90deg) translateZ(50em);
+            background: purple;
+            clip-path: polygon(
+                calc(50%*(1 + sin(1*45deg))) calc(50%*(1 + cos(1*45deg))),
+                calc(50%*(1 + sin(2*45deg))) calc(50%*(1 + cos(2*45deg))),
+                calc(50%*(1 + sin(3*45deg))) calc(50%*(1 + cos(3*45deg))),
+                calc(50%*(1 + sin(4*45deg))) calc(50%*(1 + cos(4*45deg))),
+                calc(50%*(1 + sin(5*45deg))) calc(50%*(1 + cos(5*45deg))),
+                calc(50%*(1 + sin(6*45deg))) calc(50%*(1 + cos(6*45deg))),
+                calc(50%*(1 + sin(7*45deg))) calc(50%*(1 + cos(7*45deg))),
+                calc(50%*(1 + sin(8*45deg))) calc(50%*(1 + cos(8*45deg)))
+            )
+        }
+
+        .eights, .tentacles {
+            display: grid;
+            justify-items: center;
+        }
+
+        .eights div {
+            height: calc(50em*(1 - sin(45deg)));
+            bottom: 0;
+            transform-origin: 50% 100%;
+            clip-path: polygon(calc(50%*(1 - var(--dDir))) 0, calc(50%*(1 + var(--dDir))) 100%, calc(50%*(1 - var(--dDir))) 100%);
+            transform: rotateY(calc(22.5deg*var(--dDir) + 90deg*var(--dStep))) translateZ(calc(sin(45deg)*50em*cos(22.5deg)));
+        }
+
+        :is(.eights,.tentacles) div {
+            width: calc(25em/cos(22.5deg));
+            padding: 0.01em;
+        }
+
+        .tentacles div {
+            position: absolute;
+            transform-origin: 50% 0;
+        }
+
+        .anchor {
+            transform: rotateY(calc(22.5deg*var(--dDir) + 90deg*var(--dStep))) translateZ(calc(sin(45deg)*50em*cos(22.5deg))) rotateX(15deg);
+        }
+
+        .tentacles :not(.anchor) {
+            top: 100%;
+            height: calc(100em/7);
+            animation: flap 3s linear alternate infinite;
+            animation-delay: calc(-3s + 3s/7*var(--tStep));
+        }
+
+        @keyframes flap {
+            0% {
+                rotate: x -10deg;
+            }
+            100% {
+                rotate: x 10deg;
+            }
+        }
+
+        .tentacles :not(.anchor)::before,
+        .tentacles :not(.anchor)::after {
+            content: '';
+            margin-block: -1%;
+            clip-path: polygon(
+                calc(50%*(1 - sin(90deg*(1 - var(--tStep)/7)))) 0,
+                calc(50%*(1 + sin(90deg*(1 - var(--tStep)/7)))) 0,
+                calc(50%*(1 + sin(90deg*(1 - (var(--tStep) + 1)/7)))) 100%,
+                calc(50%*(1 - sin(90deg*(1 - (var(--tStep) + 1)/7)))) 100%
+            );
+        }
+
+        .tentacles :not(.anchor)::before {
+            animation: darken 3s linear alternate infinite;
+            animation-delay: calc(-3s + 3s/7*var(--tStep));  
+        }
+
+        @keyframes darken {
+            0% {
+                filter: brightness(.5);
+            }
+            100% {
+                filter: brightness(1);
+            }
+        }
+
+        .tentacles :not(.anchor)::after {
+            rotate: y .5turn;
+            backface-visibility: hidden;
+            background-color: #0008;
+            background-image: radial-gradient(circle, transparent calc(20%*(sin(90deg*(1 - var(--tStep)/7)))), #0008 calc(40%*(sin(90deg*(1 - var(--tStep)/7)))), transparent 0);
+        }
+
+        .anchor>div {
+            --tStep: 0;
+        } 
+
+        .anchor>div>div {
+            --tStep: 1;
+        }
+
+        .anchor>div>div>div {
+            --tStep: 2;
+        }
+
+        .anchor>div>div>div>div {
+            --tStep: 3;
+        }
+
+        .anchor>div>div>div>div>div {
+            --tStep: 4;
+        }
+
+        .anchor>div>div>div>div>div>div {
+            --tStep: 5;
+        }
+
+        .anchor>div>div>div>div>div>div>div {
+            --tStep: 6;
+        }
+
+        /* PLAY/PAUSE buttons & f/x */
+
+        input {
+            display: none;
+        }
+
+        label {
+            position: relative;
+            display: grid;
+            place-items: center;
+            font-size: .6vmin;
+            height: max(30em, 80px);
+            width: 0;
+            margin: min(5em, 20px);
+            border-style: solid;
+            border-left-color: #ff0;
+            border-right-color: #ff0;
+            border-width: 0 max(15em, 40px);
+            border-radius: 50%;
+            transition: all .5s ease-in-out;
+        }
+
+        label::before {
+            content: '';
+            position: absolute;
+            width: max(18em, 48px);
+            aspect-ratio: 1;
+            background: #000;
+            clip-path: polygon(14% 0, 100% 50%, 14% 100%);
+            transition: inherit;
+        }
+
+        label:hover::before {
+            scale: 1.25;
+        }
+
+        #playPause:checked ~ label {
+            width: max(8em, 21px);
+            border-radius: 0;
+            border-width: 0 max(10em, 27px);
+            border-left-color: #080;
+            border-right-color: #08f
+        }
+
+        #playPause:checked ~ label::before {
+            scale: 1 0;
+        }
+
+        #playPause:not(:checked) ~ .scene :is(.pivot,.octo,.quaTriangle:nth-child(2) div:is(:nth-child(1),:nth-last-child(1)),.tentacles :not(.anchor)),
+        #playPause:not(:checked) ~ .scene .tentacles :not(.anchor)::before {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body>
+    <input type="checkbox" name="playPause" id="playPause">
+    <label for="playPause"></label>
+
+    <div class="scene">
+        <div class="pivot">
+            <div class="octo">
+                <div class="head">
+                    <div class="quaTriangle">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="quaTriangle">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="quaTriangle">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="quaTriangle">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    <div class="quaTriangle">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                    <div class="diagonals">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+
+                    <div class="base">
+                        <div class="quarters">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <div class="eights">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tentacles">
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="anchor">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

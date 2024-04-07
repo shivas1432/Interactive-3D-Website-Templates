@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Comparison Slider</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 30px 40px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .header-links {
+            text-align: right;
+        }
+
+        .made-with {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .brand-name {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .brand-name:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 40px 30px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .slide-counter {
+            color: white;
+        }
+
+        .current-slide {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .divider {
+            width: 23px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.25);
+            margin: 4px 0;
+        }
+
+        .total-slides {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .social-links {
+            text-align: right;
+        }
+
+        .social-links a {
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover,
+        .social-links a.active {
+            color: white;
+        }
+
+        /* Main Container */
+        .slider-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Slide */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* Before/After Container */
+        .before-after-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        .before-after-container:active {
+            cursor: grabbing;
+        }
+
+        .before-section,
+        .after-section {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+
+        .before-section {
+            left: 0;
+            clip-path: inset(0 50% 0 0);
+        }
+
+        .after-section {
+            right: 0;
+            clip-path: inset(0 0 0 50%);
+        }
+
+        /* Content Styles */
+        .slide-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(40px, 8vw, 70px);
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 0.9;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .slide-subtitle {
+            font-family: 'Licorice', cursive;
+            font-size: clamp(30px, 6vw, 47px);
+            margin-bottom: 40px;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.75);
+        }
+
+        .slide-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(35px, 7vw, 58px);
+            line-height: 1;
+            background: rgba(12, 12, 12, 0.5);
+            padding: 17px;
+            border-radius: 0;
+            max-width: 500px;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, #ff5e3a 0%, #ff2a68 100%);
+            color: white;
+            padding: 0 45px;
+            height: 54px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2.7px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            box-shadow: 0 9px 18px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Slider Handle */
+        .slider-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.35);
+            z-index: 100;
+            transform: translateX(-50%);
+            cursor: ew-resize;
+            touch-action: pan-y;
+        }
+
+        .slider-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 33px;
+            height: 33px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            touch-action: pan-y;
+        }
+
+        /* Navigation Arrows */
+        .nav-arrows {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 200;
+            pointer-events: none;
+        }
+
+        .nav-arrow {
+            width: 60px;
+            height: 60px;
+            background: #000;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            transition: all 0.3s ease;
+            pointer-events: all;
+            opacity: 1;
+            transform: translateY(-50%);
+        }
+
+        .nav-arrow:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow.left::before {
+            content: '‹';
+        }
+
+        .nav-arrow.right::before {
+            content: '›';
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 80px 40px;
+            position: relative;
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: #1c0950;
+            margin-bottom: 60px;
+        }
+
+        .testimonials-carousel {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 20px 0;
+            margin: 0 -20px;
+            padding-left: 20px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .testimonials-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            min-width: 380px;
+            max-width: 380px;
+            height: 440px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            scroll-snap-align: start;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stars {
+            color: #25c196;
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(28, 9, 80, 0.75);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .testimonial-author {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1c0950;
+        }
+        .slider-container {
+  width: 100%;     /* or a fixed width */
+  height: 500px;   /* or any height you want */
+  position: relative;
+  overflow: hidden;
+}
+
+.slide3 {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.before-after-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.before-section,
+.after-section {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+        /* Background styles */
+.before-section, .after-section {
+    background-size: cover;
+    background-position: center;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    color: white;
+    text-align: center;
+}
+
+/* General Titles */
+.slide-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 70px;
+    text-transform: uppercase;
+    letter-spacing: -3.8px;
+    line-height: 63px;
+}
+
+.stroked-title {
+    color: transparent;
+    -webkit-text-stroke: 1.9px white;
+}
+
+/* Subtitles */
+.slide-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+}
+
+/* Lightroom Label */
+.label-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3.6px;
+    padding: 5px 23px;
+    border-radius: 20px;
+    background: transparent;
+    margin-bottom: 20px;
+}
+
+.label-text.dark-bg {
+    background: rgba(12, 12, 12, 0.45);
+}
+
+/* Lightroom Main Heading */
+.main-heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 63px;
+    line-height: 1;
+    padding: 0 180px;
+}
+
+.main-heading.with-shadow {
+    text-shadow: 0 9px 45px rgba(0, 0, 0, 0.6);
+}
+
+/* Slide 3 subtitle */
+.alt-sub {
+    font-family: 'Licorice', cursive;
+    font-size: 47px;
+    text-shadow: rgba(0, 0, 0, 0.55) 0 3.8px 11.4px;
+}
+
+/* Motivational Quote */
+.quote-box {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 54px;
+    line-height: 54px;
+    background: rgba(12, 12, 12, 0.5);
+    backdrop-filter: blur(5px);
+    padding: 16px;
+    text-align: left;
+}
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header,
+            .footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .logo {
+                font-size: 15px;
+            }
+
+            .slide-title {
+                font-size: clamp(30px, 10vw, 50px);
+            }
+
+            .slide-subtitle {
+                font-size: clamp(25px, 8vw, 35px);
+            }
+
+            .slide-text {
+                font-size: clamp(25px, 8vw, 40px);
+                padding: 12px;
+            }
+
+            .cta-button {
+                padding: 0 30px;
+                height: 47px;
+                font-size: 10px;
+            }
+
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+
+            .testimonials-section {
+                padding: 60px 20px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .testimonial-card {
+                min-width: 300px;
+                max-width: 300px;
+                padding: 30px;
+                height: auto;
+            }
+
+            .testimonial-text {
+                font-size: 15px;
+            }
+        }
+
+        /* Slide-specific backgrounds */
+        .slide1 .before-section {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23667eea" width="1200" height="800"/><circle fill="%23764ba2" cx="300" cy="200" r="150" opacity="0.3"/><circle fill="%23667eea" cx="900" cy="600" r="200" opacity="0.4"/></svg>');
+        }
+
+        .slide1 .after-section {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23764ba2" width="1200" height="800"/><circle fill="%23667eea" cx="600" cy="400" r="180" opacity="0.3"/><circle fill="%23ff6b6b" cx="200" cy="600" r="120" opacity="0.4"/></svg>');
+        }
+
+        .slide2 .before-section {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23ffd89b" width="1200" height="800"/><rect fill="%2319547b" x="0" y="600" width="1200" height="200"/></svg>');
+        }
+
+        .slide2 .after-section {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%2319547b" width="1200" height="800"/><rect fill="%23ffd89b" x="0" y="600" width="1200" height="200"/></svg>');
+        }
+
+        .slide3 .before-section,
+        .slide3 .after-section {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23667eea" width="1200" height="800"/><polygon fill="%23764ba2" points="0,800 600,200 1200,800" opacity="0.6"/></svg>');
+        }
+
+        .slide4 .before-section,
+        .slide4 .after-section {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%2334495e" width="1200" height="800"/><rect fill="%234834d4" x="100" y="100" width="1000" height="600" opacity="0.3"/></svg>');
+        }
+
+        /* Font Loading */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Archivo+Black&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Licorice&family=Bebas+Neue&display=swap');
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                Image<br>
+                Comparison<br>
+                Slider
+            </div>
+            
+        </div>
+    </div>
+<div class="slider-container">
+ 
+
+    <!-- Slide 3: Self Perception -->
+    <div class="slide slide3">
+        <div class="before-after-container" data-slide="3">
+            <div class="before-section" style="background-image: url('pexels-eberhardgross-1004665.jpg');">
+                <div class="slide-subtitle alt-sub">what matters most is</div>
+                <div class="slide-title stroked-title">how you see<br>yourself</div>
+            </div>
+            <div class="after-section" style="background-image: url('pexels-rana-841343.jpg');">
+                <div class="slide-subtitle alt-sub">what matters most is</div>
+                <div class="slide-title">how you see<br>yourself</div>
+            </div>
+            <div class="slider-handle">
+                <div class="slider-button">
+                    <span>‹</span>
+                    <span>›</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+
+    <!-- Navigation Arrows -->
+    <div class="nav-arrows">
+        <button class="nav-arrow left" onclick="previousSlide()"></button>
+        <button class="nav-arrow right" onclick="nextSlide()"></button>
+    </div>
+</div>
+
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="footer-content">
+            <div class="slide-counter">
+                <div class="current-slide">03</div>
+                <div class="divider"></div>
+                <div class="total-slides">04</div>
+            </div>
+            <div class="social-links">
+                <a href="#">facebook</a>
+                <a href="#" class="active">instagram</a>
+                <a href="#">dribbble</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="testimonials-section">
+        <div class="testimonials-container">
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="testimonials-carousel">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"The people who build Slider Revolution's templates are masters. They've figured out ways to create really cool effects. I see them in the templates and they're amazing. Like the one with the portals that zooms through the doorways. Oh, I love it. I love it. I'm just waiting for my next client so I can suggest this one to them."</div>
+                    <div class="testimonial-author">Michael Conner</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"It's an excellent tool for bringing visual dynamism to my websites. With its user-friendly interface and extensive feature set, it has become an indispensable plugin for me. It's been a fantastic investment that has enhanced customer satisfaction."</div>
+                    <div class="testimonial-author">Mehmet Akif Orakci</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"I've been able to develop and deliver projects a lot faster using Slider Revolution, and it's become a preferred tool. We can ramp up a delivery in a very short amount of time. I think I spend about 40% less time now. Unlike with something like Elementor where you're almost using a blank whiteboard, we start at a higher level with Slider Revolution."</div>
+                    <div class="testimonial-author">Step Eldridge</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"This plugin is exactly what we creatives need to power our websites. It's freedom, it's versatility, it's reconciling you with the WordPress platform as a designer. I wouldn't know how to start a new project without Slider Revolution. It's worth so much more than it costs."</div>
+                    <div class="testimonial-author">Javier</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"The slider is excellent and does exactly what is needed. It is optimised to load fast and use modern image formats. There are a lot of great tutorials and templates to get you started. Highly recommend."</div>
+                    <div class="testimonial-author">Claire Devereux</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"I love the support videos. I just click the little help button in the editor and it helps me figure out what I need to do to get the end result I want. If I don't find what I want there, then it could be because the template I'm using can't do whatever it is I'm looking for."</div>
+                    <div class="testimonial-author">Michael Orr</div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-text">"I remember Slider Revolution stood out straight away as being one of the coolest plugins visually. But, obviously, there was a fee. So I went down the route of looking at some cheaper or free ones. But putting our visuals together with them didn't look great. I remember it looked good in the plugin, but when it went live, I was like, 'Oh, that looks a bit cheap'. So, I went back to Slider Revolution at that point."</div>
+                    <div class="testimonial-author">Stuart Luckhurst</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        let isDragging = false;
+
+        // Update slide counter
+        function updateSlideCounter() {
+            const counter = document.querySelector('.current-slide');
+            counter.textContent = String(currentSlide + 1).padStart(2, '0');
+        }
+
+        // Show specific slide
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            updateSlideCounter();
+        }
+
+        // Next slide
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Previous slide
+        function previousSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(currentSlide);
+        }
+
+        // Before/After slider functionality
+        function initBeforeAfterSlider() {
+            const containers = document.querySelectorAll('.before-after-container');
+            
+            containers.forEach(container => {
+                const handle = container.querySelector('.slider-handle');
+                const beforeSection = container.querySelector('.before-section');
+                const afterSection = container.querySelector('.after-section');
+                let isDragging = false;
+
+                function updateSlider(percentage) {
+                    percentage = Math.max(0, Math.min(100, percentage));
+                    
+                    handle.style.left = percentage + '%';
+                    beforeSection.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
+                    afterSection.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+                }
+
+                function handleMove(clientX) {
+                    if (!isDragging) return;
+                    
+                    const rect = container.getBoundingClientRect();
+                    const percentage = ((clientX - rect.left) / rect.width) * 100;
+                    updateSlider(percentage);
+                }
+
+                // Mouse events
+                handle.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    container.style.cursor = 'grabbing';
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    handleMove(e.clientX);
+                });
+
+                document.addEventListener('mouseup', () => {
+                    isDragging = false;
+                    container.style.cursor = 'grab';
+                });
+
+                // Touch events
+                handle.addEventListener('touchstart', (e) => {
+                    isDragging = true;
+                    e.preventDefault();
+                });
+
+                document.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0) {
+                        handleMove(e.touches[0].clientX);
+                    }
+                });
+
+                document.addEventListener('touchend', () => {
+                    isDragging = false;
+                });
+
+                // Click to position
+                container.addEventListener('click', (e) => {
+                    if (e.target === handle || e.target.closest('.slider-button')) return;
+                    
+                    const rect = container.getBoundingClientRect();
+                    const percentage = ((e.clientX - rect.left) / rect.width) * 100;
+                    updateSlider(percentage);
+                });
+
+                // Initialize at 50%
+                updateSlider(50);
+            });
+        }
+
+        // Auto-advance slides
+        function startAutoSlide() {
+            setInterval(() => {
+                if (!isDragging) {
+                    nextSlide();
+                }
+            }, 6000);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        });
+
+        // Testimonials carousel auto-scroll
+        function initTestimonialsCarousel() {
+            const carousel = document.querySelector('.testimonials-carousel');
+            const cards = document.querySelectorAll('.testimonial-card');
+            let currentIndex = 0;
+
+            function scrollToCard(index) {
+                const cardWidth = cards[0].offsetWidth + 20; // card width + gap
+                carousel.scrollTo({
+                    left: index * cardWidth,
+                    behavior: 'smooth'
+                });
+            }
+
+            function autoScrollTestimonials() {
+                currentIndex = (currentIndex + 1) % cards.length;
+                scrollToCard(currentIndex);
+            }
+
+            // Auto-scroll testimonials every 4 seconds
+            setInterval(autoScrollTestimonials, 4000);
+
+            // Handle manual scroll
+            carousel.addEventListener('scroll', () => {
+                const cardWidth = cards[0].offsetWidth + 20;
+                const newIndex = Math.round(carousel.scrollLeft / cardWidth);
+                if (newIndex !== currentIndex) {
+                    currentIndex = newIndex;
+                }
+            });
+        }
+
+        // Smooth scroll for anchor links
+        function smoothScrollToSection(targetId) {
+            const element = document.getElementById(targetId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+
+        // Add scroll reveal animations
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe testimonial cards
+            document.querySelectorAll('.testimonial-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        }
+
+        // Handle window resize
+        function handleResize() {
+            // Reinitialize sliders on resize
+            initBeforeAfterSlider();
+        }
+
+        // Preload images for better performance
+        function preloadImages() {
+            const imageUrls = [
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23667eea" width="1200" height="800"/><circle fill="%23764ba2" cx="300" cy="200" r="150" opacity="0.3"/><circle fill="%23667eea" cx="900" cy="600" r="200" opacity="0.4"/></svg>',
+                'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23764ba2" width="1200" height="800"/><circle fill="%23667eea" cx="600" cy="400" r="180" opacity="0.3"/><circle fill="%23ff6b6b" cx="200" cy="600" r="120" opacity="0.4"/></svg>'
+            ];
+
+            imageUrls.forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
+        }
+
+        // Add touch gesture support for mobile
+        function initTouchGestures() {
+            let startX = 0;
+            let startY = 0;
+            let isScrolling = false;
+
+            document.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                isScrolling = false;
+            });
+
+            document.addEventListener('touchmove', (e) => {
+                if (!startX || !startY) return;
+
+                const diffX = e.touches[0].clientX - startX;
+                const diffY = e.touches[0].clientY - startY;
+
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    isScrolling = true;
+                }
+            });
+
+            document.addEventListener('touchend', (e) => {
+                if (!startX || !startY || !isScrolling) return;
+
+                const diffX = e.changedTouches[0].clientX - startX;
+                const threshold = 100;
+
+                if (Math.abs(diffX) > threshold) {
+                    if (diffX > 0) {
+                        previousSlide();
+                    } else {
+                        nextSlide();
+                    }
+                }
+
+                startX = 0;
+                startY = 0;
+                isScrolling = false;
+            });
+        }
+
+        // Enhanced accessibility
+        function initAccessibility() {
+            // Add ARIA labels
+            const navArrows = document.querySelectorAll('.nav-arrow');
+            navArrows[0].setAttribute('aria-label', 'Previous slide');
+            navArrows[1].setAttribute('aria-label', 'Next slide');
+
+            // Add keyboard focus management
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    // Ensure proper tab order
+                    const focusableElements = document.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+                    
+                    // Add focus ring styles
+                    focusableElements.forEach(el => {
+                        el.addEventListener('focus', () => {
+                            el.style.outline = '2px solid #fff';
+                            el.style.outlineOffset = '2px';
+                        });
+                        
+                        el.addEventListener('blur', () => {
+                            el.style.outline = 'none';
+                        });
+                    });
+                }
+            });
+        }
+
+        // Performance optimization
+        function initPerformanceOptimizations() {
+            // Debounce resize handler
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(handleResize, 150);
+            });
+
+            // Use passive event listeners for better scroll performance
+            document.addEventListener('touchstart', (e) => {
+                // Touch start logic
+            }, { passive: true });
+
+            document.addEventListener('touchmove', (e) => {
+                // Touch move logic
+            }, { passive: true });
+        }
+
+        // Error handling and fallbacks
+        function initErrorHandling() {
+            // Check for required features
+            if (!('IntersectionObserver' in window)) {
+                // Fallback for older browsers
+                console.warn('IntersectionObserver not supported, using fallback');
+                document.querySelectorAll('.testimonial-card').forEach(card => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                });
+            }
+
+            // Handle image loading errors
+            document.querySelectorAll('img').forEach(img => {
+                img.addEventListener('error', () => {
+                    img.style.display = 'none';
+                });
+            });
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Initializing Image Comparison Slider...');
+            
+            // Core functionality
+            initBeforeAfterSlider();
+            initTestimonialsCarousel();
+            updateSlideCounter();
+            
+            // Enhanced features
+            initScrollAnimations();
+            initTouchGestures();
+            initAccessibility();
+            initPerformanceOptimizations();
+            initErrorHandling();
+            
+            // Performance enhancements
+            preloadImages();
+            
+            // Start auto-advance after a delay
+            setTimeout(startAutoSlide, 3000);
+            
+            console.log('Initialization complete!');
+        });
+
+        // Add loading state management
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+            
+            // Fade in animation for the whole page
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Export functions for testing (if needed)
+        if (typeof module !== 'undefined' && module.exports) {
+            module.exports = {
+                nextSlide,
+                previousSlide,
+                showSlide,
+                initBeforeAfterSlider
+            };
+        }
+    </script>
+</body>
+</html>

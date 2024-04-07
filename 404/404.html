@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coming Soon - Just Around the Corner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Turret+Road:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .main-frame {
+            position: relative;
+            width: 60%;
+            height: 80%;
+            border: 1px solid rgba(187, 244, 0, 0.7);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(0px);
+        }
+        
+        .nav-dots {
+            position: absolute;
+            top: 17px;
+            left: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        
+        .nav-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-dot.active {
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .main-title {
+            position: absolute;
+            left: 45px;
+            top: 90px;
+            font-size: 101px;
+            font-weight: 800;
+            color: rgba(187, 244, 0, 0.9);
+            letter-spacing: -0.9px;
+            line-height: 98px;
+            z-index: 10;
+        }
+        
+        .subtitle {
+            position: absolute;
+            right: 50px;
+            top: 99px;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: right;
+        }
+        
+        .page-number {
+            position: absolute;
+            right: 50px;
+            top: 144px;
+            font-size: 101px;
+            font-weight: 700;
+            color: transparent;
+            -webkit-text-stroke: 0.9px rgb(187, 244, 0);
+        }
+        
+        .description {
+            position: absolute;
+            left: 49px;
+            bottom: 100px;
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 27px;
+        }
+        
+        .center-animation {
+            position: absolute;
+            left: 75%;
+            top: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+        }
+        
+        .ellipse-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+        
+        .ellipse {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid;
+            animation-fill-mode: forwards;
+        }
+        
+        .ellipse-1 {
+            width: 300px;
+            height: 300px;
+            border-color: rgba(255, 255, 255, 0.15);
+            left: -37.5px;
+            top: 0px;
+            animation: rotateEllipse1 20s linear infinite;
+        }
+        
+        .ellipse-2 {
+            width: 250px;
+            height: 300px;
+            border-color: rgba(187, 244, 0, 0.85);
+            left: -12.5px;
+            top: 0px;
+            animation: rotateEllipse2 18s linear infinite reverse;
+        }
+        
+        .ellipse-3 {
+            width: 300px;
+            height: 250px;
+            border-color: rgba(187, 244, 0, 0.65);
+            left: -37.5px;
+            top: 25px;
+            animation: rotateEllipse3 22s linear infinite;
+        }
+        
+        .ellipse-4 {
+            width: 300px;
+            height: 200px;
+            border-color: rgba(187, 244, 0, 0.7);
+            left: -37.5px;
+            top: 50px;
+            animation: rotateEllipse4 16s linear infinite reverse;
+        }
+        
+        .ellipse-5 {
+            width: 200px;
+            height: 300px;
+            border-color: rgba(255, 255, 255, 0.31);
+            left: 12.5px;
+            top: 0px;
+            animation: rotateEllipse5 24s linear infinite;
+        }
+        
+        .center-element {
+            position: absolute;
+            left: 37%;
+            top: 50%;
+            width: 76px;
+            height: 110px;
+            transform: translate(-50%, -50%);
+            animation: rotateCenter 8s linear infinite;
+        }
+        
+        .hourglass-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .frame-top {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 76px;
+            height: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .frame-bottom {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 76px;
+            height: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .corner-tl {
+            position: absolute;
+            left: 7px;
+            top: 7px;
+            width: 7px;
+            height: 21px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-top: 0;
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .corner-tr {
+            position: absolute;
+            right: 7px;
+            top: 7px;
+            width: 7px;
+            height: 21px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-top: 0;
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .corner-bl {
+            position: absolute;
+            left: 7px;
+            bottom: 7px;
+            width: 7px;
+            height: 21px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: 0;
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .corner-br {
+            position: absolute;
+            right: 7px;
+            bottom: 7px;
+            width: 7px;
+            height: 21px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: 0;
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .side-left-top {
+            position: absolute;
+            left: 14px;
+            top: 28px;
+            width: 7px;
+            height: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .side-right-top {
+            position: absolute;
+            right: 14px;
+            top: 28px;
+            width: 7px;
+            height: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .side-left-bottom {
+            position: absolute;
+            left: 14px;
+            bottom: 28px;
+            width: 7px;
+            height: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .side-right-bottom {
+            position: absolute;
+            right: 14px;
+            bottom: 28px;
+            width: 7px;
+            height: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .mid-left {
+            position: absolute;
+            left: 28px;
+            top: 48px;
+            width: 7px;
+            height: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .mid-right {
+            position: absolute;
+            right: 28px;
+            top: 48px;
+            width: 7px;
+            height: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .inner-left {
+            position: absolute;
+            left: 21px;
+            top: 41px;
+            width: 7px;
+            height: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .inner-right {
+            position: absolute;
+            right: 21px;
+            top: 41px;
+            width: 7px;
+            height: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .inner-left-bottom {
+            position: absolute;
+            left: 21px;
+            bottom: 34px;
+            width: 7px;
+            height: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .inner-right-bottom {
+            position: absolute;
+            right: 21px;
+            bottom: 34px;
+            width: 7px;
+            height: 7px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        .sand-top-area {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            width: 36px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .sand-bottom-area {
+            position: absolute;
+            bottom: 10px;
+            left: 20px;
+            width: 36px;
+            height: 40px;
+            overflow: hidden;
+        }
+        
+        .sand-fill-top {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 35px;
+            background: rgb(187, 244, 0);
+            border-radius: 15px 15px 0 0;
+            animation: sandTopDrain 8s ease-in-out infinite;
+        }
+        
+        .sand-fill-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 0px;
+            background: rgb(187, 244, 0);
+            border-radius: 0 0 15px 15px;
+            animation: sandBottomFill 8s ease-in-out infinite;
+        }
+        
+        .sand-stream {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 2px;
+            height: 15px;
+            background: rgb(187, 244, 0);
+            transform: translateX(-50%) translateY(-50%);
+            opacity: 0;
+            animation: sandStreamFlow 8s ease-in-out infinite;
+        }
+        
+        .hourglass-neck {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 8px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(-50%) translateY(-50%);
+        }
+        
+        .social-icons {
+            position: absolute;
+            bottom: 50px;
+            right: 45px;
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.9px;
+            background: transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .nav-arrow {
+            color: rgb(187, 244, 0);
+        }
+        
+        .header-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            border-bottom: 1px solid rgba(187, 244, 0, 0.7);
+            background: rgba(255, 255, 255, 0);
+        }
+        
+        @keyframes rotateEllipse1 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotateEllipse2 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        
+        @keyframes rotateEllipse3 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotateEllipse4 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        
+        @keyframes rotateEllipse5 {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotateCenter {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        @keyframes sandTopDrain {
+            0% { height: 35px; }
+            45% { height: 35px; }
+            50% { height: 0px; }
+            95% { height: 0px; }
+            100% { height: 35px; }
+        }
+        
+        @keyframes sandBottomFill {
+            0% { height: 0px; }
+            45% { height: 0px; }
+            50% { height: 35px; }
+            95% { height: 35px; }
+            100% { height: 0px; }
+        }
+        
+        @keyframes sandStreamFlow {
+            0%, 40% { opacity: 0; }
+            45%, 55% { opacity: 1; }
+            60%, 100% { opacity: 0; }
+        }
+        
+        @media (max-width: 1200px) {
+            .main-title {
+                font-size: 70px;
+                line-height: 68px;
+                left: 30px;
+            }
+            
+            .page-number {
+                font-size: 70px;
+                right: 30px;
+            }
+            
+            .center-animation {
+                width: 250px;
+                height: 250px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 45px;
+                line-height: 43px;
+                left: 20px;
+                top: 70px;
+            }
+            
+            .page-number {
+                font-size: 45px;
+                right: 20px;
+                top: 110px;
+            }
+            
+            .subtitle {
+                right: 20px;
+                top: 70px;
+                font-size: 14px;
+            }
+            
+            .description {
+                left: 20px;
+                bottom: 70px;
+                font-size: 14px;
+            }
+            
+            .social-icons {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .social-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+            }
+            
+            .center-animation {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .center-element {
+                width: 60px;
+                height: 85px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-frame">
+            <div class="header-bar"></div>
+            
+            <div class="nav-dots">
+                <div class="nav-dot active"></div>
+                <div class="nav-dot"></div>
+                <div class="nav-dot"></div>
+            </div>
+            <h1 class="main-title">404<br>NOT<br>FOUND</h1>
+            <div class="description">
+                We're wrapping up some final touches.<br>
+                Stay tuned for the reveal.<br>
+                Please Try Again Later
+            </div>
+            
+            <div class="center-animation">
+                <div class="ellipse-container">
+                    <div class="ellipse ellipse-1"></div>
+                    <div class="ellipse ellipse-2"></div>
+                    <div class="ellipse ellipse-3"></div>
+                    <div class="ellipse ellipse-4"></div>
+                    <div class="ellipse ellipse-5"></div>
+                </div>
+                
+                <div class="center-element">
+                    <div class="hourglass-frame">
+                        <div class="frame-top"></div>
+                        <div class="frame-bottom"></div>
+                        
+                        <div class="corner-tl"></div>
+                        <div class="corner-tr"></div>
+                        <div class="corner-bl"></div>
+                        <div class="corner-br"></div>
+                        
+                        <div class="side-left-top"></div>
+                        <div class="side-right-top"></div>
+                        <div class="side-left-bottom"></div>
+                        <div class="side-right-bottom"></div>
+                        
+                        <div class="mid-left"></div>
+                        <div class="mid-right"></div>
+                        
+                        <div class="inner-left"></div>
+                        <div class="inner-right"></div>
+                        <div class="inner-left-bottom"></div>
+                        <div class="inner-right-bottom"></div>
+                        
+                        <div class="sand-particle sand-1"></div>
+                        <div class="sand-particle sand-2"></div>
+                        <div class="sand-particle sand-3"></div>
+                        <div class="sand-particle sand-4"></div>
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</body>
+</html>

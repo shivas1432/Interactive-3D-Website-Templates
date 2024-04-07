@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Archive - Glass Refraction Experience</title>
+    <style>
+        @font-face {
+            font-family: "PPSupplyMono";
+            src: url("https://assets.codepen.io/7558/PPSupplyMono-Regular.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        *, *::after, *::before {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-background: rgb(60, 60, 60);
+            --color-foreground: #c4d5bc;
+            --color-accent: rgb(170, 170, 170);
+            --font-primary: "PPSupplyMono", "Courier New", monospace;
+            --margin: 32px;
+            --gutter: 16px;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-primary);
+            background: radial-gradient(circle at 10% 20%, rgb(230, 230, 230) 0%, rgb(180, 180, 180) 45%, rgb(100, 100, 100) 90%);
+            color: var(--color-foreground);
+            letter-spacing: -0.03em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.loading-active {
+            overflow: hidden !important;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: transparent url("https://assets.codepen.io/7558/noise.png") repeat 0 0;
+            background-size: 300px 300px;
+            animation: noise-animation 0.3s steps(5) infinite;
+            opacity: 0.9;
+            will-change: transform;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        @keyframes noise-animation {
+            0% { transform: translate(0, 0); }
+            10% { transform: translate(-2%, -3%); }
+            20% { transform: translate(-4%, 2%); }
+            30% { transform: translate(2%, -4%); }
+            40% { transform: translate(-2%, 5%); }
+            50% { transform: translate(-4%, 2%); }
+            60% { transform: translate(3%, 0); }
+            70% { transform: translate(0, 3%); }
+            80% { transform: translate(-3%, 0); }
+            90% { transform: translate(2%, 2%); }
+            100% { transform: translate(1%, 0); }
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: transparent;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-out;
+        }
+
+        #canvas.ready {
+            opacity: 1;
+        }
+
+        .fallback-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("https://assets.codepen.io/7558/red-protocol-poster-03-bg.jpg");
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+
+        .fallback-bg.active {
+            opacity: 1;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            padding: var(--gutter);
+            position: relative;
+            z-index: 10;
+            transition: filter 0.1s ease-out;
+        }
+
+        .text-element {
+            position: fixed;
+            font-family: var(--font-primary);
+            color: var(--color-foreground);
+            text-transform: uppercase;
+            z-index: 10;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .text-element.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .audio-enable {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #0a0a0a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            font-family: var(--font-primary);
+            font-size: 12px;
+            color: #c4d5bc;
+            text-transform: uppercase;
+            gap: 2rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .enable-button {
+            border: 1px solid #c4d5bc;
+            background: transparent;
+            color: #c4d5bc;
+            padding: 1rem 2rem;
+            font-family: var(--font-primary);
+            font-size: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+
+        .enable-button:hover {
+            background: #c4d5bc;
+            color: #0a0a0a;
+        }
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #0a0a0a;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            font-family: var(--font-primary);
+            font-size: 12px;
+            color: #c4d5bc;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 1;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .preloader.fade-out {
+            opacity: 0;
+        }
+
+        .error-message {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            display: none;
+            z-index: 3000;
+            border-radius: 4px;
+        }
+
+        .description {
+            top: 120px;
+            left: 50px;
+            width: 360px;
+            font-size: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .nav-links {
+            top: 50%;
+            left: 50px;
+            transform: translateY(-50%);
+        }
+
+        .nav-links a {
+            position: relative;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--color-foreground);
+            text-decoration: none;
+            z-index: 1;
+            transition: color 0.3s ease;
+            padding: 4px 8px;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background-color: var(--color-foreground);
+            z-index: -1;
+            transition: width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer {
+            bottom: 120px;
+            right: 50px;
+            font-size: 0.625rem;
+        }
+
+        .division {
+            bottom: 120px;
+            left: 50px;
+            font-size: 0.625rem;
+        }
+
+        .signal {
+            top: 50%;
+            right: 100px;
+            font-size: 0.625rem;
+            transform: translateY(-50%);
+        }
+
+        .central-text {
+            bottom: 30%;
+            left: 50%;
+            transform: translateX(-50%) translateY(0);
+            text-align: center;
+            font-size: 1.25rem;
+            line-height: 1.1;
+            white-space: nowrap;
+            width: max-content;
+        }
+
+        .controls-hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6rem;
+            opacity: 0.7;
+            z-index: 15;
+            text-align: center;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .description, .nav-links, .division {
+                left: 20px;
+            }
+
+            .footer, .signal {
+                right: 20px;
+            }
+
+            .central-text {
+                font-size: 1rem;
+                white-space: normal;
+                max-width: 90%;
+            }
+
+            .description {
+                width: calc(100vw - 40px);
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .central-text {
+                font-size: 0.9rem;
+            }
+
+            .description {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .nav-links a:hover::after {
+                width: 0;
+            }
+
+            .nav-links a:active::after {
+                width: 100%;
+            }
+
+            .enable-button:hover {
+                background: transparent;
+                color: #c4d5bc;
+            }
+
+            .enable-button:active {
+                background: #c4d5bc;
+                color: #0a0a0a;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-message" id="errorMessage"></div>
+    <div class="fallback-bg" id="fallbackBg"></div>
+    
+    <div class="audio-enable">
+        <p>ENTER EXPERIENCE<br />WITH AUDIO</p>
+        <button class="enable-button" id="enableBtn">START</button>
+    </div>
+    
+    <div class="preloader" id="preloader">
+        <span id="counter">[000]</span>
+    </div>
+    
+    <canvas id="canvas"></canvas>
+    
+    <p class="text-element description">
+        COOPER STATION ARCHIVES - DIMENSIONAL DATA FROM BEYOND THE EVENT HORIZON. LOVE IS THE ONE THING WE'RE CAPABLE OF PERCEIVING.
+    </p>
+    
+    <nav class="text-element nav-links">
+        <a href="#">_GARGANTUA DATA</a>
+        <a href="#">_TESSERACT LOGS</a>
+        <a href="#">_MILLER'S PLANET</a>
+        <a href="#">_BRAND'S MISSION</a>
+    </nav>
+    
+    <div class="text-element footer">
+        <p>STATUS: [ENDURANCE - CONTACT LOST]<br />
+            MISSION TIME: 51 YEARS, 10 MONTHS<br />
+            <span class="controls-hint">PRESS 'H' TO TOGGLE REFRACTION CONTROLS</span>
+        </p>
+    </div>
+    
+    <p class="text-element division">
+        PERFORMANCE ANALYSIS: <span id="fpsCounter">60</span> FPS<br>
+        GRAVITATIONAL LENSING: ACTIVE<br>
+        DIMENSIONAL BRIDGE: STABILIZED<br>
+        QUANTUM DATA: TRANSMITTING.
+    </p>
+    
+    <p class="text-element signal">_Gravity Waves Detected...</p>
+    
+    <div class="text-element central-text">
+        WE USED TO LOOK UP AT THE SKY AND WONDER AT OUR PLACE IN THE STARS<br>
+        NOW WE JUST LOOK DOWN AND WORRY ABOUT OUR PLACE IN THE DIRT.
+    </div>
+
+    <audio id="startClickSound" preload="auto">
+        <source src="https://assets.codepen.io/7558/preloader-2s-001.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="preloaderSound" preload="auto">
+        <source src="https://assets.codepen.io/7558/preloader-3s-002.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="hoverSound" preload="auto">
+        <source src="https://assets.codepen.io/7558/preloader-2s-001.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="https://assets.codepen.io/7558/cinematic-02.mp3" type="audio/mpeg">
+    </audio>
+
+    <script type="module">
+        import * as THREE from "https://esm.sh/three@0.177.0";
+        import { EffectComposer } from "https://esm.sh/three@0.177.0/examples/jsm/postprocessing/EffectComposer.js";
+        import { RenderPass } from "https://esm.sh/three@0.177.0/examples/jsm/postprocessing/RenderPass.js";
+        import { ShaderPass } from "https://esm.sh/three@0.177.0/examples/jsm/postprocessing/ShaderPass.js";
+        import { Pane } from "https://cdn.skypack.dev/tweakpane@4.0.4";
+
+        class GlassRefractionApp {
+            constructor() {
+                this.PARAMS = {
+                    distortion: {
+                        strength: 0.15,
+                        radius: 0.2,
+                        size: 1,
+                        edgeWidth: 0.05,
+                        edgeOpacity: 0.2,
+                        rimLightIntensity: 0.3,
+                        rimLightWidth: 0.08,
+                        chromaticAberration: 0.03,
+                        reflectionIntensity: 0.3,
+                        waveDistortion: 0.08,
+                        waveSpeed: 1.2,
+                        lensBlur: 0.15,
+                        clearCenterSize: 0.3,
+                        followMouse: true,
+                        animationSpeed: 1,
+                        overallIntensity: 1,
+                        preset: "Classic Glass"
+                    },
+                    presets: {
+                        Minimal: {
+                            strength: 0.05, radius: 0.12, size: 0.8, edgeWidth: 0.02, edgeOpacity: 0.1,
+                            rimLightIntensity: 0.1, rimLightWidth: 0.04, chromaticAberration: 0.01,
+                            reflectionIntensity: 0.15, waveDistortion: 0.02, waveSpeed: 0.8,
+                            lensBlur: 0.05, clearCenterSize: 0.5
+                        },
+                        Subtle: {
+                            strength: 0.08, radius: 0.16, size: 0.9, edgeWidth: 0.03, edgeOpacity: 0.15,
+                            rimLightIntensity: 0.2, rimLightWidth: 0.06, chromaticAberration: 0.02,
+                            reflectionIntensity: 0.2, waveDistortion: 0.04, waveSpeed: 1,
+                            lensBlur: 0.08, clearCenterSize: 0.4
+                        },
+                        "Classic Glass": {
+                            strength: 0.12, radius: 0.18, size: 1, edgeWidth: 0.04, edgeOpacity: 0.25,
+                            rimLightIntensity: 0.3, rimLightWidth: 0.08, chromaticAberration: 0.025,
+                            reflectionIntensity: 0.35, waveDistortion: 0.03, waveSpeed: 0.5,
+                            lensBlur: 0.12, clearCenterSize: 0.2
+                        },
+                        Dramatic: {
+                            strength: 0.25, radius: 0.35, size: 1.2, edgeWidth: 0.08, edgeOpacity: 0.4,
+                            rimLightIntensity: 0.5, rimLightWidth: 0.1, chromaticAberration: 0.06,
+                            reflectionIntensity: 0.5, waveDistortion: 0.15, waveSpeed: 1.8,
+                            lensBlur: 0.25, clearCenterSize: 0.15
+                        },
+                        "Chromatic Focus": {
+                            strength: 0.1, radius: 0.22, size: 1, edgeWidth: 0.06, edgeOpacity: 0.3,
+                            rimLightIntensity: 0.25, rimLightWidth: 0.07, chromaticAberration: 0.08,
+                            reflectionIntensity: 0.2, waveDistortion: 0.05, waveSpeed: 0.8,
+                            lensBlur: 0.1, clearCenterSize: 0.25
+                        },
+                        "Liquid Wave": {
+                            strength: 0.18, radius: 0.28, size: 1.1, edgeWidth: 0.05, edgeOpacity: 0.2,
+                            rimLightIntensity: 0.4, rimLightWidth: 0.09, chromaticAberration: 0.04,
+                            reflectionIntensity: 0.4, waveDistortion: 0.2, waveSpeed: 2.5,
+                            lensBlur: 0.15, clearCenterSize: 0.1
+                        },
+                        Gigantic: {
+                            strength: 0.4, radius: 0.65, size: 1.8, edgeWidth: 0.12, edgeOpacity: 0.6,
+                            rimLightIntensity: 0.8, rimLightWidth: 0.15, chromaticAberration: 0.1,
+                            reflectionIntensity: 0.7, waveDistortion: 0.25, waveSpeed: 1.5,
+                            lensBlur: 0.35, clearCenterSize: 0.05
+                        }
+                    }
+                };
+
+                this.scene = null;
+                this.camera = null;
+                this.renderer = null;
+                this.composer = null;
+                this.customPass = null;
+                this.backgroundTexture = null;
+                this.backgroundMesh = null;
+                this.aspect = 1;
+                this.backgroundScene = null;
+                this.backgroundCamera = null;
+                this.mousePosition = { x: 0.5, y: 0.5 };
+                this.targetMousePosition = { x: 0.5, y: 0.5 };
+                this.staticMousePosition = { x: 0.5, y: 0.5 };
+                this.performanceMonitor = { frameCount: 0, lastTime: 0, fps: 60 };
+                this.pane = null;
+                this.isBackgroundPlaying = false;
+                this.paneVisible = false;
+                this.paneInitialized = false;
+                this.isSceneReady = false;
+                this.isTextureLoaded = false;
+                this.webglSupported = this.supportsWebGL();
+
+                this.init();
+            }
+
+            supportsWebGL() {
+                try {
+                    const canvas = document.createElement("canvas");
+                    return !!(
+                        window.WebGLRenderingContext &&
+                        (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+                    );
+                } catch {
+                    return false;
+                }
+            }
+
+            init() {
+                this.setupAudio();
+                this.setupKeyboardControls();
+                this.bindEvents();
+                
+                if (!this.webglSupported) {
+                    this.showFallback();
+                    return;
+                }
+            }
+
+            setupAudio() {
+                this.startClickSound = document.getElementById("startClickSound");
+                this.preloaderSound = document.getElementById("preloaderSound");
+                this.hoverSound = document.getElementById("hoverSound");
+                this.backgroundMusic = document.getElementById("backgroundMusic");
+            }
+
+            bindEvents() {
+                document.getElementById("enableBtn").onclick = () => this.onStartClick();
+            }
+
+            async onStartClick() {
+                document.body.classList.add("loading-active");
+                
+                try {
+                    await this.startClickSound?.play();
+                } catch (e) {
+                    console.log("Audio autoplay blocked");
+                }
+
+                document.querySelector(".audio-enable").style.display = "none";
+                document.getElementById("preloader").style.display = "flex";
+
+                try {
+                    await this.preloaderSound?.play();
+                } catch (e) {
+                    console.log("Preloader audio blocked");
+                }
+
+                setTimeout(async () => {
+                    if (this.backgroundMusic) {
+                        this.backgroundMusic.volume = 0.3;
+                        try {
+                            await this.backgroundMusic.play();
+                            this.isBackgroundPlaying = true;
+                        } catch (e) {
+                            console.log("Background music blocked");
+                        }
+                    }
+                }, 500);
+
+                this.webglSupported ? this.initializeScene() : this.showFallback();
+                this.startPreloader();
+            }
+
+            startPreloader() {
+                let count = 0;
+                const timer = setInterval(() => {
+                    const element = document.getElementById("counter");
+                    if (element) {
+                        element.textContent = `[${count.toString().padStart(3, '0')}]`;
+                    }
+                    
+                    if (++count >= 100) {
+                        clearInterval(timer);
+                        setTimeout(() => {
+                            this.preloaderSound?.pause();
+                            if (this.preloaderSound) {
+                                this.preloaderSound.currentTime = 0;
+                            }
+                            this.finishPreloader();
+                        }, 200);
+                    }
+                }, 30);
+            }
+
+            finishPreloader() {
+                const checkReady = () => {
+                    if ((this.isSceneReady && this.isTextureLoaded) || !this.webglSupported) {
+                        const preloader = document.getElementById("preloader");
+                        preloader.classList.add("fade-out");
+                        
+                        if (this.webglSupported) {
+                            document.getElementById("canvas").classList.add("ready");
+                        }
+                        
+                        setTimeout(() => {
+                            document.body.classList.remove("loading-active");
+                            preloader.style.display = "none";
+                            preloader.classList.remove("fade-out");
+                            this.animateTextElements();
+                        }, 800);
+                    } else {
+                        setTimeout(checkReady, 50);
+                    }
+                };
+                
+                checkReady();
+            }
+
+            animateTextElements() {
+                const elements = document.querySelectorAll('.text-element');
+                elements.forEach((element, index) => {
+                    setTimeout(() => {
+                        element.classList.add('animate');
+                        if (element.classList.contains('central-text')) {
+                            element.style.transform = 'translateX(-50%) translateY(0)';
+                        }
+                    }, index * 150);
+                });
+            }
+
+            showFallback() {
+                document.getElementById("fallbackBg").classList.add("active");
+                this.finishPreloader();
+            }
+
+            showError(message) {
+                const element = document.getElementById("errorMessage");
+                if (!element) return;
+                
+                element.textContent = message;
+                element.style.display = "block";
+                setTimeout(() => {
+                    element.style.display = "none";
+                }, 5000);
+            }
+
+            initializeScene() {
+                if (!this.webglSupported) {
+                    this.isSceneReady = this.isTextureLoaded = true;
+                    return;
+                }
+
+                const canvas = document.getElementById("canvas");
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas,
+                    antialias: true,
+                    alpha: true,
+                    premultipliedAlpha: false
+                });
+                
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.autoClear = false;
+
+                this.aspect = window.innerWidth / window.innerHeight;
+
+                // Background scene
+                this.backgroundScene = new THREE.Scene();
+                this.backgroundCamera = new THREE.OrthographicCamera(
+                    -this.aspect, this.aspect, 1, -1, 0.1, 10
+                );
+                this.backgroundCamera.position.z = 1;
+
+                // Main scene
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.OrthographicCamera(
+                    -this.aspect, this.aspect, 1, -1, 0.1, 10
+                );
+                this.camera.position.z = 1;
+
+                this.loadBackgroundTexture();
+                this.setupPostProcessing();
+                this.setupEventListeners();
+                this.setupNavHoverSounds();
+
+                this.animate();
+                this.isSceneReady = true;
+            }
+
+            setupEventListeners() {
+                const onResize = this.onWindowResize.bind(this);
+                const onMouseMove = this.onMouseMove.bind(this);
+                const onTouchMove = this.onTouchMove.bind(this);
+                const onTouchStart = this.onTouchStart.bind(this);
+
+                window.addEventListener("resize", onResize);
+                document.addEventListener("mousemove", onMouseMove);
+                document.addEventListener("touchmove", onTouchMove);
+                document.addEventListener("touchstart", onTouchStart);
+            }
+
+            onMouseMove(event) {
+                if (this.PARAMS.distortion.followMouse) {
+                    this.targetMousePosition.x = event.clientX / window.innerWidth;
+                    this.targetMousePosition.y = 1 - event.clientY / window.innerHeight;
+                }
+            }
+
+            onTouchStart(event) {
+                event.preventDefault();
+                if (event.touches.length) {
+                    this.onTouchMove(event);
+                }
+            }
+
+            onTouchMove(event) {
+                event.preventDefault();
+                if (this.PARAMS.distortion.followMouse && event.touches.length) {
+                    const touch = event.touches[0];
+                    this.targetMousePosition.x = touch.clientX / window.innerWidth;
+                    this.targetMousePosition.y = 1 - touch.clientY / window.innerHeight;
+                }
+            }
+
+            loadBackgroundTexture() {
+                const loader = new THREE.TextureLoader();
+                loader.load(
+                    "https://assets.codepen.io/7558/red-protocol-poster-03-bg.jpg",
+                    (texture) => {
+                        this.backgroundTexture = texture;
+                        this.createBackgroundMesh();
+                        this.isTextureLoaded = true;
+                    },
+                    undefined,
+                    (error) => {
+                        console.error("Failed to load background texture:", error);
+                        this.isTextureLoaded = true;
+                    }
+                );
+            }
+
+            createBackgroundMesh() {
+                if (this.backgroundMesh) {
+                    this.backgroundScene.remove(this.backgroundMesh);
+                }
+
+                const imageAspect = this.backgroundTexture.image.width / this.backgroundTexture.image.height;
+                const screenAspect = window.innerWidth / window.innerHeight;
+                
+                let scaleX, scaleY;
+                if (screenAspect > imageAspect) {
+                    scaleX = screenAspect * 2;
+                    scaleY = scaleX / imageAspect;
+                } else {
+                    scaleY = 2;
+                    scaleX = scaleY * imageAspect;
+                }
+
+                const geometry = new THREE.PlaneGeometry(scaleX, scaleY);
+                const material = new THREE.MeshBasicMaterial({ 
+                    map: this.backgroundTexture 
+                });
+                
+                this.backgroundMesh = new THREE.Mesh(geometry, material);
+                this.backgroundScene.add(this.backgroundMesh);
+            }
+
+            setupPostProcessing() {
+                this.composer = new EffectComposer(this.renderer);
+                
+                const renderPass = new RenderPass(this.backgroundScene, this.backgroundCamera);
+                this.composer.addPass(renderPass);
+                
+                this.setupDistortionPass();
+            }
+
+            setupDistortionPass() {
+                const vertexShader = `
+                    varying vec2 vUv;
+                    void main() {
+                        vUv = uv;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `;
+
+                const fragmentShader = `
+                    uniform sampler2D tDiffuse;
+                    uniform vec2 uMouse;
+                    uniform float uRadius;
+                    uniform float uSize;
+                    uniform float uStrength;
+                    uniform float uEdgeWidth;
+                    uniform float uEdgeOpacity;
+                    uniform float uRimLightIntensity;
+                    uniform float uRimLightWidth;
+                    uniform float uChromaticAberration;
+                    uniform float uReflectionIntensity;
+                    uniform float uWaveDistortion;
+                    uniform float uWaveSpeed;
+                    uniform float uLensBlur;
+                    uniform float uClearCenterSize;
+                    uniform float uOverallIntensity;
+                    uniform float uAspect;
+                    uniform float uTime;
+                    varying vec2 vUv;
+
+                    vec4 blur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction, float iterations) {
+                        vec4 color = vec4(0.0);
+                        vec2 off1 = vec2(1.3333333) * direction * iterations;
+                        color += texture2D(image, uv) * 0.2941176;
+                        color += texture2D(image, uv + (off1 / resolution)) * 0.3529412;
+                        color += texture2D(image, uv - (off1 / resolution)) * 0.3529412;
+                        return color;
+                    }
+
+                    void main() {
+                        vec2 center = uMouse;
+                        vec2 adjustedUv = vUv;
+                        adjustedUv.x *= uAspect;
+                        center.x *= uAspect;
+                        
+                        float distance = distance(adjustedUv, center);
+                        float radius = uRadius * uSize;
+                        vec4 originalColor = texture2D(tDiffuse, vUv);
+                        
+                        // Calculate the effect for all pixels
+                        float normalizedDistance = distance / radius;
+                        vec2 direction = normalize(adjustedUv - center);
+                        float clearCenter = uClearCenterSize * radius;
+                        float distanceFactor = smoothstep(clearCenter, radius, distance);
+                        float power = 1.0 + normalizedDistance * 2.0;
+                        
+                        vec2 distortedUv = adjustedUv - direction * uStrength * pow(distanceFactor, power);
+                        
+                        // Wave distortion
+                        float wave1 = sin(normalizedDistance * 8.0 - uTime * uWaveSpeed) * uWaveDistortion;
+                        float wave2 = cos(normalizedDistance * 12.0 - uTime * uWaveSpeed * 0.7) * uWaveDistortion * 0.5;
+                        distortedUv += direction * (wave1 + wave2) * distanceFactor;
+                        
+                        distortedUv.x /= uAspect;
+                        
+                        // Chromatic aberration
+                        float aberration = uChromaticAberration * distanceFactor * (1.0 + normalizedDistance);
+                        vec2 redOffset = direction * aberration * 1.2 / vec2(uAspect, 1.0);
+                        vec2 blueOffset = direction * aberration * 0.8 / vec2(uAspect, 1.0);
+                        
+                        vec4 colorRed = texture2D(tDiffuse, distortedUv + redOffset);
+                        vec4 colorGreen = texture2D(tDiffuse, distortedUv);
+                        vec4 colorBlue = texture2D(tDiffuse, distortedUv - blueOffset);
+                        
+                        // Reflections
+                        vec4 reflection1 = texture2D(tDiffuse, vUv + direction * 0.08 * distanceFactor);
+                        vec4 reflection2 = texture2D(tDiffuse, vUv + direction * 0.15 * distanceFactor);
+                        vec4 reflection = mix(reflection1, reflection2, 0.6);
+                        
+                        vec4 finalColor = vec4(colorRed.r, colorGreen.g, colorBlue.b, 1.0);
+                        finalColor = mix(finalColor, reflection, uReflectionIntensity * distanceFactor);
+                        
+                        // Lens blur
+                        float blurAmount = uLensBlur * distanceFactor * (1.0 + normalizedDistance * 0.5);
+                        vec4 blurredColor = blur(tDiffuse, distortedUv, vec2(1.0 / uAspect, 1.0), vec2(1.0), blurAmount);
+                        finalColor = mix(finalColor, blurredColor, distanceFactor * 0.7);
+                        
+                        // Edge effects
+                        float edge = smoothstep(radius - uEdgeWidth, radius, distance);
+                        vec3 edgeColor = mix(vec3(1.0), vec3(0.8, 0.9, 1.0), normalizedDistance);
+                        finalColor = mix(finalColor, vec4(edgeColor, 1.0), edge * uEdgeOpacity);
+                        
+                        // Rim lighting
+                        float rimDistance = radius - uRimLightWidth;
+                        float rim = smoothstep(rimDistance - 0.02, rimDistance + 0.02, distance);
+                        rim *= (1.0 - smoothstep(radius - 0.01, radius, distance));
+                        finalColor = mix(finalColor, vec4(1.0), rim * uRimLightIntensity);
+                        
+                        // Brightness variation
+                        float brightness = 1.0 + sin(normalizedDistance * 6.0 - uTime * 2.0) * 0.1 * distanceFactor;
+                        finalColor.rgb *= brightness;
+                        
+                        // Ultra-smooth edge transition to fix jagged edges
+                        float effectMask = 1.0 - smoothstep(radius - 0.001, radius + 0.001, distance);
+                        
+                        gl_FragColor = mix(originalColor, mix(originalColor, finalColor, uOverallIntensity), effectMask);
+                    }
+                `;
+
+                this.customPass = new ShaderPass({
+                    uniforms: {
+                        tDiffuse: { value: null },
+                        uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+                        uRadius: { value: this.PARAMS.distortion.radius },
+                        uSize: { value: this.PARAMS.distortion.size },
+                        uStrength: { value: this.PARAMS.distortion.strength },
+                        uEdgeWidth: { value: this.PARAMS.distortion.edgeWidth },
+                        uEdgeOpacity: { value: this.PARAMS.distortion.edgeOpacity },
+                        uRimLightIntensity: { value: this.PARAMS.distortion.rimLightIntensity },
+                        uRimLightWidth: { value: this.PARAMS.distortion.rimLightWidth },
+                        uChromaticAberration: { value: this.PARAMS.distortion.chromaticAberration },
+                        uReflectionIntensity: { value: this.PARAMS.distortion.reflectionIntensity },
+                        uWaveDistortion: { value: this.PARAMS.distortion.waveDistortion },
+                        uWaveSpeed: { value: this.PARAMS.distortion.waveSpeed },
+                        uLensBlur: { value: this.PARAMS.distortion.lensBlur },
+                        uClearCenterSize: { value: this.PARAMS.distortion.clearCenterSize },
+                        uOverallIntensity: { value: this.PARAMS.distortion.overallIntensity },
+                        uAspect: { value: this.aspect },
+                        uTime: { value: 0 }
+                    },
+                    vertexShader,
+                    fragmentShader
+                });
+
+                this.customPass.renderToScreen = true;
+                this.composer.addPass(this.customPass);
+            }
+
+            setupNavHoverSounds() {
+                document.querySelectorAll(".nav-links a").forEach((anchor) => {
+                    anchor.addEventListener("mouseenter", () => {
+                        if (this.hoverSound && this.isBackgroundPlaying) {
+                            this.hoverSound.currentTime = 0;
+                            this.hoverSound.volume = 0.4;
+                            this.hoverSound.play().catch(() => {});
+                        }
+                    });
+                });
+            }
+
+            setupKeyboardControls() {
+                document.addEventListener("keydown", (event) => {
+                    if (event.key.toLowerCase() === "h") {
+                        event.preventDefault();
+                        this.togglePane();
+                    }
+                });
+            }
+
+            togglePane() {
+                if (!this.paneInitialized) {
+                    this.setupPane();
+                }
+                
+                if (this.pane) {
+                    this.paneVisible = !this.paneVisible;
+                    this.pane.hidden = !this.paneVisible;
+                }
+            }
+
+            setupPane() {
+                if (this.paneInitialized) return;
+
+                this.pane = new Pane({
+                    title: "Glass Refraction Controls",
+                    expanded: true
+                });
+
+                // Preset selector
+                this.pane.addBinding(this.PARAMS.distortion, "preset", {
+                    label: "Presets",
+                    options: {
+                        Minimal: "Minimal",
+                        Subtle: "Subtle",
+                        "Classic Glass": "Classic Glass",
+                        Dramatic: "Dramatic",
+                        "Chromatic Focus": "Chromatic Focus",
+                        "Liquid Wave": "Liquid Wave",
+                        Gigantic: "Gigantic"
+                    }
+                }).on("change", (event) => this.loadPreset(event.value));
+
+                // Reload button
+                this.pane.addButton({ title: "Reload Preset" }).on("click", () =>
+                    this.loadPreset(this.PARAMS.distortion.preset)
+                );
+
+                // Helper function for bindings
+                const addBinding = (property, options) =>
+                    this.pane.addBinding(this.PARAMS.distortion, property, options).on("change", (event) => {
+                        const uniformName = "u" + property.charAt(0).toUpperCase() + property.slice(1);
+                        if (this.customPass?.uniforms[uniformName]) {
+                            this.customPass.uniforms[uniformName].value = event.value;
+                        }
+                    });
+
+                // Main controls
+                addBinding("overallIntensity", {
+                    min: 0, max: 2, step: 0.01, label: "Overall Intensity"
+                });
+
+                this.pane.addBinding(this.PARAMS.distortion, "followMouse", {
+                    label: "Follow Mouse"
+                }).on("change", (event) => {
+                    if (!event.value) {
+                        this.staticMousePosition = { x: 0.5, y: 0.5 };
+                    }
+                });
+
+                addBinding("animationSpeed", {
+                    min: 0, max: 3, step: 0.1, label: "Animation Speed"
+                });
+
+                // Size Controls folder
+                const sizeFolder = this.pane.addFolder({ title: "Size Controls" });
+                sizeFolder.addBinding(this.PARAMS.distortion, "size", {
+                    min: 0.2, max: 3, step: 0.1, label: "Effect Size"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uSize.value = event.value;
+                    }
+                });
+
+                sizeFolder.addBinding(this.PARAMS.distortion, "radius", {
+                    min: 0.05, max: 0.8, step: 0.01, label: "Base Radius"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uRadius.value = event.value;
+                    }
+                });
+
+                // Refraction Properties folder
+                const refractionFolder = this.pane.addFolder({ title: "Refraction Properties" });
+                refractionFolder.addBinding(this.PARAMS.distortion, "strength", {
+                    min: 0, max: 0.5, step: 0.01, label: "Refraction Strength"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uStrength.value = event.value;
+                    }
+                });
+
+                refractionFolder.addBinding(this.PARAMS.distortion, "clearCenterSize", {
+                    min: 0, max: 1, step: 0.01, label: "Clear Center"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uClearCenterSize.value = event.value;
+                    }
+                });
+
+                // Visual Effects folder
+                const visualFolder = this.pane.addFolder({ title: "Visual Effects" });
+                visualFolder.addBinding(this.PARAMS.distortion, "chromaticAberration", {
+                    min: 0, max: 0.15, step: 0.001, label: "Chromatic Aberration"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uChromaticAberration.value = event.value;
+                    }
+                });
+
+                visualFolder.addBinding(this.PARAMS.distortion, "reflectionIntensity", {
+                    min: 0, max: 1, step: 0.01, label: "Reflections"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uReflectionIntensity.value = event.value;
+                    }
+                });
+
+                visualFolder.addBinding(this.PARAMS.distortion, "lensBlur", {
+                    min: 0, max: 0.5, step: 0.01, label: "Lens Blur"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uLensBlur.value = event.value;
+                    }
+                });
+
+                // Wave Animation folder
+                const waveFolder = this.pane.addFolder({ title: "Wave Animation" });
+                waveFolder.addBinding(this.PARAMS.distortion, "waveDistortion", {
+                    min: 0, max: 0.3, step: 0.01, label: "Wave Strength"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uWaveDistortion.value = event.value;
+                    }
+                });
+
+                waveFolder.addBinding(this.PARAMS.distortion, "waveSpeed", {
+                    min: 0, max: 5, step: 0.1, label: "Wave Speed"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uWaveSpeed.value = event.value;
+                    }
+                });
+
+                // Edge Effects folder
+                const edgeFolder = this.pane.addFolder({ title: "Edge Effects" });
+                edgeFolder.addBinding(this.PARAMS.distortion, "edgeWidth", {
+                    min: 0, max: 0.2, step: 0.01, label: "Edge Width"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uEdgeWidth.value = event.value;
+                    }
+                });
+
+                edgeFolder.addBinding(this.PARAMS.distortion, "edgeOpacity", {
+                    min: 0, max: 1, step: 0.01, label: "Edge Opacity"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uEdgeOpacity.value = event.value;
+                    }
+                });
+
+                // Rim Lighting folder
+                const rimFolder = this.pane.addFolder({ title: "Rim Lighting" });
+                rimFolder.addBinding(this.PARAMS.distortion, "rimLightIntensity", {
+                    min: 0, max: 1, step: 0.01, label: "Rim Light Intensity"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uRimLightIntensity.value = event.value;
+                    }
+                });
+
+                rimFolder.addBinding(this.PARAMS.distortion, "rimLightWidth", {
+                    min: 0, max: 0.3, step: 0.01, label: "Rim Light Width"
+                }).on("change", (event) => {
+                    if (this.customPass) {
+                        this.customPass.uniforms.uRimLightWidth.value = event.value;
+                    }
+                });
+
+                // Style the pane
+                Object.assign(this.pane.element.style, {
+                    position: "fixed",
+                    top: "10px",
+                    right: "10px",
+                    zIndex: "3000"
+                });
+
+                this.pane.hidden = true;
+                this.paneVisible = false;
+                this.paneInitialized = true;
+                
+                // Load default preset
+                this.loadPreset("Classic Glass");
+            }
+
+            loadPreset(presetName) {
+                const preset = this.PARAMS.presets[presetName];
+                if (!preset) return;
+
+                Object.entries(preset).forEach(([key, value]) => {
+                    if (key in this.PARAMS.distortion) {
+                        this.PARAMS.distortion[key] = value;
+                        const uniformName = "u" + key.charAt(0).toUpperCase() + key.slice(1);
+                        if (this.customPass?.uniforms[uniformName]) {
+                            this.customPass.uniforms[uniformName].value = value;
+                        }
+                    }
+                });
+
+                this.PARAMS.distortion.preset = presetName;
+                this.pane?.refresh();
+            }
+
+            onWindowResize() {
+                this.aspect = window.innerWidth / window.innerHeight;
+
+                if (this.camera && this.backgroundCamera) {
+                    [this.camera, this.backgroundCamera].forEach((camera) => {
+                        camera.left = -this.aspect;
+                        camera.right = this.aspect;
+                        camera.updateProjectionMatrix();
+                    });
+                }
+
+                if (this.renderer) {
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+
+                if (this.composer) {
+                    this.composer.setSize(window.innerWidth, window.innerHeight);
+                }
+
+                if (this.customPass) {
+                    this.customPass.uniforms.uAspect.value = this.aspect;
+                }
+
+                if (this.backgroundTexture) {
+                    this.createBackgroundMesh();
+                }
+            }
+
+            animate(timestamp = 0) {
+                requestAnimationFrame((time) => this.animate(time));
+                
+                if (!this.webglSupported || !this.renderer) return;
+
+                // Performance monitoring
+                this.performanceMonitor.frameCount++;
+                if (timestamp - this.performanceMonitor.lastTime >= 1000) {
+                    this.performanceMonitor.fps = this.performanceMonitor.frameCount;
+                    this.performanceMonitor.frameCount = 0;
+                    this.performanceMonitor.lastTime = timestamp;
+
+                    const fpsElement = document.getElementById("fpsCounter");
+                    if (fpsElement) {
+                        fpsElement.textContent = String(this.performanceMonitor.fps);
+                    }
+                }
+
+                // Mouse position interpolation
+                const targetPosition = this.PARAMS.distortion.followMouse
+                    ? this.targetMousePosition
+                    : this.staticMousePosition;
+                
+                this.mousePosition.x += (targetPosition.x - this.mousePosition.x) * 0.1;
+                this.mousePosition.y += (targetPosition.y - this.mousePosition.y) * 0.1;
+
+                // Update shader uniforms
+                if (this.customPass) {
+                    this.customPass.uniforms.uMouse.value.set(
+                        this.mousePosition.x,
+                        this.mousePosition.y
+                    );
+                    this.customPass.uniforms.uTime.value = 
+                        timestamp * 0.001 * this.PARAMS.distortion.animationSpeed;
+                }
+
+                // Render
+                if (this.composer) {
+                    this.composer.render();
+                } else if (this.renderer && this.backgroundScene && this.backgroundCamera) {
+                    this.renderer.clear();
+                    this.renderer.render(this.backgroundScene, this.backgroundCamera);
+                }
+            }
+        }
+
+        // Error handling
+        window.addEventListener("error", (event) => {
+            let message = "An error occurred";
+            if (event.error?.message) {
+                message += ": " + event.error.message;
+            }
+            if (event.filename) {
+                message += " in " + event.filename;
+            }
+            console.error(message);
+        });
+
+        window.addEventListener("unhandledrejection", (event) => {
+            console.error("Loading failed:", event.reason || "Unknown error");
+        });
+
+        // Initialize the application
+        let app;
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", () => {
+                app = new GlassRefractionApp();
+            });
+        } else {
+            app = new GlassRefractionApp();
+        }
+
+        // Export for debugging
+        window.GlassApp = app;
+    </script>
+</body>
+</html>

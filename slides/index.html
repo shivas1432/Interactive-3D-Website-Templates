@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Futuristic Hairstyles Slider</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;800&family=Space+Grotesk:wght@400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Slider Revolution CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+        }
+        
+        /* Slider Container */
+        .futuristic-slider {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Slide Styles */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        /* Background Images */
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+        
+        .slide-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
+        }
+        
+        /* Background Text */
+        .bg-text {
+            position: absolute;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(150px, 25vw, 500px);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.05);
+            text-transform: uppercase;
+            white-space: nowrap;
+            z-index: 2;
+            animation: floatText 10s ease-in-out infinite;
+        }
+        
+        @keyframes floatText {
+            0%, 100% { transform: translateX(-20px); }
+            50% { transform: translateX(20px); }
+        }
+        
+        /* Image Gallery */
+        .image-gallery {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+        
+        .gallery-image {
+            position: absolute;
+            width: clamp(200px, 30vw, 400px);
+            height: clamp(250px, 40vw, 500px);
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .gallery-image:hover {
+            transform: scale(1.05) rotateY(5deg);
+        }
+        
+        /* Image positioning */
+        .gallery-image:nth-child(1) {
+            transform: translateX(-150px) rotateZ(-5deg);
+            z-index: 8;
+        }
+        
+        .gallery-image:nth-child(2) {
+            transform: translateX(150px) rotateZ(5deg);
+            z-index: 9;
+        }
+        
+        .gallery-image:nth-child(3) {
+            transform: translateX(-75px) rotateZ(0deg);
+            z-index: 10;
+        }
+        
+        .gallery-image:nth-child(4) {
+            transform: translateX(75px) rotateZ(-5deg);
+            z-index: 11;
+        }
+        
+        .gallery-image:nth-child(5) {
+            transform: translateX(0px) rotateZ(0deg);
+            z-index: 12;
+        }
+        
+        /* Hairstyle Title */
+        .hairstyle-title {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(40px, 8vw, 100px);
+            font-weight: 400;
+            color: #ffffff;
+            text-align: center;
+            z-index: 15;
+            letter-spacing: -2px;
+        }
+        
+        /* Navigation */
+        .navigation {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+        }
+        
+        .nav-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-circle:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.1);
+        }
+        
+        .nav-circle .material-icons {
+            font-size: 24px;
+            color: #ffffff;
+        }
+        
+        .nav-prev {
+            left: 50px;
+        }
+        
+        .nav-next {
+            right: 50px;
+        }
+        
+        /* Header */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 25;
+        }
+        
+        .header-left, .header-right {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.65);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .header-left:hover, .header-right:hover {
+            color: #ffffff;
+        }
+        
+        .logo {
+            width: 143px;
+            height: 27px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 143 27"><text x="0" y="20" fill="white" font-family="Arial" font-size="20">LOGO</text></svg>') center/contain no-repeat;
+        }
+        
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 0 50px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 25;
+        }
+        
+        .footer-left {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.65);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+        
+        .footer-right {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 23px;
+            font-weight: 400;
+            color: #ffffff;
+        }
+        
+        .arrow-link {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0 8px;
+            transform: rotate(-45deg);
+            display: inline-block;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .gallery-image {
+                width: 200px;
+                height: 250px;
+            }
+            
+            .gallery-image:nth-child(1) {
+                transform: translateX(-100px) rotateZ(-3deg);
+            }
+            
+            .gallery-image:nth-child(2) {
+                transform: translateX(100px) rotateZ(3deg);
+            }
+            
+            .gallery-image:nth-child(3) {
+                transform: translateX(-50px) rotateZ(0deg);
+            }
+            
+            .gallery-image:nth-child(4) {
+                transform: translateX(50px) rotateZ(-3deg);
+            }
+            
+            .nav-circle {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .nav-prev {
+                left: 20px;
+            }
+            
+            .nav-next {
+                right: 20px;
+            }
+            
+            .header {
+                padding: 20px 30px;
+            }
+            
+            .footer {
+                padding: 0 30px 30px;
+            }
+        }
+        
+        /* Click Indicator */
+        .click-indicator {
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .click-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .click-text {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 500;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            line-height: 14px;
+            text-align: center;
+        }
+        
+        .gallery-image:hover + .click-indicator {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="futuristic-slider" id="slider">
+        <!-- Header -->
+        <div class="header">
+            <a href="#" class="header-left">about</a>
+            <div class="logo"></div>
+            <a href="#" class="header-right">contact</a>
+        </div>
+        
+        <!-- Slide 1: Hyperhawk -->
+        <div class="slide active" data-slide="0">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1200&h=800&fit=crop')"></div>
+            <div class="bg-text">Hyperhawk</div>
+            <div class="image-gallery">
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0dcba0bb1a5?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1584308972272-9e4e7685e80f?w=400&h=500&fit=crop')"></div>
+            </div>
+            <div class="hairstyle-title">Hyperhawk</div>
+        </div>
+        
+        <!-- Slide 2: Gravity Waves -->
+        <div class="slide" data-slide="1">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=1200&h=800&fit=crop')"></div>
+            <div class="bg-text">Gravity Waves</div>
+            <div class="image-gallery">
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0dcba0bb1a5?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1584308972272-9e4e7685e80f?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=500&fit=crop')"></div>
+            </div>
+            <div class="hairstyle-title">Gravity Waves</div>
+        </div>
+        
+        <!-- Slide 3: Quantum Quiff -->
+        <div class="slide" data-slide="2">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1200&h=800&fit=crop')"></div>
+            <div class="bg-text">Quantum Quiff</div>
+            <div class="image-gallery">
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0dcba0bb1a5?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1584308972272-9e4e7685e80f?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=500&fit=crop')"></div>
+            </div>
+            <div class="hairstyle-title">Quantum Quiff</div>
+        </div>
+        
+        <!-- Slide 4: Space Crop -->
+        <div class="slide" data-slide="3">
+            <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1200&h=800&fit=crop')"></div>
+            <div class="bg-text">Space Crop</div>
+            <div class="image-gallery">
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1584308972272-9e4e7685e80f?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=500&fit=crop')"></div>
+                <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1594736797933-d0dcba0bb1a5?w=400&h=500&fit=crop')"></div>
+            </div>
+            <div class="hairstyle-title">Space Crop</div>
+        </div>
+        
+
+        
+        <!-- Navigation -->
+        <div class="navigation nav-prev">
+            <div class="nav-circle">
+                <i class="material-icons">arrow_back</i>
+            </div>
+        </div>
+        
+        <div class="navigation nav-next">
+            <div class="nav-circle">
+                <i class="material-icons">arrow_forward</i>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <a href="#" class="footer-left">instagram</a>
+            <a href="#" class="arrow-link"><i class="material-icons">arrow_forward</i></a>
+            <div class="footer-right">05</div>
+        </div>
+        
+        <!-- Click Indicator -->
+        <div class="click-indicator">
+            <div class="click-circle"></div>
+            <div class="click-text">click<br>the<br>image</div>
+        </div>
+    </div>
+
+    <script>
+        class FuturisticSlider {
+            constructor() {
+                this.currentSlide = 0;
+                this.slides = document.querySelectorAll('.slide');
+                this.totalSlides = this.slides.length;
+                this.isAnimating = false;
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.startAutoPlay();
+            }
+            
+            bindEvents() {
+                // Navigation buttons
+                document.querySelector('.nav-next').addEventListener('click', () => this.nextSlide());
+                document.querySelector('.nav-prev').addEventListener('click', () => this.prevSlide());
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+                
+                // Touch/swipe support
+                let startX = 0;
+                let endX = 0;
+                
+                document.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+                
+                document.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    this.handleSwipe();
+                });
+                
+                // Mouse wheel navigation
+                document.addEventListener('wheel', (e) => {
+                    if (this.isAnimating) return;
+                    
+                    if (e.deltaY > 0) {
+                        this.nextSlide();
+                    } else {
+                        this.prevSlide();
+                    }
+                });
+                
+                // Gallery image clicks
+                this.slides.forEach((slide, slideIndex) => {
+                    const images = slide.querySelectorAll('.gallery-image');
+                    images.forEach((image, imageIndex) => {
+                        image.addEventListener('click', () => {
+                            this.goToSlide((slideIndex + imageIndex + 1) % this.totalSlides);
+                        });
+                    });
+                });
+            }
+            
+            handleSwipe() {
+                const threshold = 50;
+                const diff = startX - endX;
+                
+                if (Math.abs(diff) > threshold) {
+                    if (diff > 0) {
+                        this.nextSlide();
+                    } else {
+                        this.prevSlide();
+                    }
+                }
+            }
+            
+            nextSlide() {
+                if (this.isAnimating) return;
+                this.goToSlide((this.currentSlide + 1) % this.totalSlides);
+            }
+            
+            prevSlide() {
+                if (this.isAnimating) return;
+                this.goToSlide((this.currentSlide - 1 + this.totalSlides) % this.totalSlides);
+            }
+            
+            goToSlide(index) {
+                if (this.isAnimating || index === this.currentSlide) return;
+                
+                this.isAnimating = true;
+                
+                // Remove active class from current slide
+                this.slides[this.currentSlide].classList.remove('active');
+                
+                // Add active class to new slide
+                setTimeout(() => {
+                    this.currentSlide = index;
+                    this.slides[this.currentSlide].classList.add('active');
+                    
+                    // Update footer counter
+                    document.querySelector('.footer-right').textContent = 
+                        '0' + (this.currentSlide + 1);
+                    
+                    setTimeout(() => {
+                        this.isAnimating = false;
+                    }, 1000);
+                }, 50);
+            }
+            
+            startAutoPlay() {
+                setInterval(() => {
+                    if (!this.isAnimating) {
+                        this.nextSlide();
+                    }
+                }, 8000); // Change slide every 8 seconds
+            }
+        }
+        
+        // Enhanced animations for gallery images
+        function animateGalleryImages() {
+            const slides = document.querySelectorAll('.slide');
+            
+            slides.forEach(slide => {
+                const images = slide.querySelectorAll('.gallery-image');
+                
+                images.forEach((image, index) => {
+                    // Floating animation
+                    const delay = index * 0.2;
+                    image.style.animation = `floatImage 6s ease-in-out infinite ${delay}s`;
+                    
+                    // Hover effects
+                    image.addEventListener('mouseenter', () => {
+                        image.style.transform += ' scale(1.1)';
+                        image.style.boxShadow = '0 30px 60px rgba(0, 0, 0, 0.5)';
+                    });
+                    
+                    image.addEventListener('mouseleave', () => {
+                        image.style.transform = image.style.transform.replace(' scale(1.1)', '');
+                        image.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+                    });
+                });
+            });
+        }
+        
+        // Add floating animation for images
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes floatImage {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize slider when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new FuturisticSlider();
+            animateGalleryImages();
+        });
+        
+        // Parallax effect for background text
+        document.addEventListener('mousemove', (e) => {
+            const bgTexts = document.querySelectorAll('.bg-text');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            bgTexts.forEach(text => {
+                const moveX = (mouseX - 0.5) * 50;
+                const moveY = (mouseY - 0.5) * 30;
+                text.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

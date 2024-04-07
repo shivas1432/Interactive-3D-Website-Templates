@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&family=Manrope:wght@400;500;800&family=Roboto:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background: radial-gradient(circle, rgba(255, 161, 0, 0.1) 0%, rgb(12, 0, 12) 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .slide-bg video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .content-row {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .slide-info {
+            flex: 1;
+            max-width: 25%;
+        }
+
+        .slide-counter {
+            font-size: 15px;
+            font-weight: 500;
+            color: white;
+            margin-bottom: 27px;
+        }
+
+        .slide-description {
+            font-size: 15px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 22px;
+            margin-bottom: 27px;
+        }
+
+        .learn-more {
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: 2.74512px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            padding-bottom: 5px;
+            display: inline-block;
+        }
+
+        .planet-center {
+            flex: 1;
+            text-align: center;
+            max-width: 50%;
+        }
+
+        .planet-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 113px;
+            font-weight: 400;
+            color: white;
+            text-transform: uppercase;
+            text-shadow: rgba(0, 0, 0, 0.6) 0px 21.9609px 37.5166px;
+            line-height: 113px;
+            margin-bottom: 10px;
+        }
+
+        .planet-subtitle {
+            font-size: 15px;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2.74512px;
+        }
+
+        .planet-stats {
+            flex: 1;
+            max-width: 25%;
+            text-align: right;
+        }
+
+        .stat-item {
+            margin-bottom: 18px;
+        }
+
+        .stat-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            font-weight: 400;
+            color: white;
+            line-height: 22px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 15px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 22px;
+        }
+
+        .planet-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 487px;
+            height: 486px;
+            border-radius: 50%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 5;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .planet-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 405px;
+            height: 405px;
+            border-radius: 50%;
+            z-index: 4;
+        }
+
+        /* Planet specific styles */
+        .slide.sun {
+            background: radial-gradient(circle, rgba(255, 161, 0, 0.1) 0%, rgb(12, 0, 12) 100%);
+        }
+        .slide.sun .planet-glow {
+            box-shadow: rgb(255, 159, 43) 0px 0px 90.5889px 0px;
+        }
+
+        .slide.mercury {
+            background: radial-gradient(circle, rgba(222, 252, 252, 0.1) 0%, rgb(0, 4, 12) 100%);
+        }
+        .slide.mercury .planet-image {
+            box-shadow: rgba(255, 255, 255, 0.3) 0px 0px 54.0667px 0px;
+        }
+
+        .slide.venus {
+            background: radial-gradient(circle, rgba(201, 86, 20, 0.15) 0%, rgb(0, 0, 12) 100%);
+        }
+        .slide.venus .planet-image {
+            box-shadow: rgba(255, 206, 147, 0.3) 0px 0px 54.0667px 0px;
+        }
+
+        .slide.earth {
+            background: radial-gradient(circle, rgba(26, 214, 253, 0.1) 0%, rgb(0, 4, 12) 100%);
+        }
+        .slide.earth .planet-image {
+            box-shadow: rgba(255, 255, 255, 0.3) 0px 0px 54.0667px 0px;
+        }
+
+        .slide.mars {
+            background: radial-gradient(circle, rgba(226, 97, 22, 0.15) 0%, rgb(0, 0, 12) 100%);
+        }
+        .slide.mars .planet-image {
+            box-shadow: rgba(255, 206, 147, 0.3) 0px 0px 54.0667px 0px;
+        }
+
+        .slide.jupiter {
+            background: radial-gradient(circle, rgba(226, 97, 22, 0.15) 0%, rgb(0, 4, 12) 100%);
+        }
+        .slide.jupiter .planet-image {
+            box-shadow: rgba(255, 240, 226, 0.25) 0px 0px 54.0667px 0px;
+        }
+
+        .slide.saturn {
+            background: radial-gradient(circle, rgba(26, 214, 253, 0.1) 0%, rgb(0, 4, 12) 100%);
+        }
+        .slide.saturn .planet-image {
+            box-shadow: rgba(255, 248, 201, 0.5) 0px 0px 54.0667px 0px;
+        }
+
+        .slide.uranus {
+            background: radial-gradient(circle, rgba(0, 255, 229, 0.1) 0%, rgb(0, 4, 12) 100%);
+        }
+        .slide.uranus .planet-image {
+            box-shadow: rgba(255, 255, 255, 0.3) 0px 0px 54.0667px 0px;
+        }
+
+        .slide.neptune {
+            background: radial-gradient(circle, rgba(26, 214, 253, 0.1) 0%, rgb(12, 0, 3) 100%);
+        }
+        .slide.neptune .planet-image {
+            box-shadow: rgba(186, 208, 221, 0.41) 0px 0px 10.3583px 0px;
+            width: 121px;
+            height: 120px;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: fixed;
+            bottom: 50px;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 0 50px;
+        }
+
+        .nav-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 3.66016px;
+            cursor: pointer;
+            padding: 0;
+            margin: 0 8px;
+        }
+
+        .nav-btn.icon {
+            font-size: 13px;
+            line-height: 52px;
+        }
+
+        .nav-btn.text {
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 50px;
+        }
+
+        .scroll-btn {
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 70px;
+            padding: 0 41px;
+            line-height: 50px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 30px 50px;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .menu-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-line {
+            height: 1px;
+            background: white;
+        }
+
+        .menu-line:nth-child(1) { width: 15px; }
+        .menu-line:nth-child(2) { width: 30px; }
+        .menu-line:nth-child(3) { width: 20px; }
+
+        .logo {
+            width: 177px;
+            height: 43px;
+            background: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 9px;
+        }
+
+        .social-link {
+            width: 43px;
+            height: 43px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Side Navigation */
+        .side-nav {
+            position: fixed;
+            left: -275px;
+            top: 0;
+            width: 275px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 200;
+            transition: left 0.3s ease;
+        }
+
+        .side-nav.open {
+            left: 0;
+        }
+
+        .planet-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .planet-nav-item:hover {
+            opacity: 0.8;
+        }
+
+        .planet-nav-icon {
+            width: 41px;
+            height: 41px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-right: 20px;
+        }
+
+        .planet-nav-text {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 23px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide-content {
+                padding: 0 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .content-row {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .slide-info, .planet-center, .planet-stats {
+                max-width: 100%;
+            }
+
+            .planet-title {
+                font-size: 60px;
+                line-height: 60px;
+            }
+
+            .planet-image {
+                width: 300px;
+                height: 300px;
+                position: relative;
+                top: 0;
+                left: 0;
+                transform: none;
+                margin: 20px auto;
+            }
+
+            .header, .navigation {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-row">
+            <div class="menu-icon" onclick="toggleSideNav()">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-link">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Side Navigation -->
+    <nav class="side-nav" id="sideNav">
+        <div class="planet-nav-item" onclick="goToSlide(0)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/sun6.png'); width: 51px; height: 51px;"></div>
+            <div class="planet-nav-text">sun</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(1)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/mercury.png');"></div>
+            <div class="planet-nav-text">mercury</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(2)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/venus.png');"></div>
+            <div class="planet-nav-text">venus</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(3)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/earth.png');"></div>
+            <div class="planet-nav-text">earth</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(4)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/mars.png');"></div>
+            <div class="planet-nav-text">mars</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(5)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/jupiter.png');"></div>
+            <div class="planet-nav-text">jupiter</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(6)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/saturn.png');"></div>
+            <div class="planet-nav-text">saturn</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(7)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/uranus.png');"></div>
+            <div class="planet-nav-text">uranus</div>
+        </div>
+        <div class="planet-nav-item" onclick="goToSlide(8)">
+            <div class="planet-nav-icon" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/neptune.png');"></div>
+            <div class="planet-nav-text">neptune</div>
+        </div>
+    </nav>
+
+    <!-- Main Slider Container -->
+    <div class="slider-container">
+        <!-- Sun Slide -->
+        <div class="slide sun active">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-glow"></div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/sun6.png'); width: 552px; height: 551px;"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">1 / 9</div>
+                        <div class="slide-description">The Sun is a 4.5 billion-year-old yellow dwarf star – a hot glowing ball of hydrogen and helium – at the center of our solar system. It's about 150 million kilometers from Earth and it's our solar system's only star.</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">sun</div>
+                        <div class="planet-subtitle">source of life</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">age</div>
+                            <div class="stat-value">4.5 billion years</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">star Type</div>
+                            <div class="stat-value">Yellow Dwarf</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">696,340 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">temperature</div>
+                            <div class="stat-value">5,500 degrees Celsius</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mercury Slide -->
+        <div class="slide mercury">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/mercury.png');"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">2 / 9</div>
+                        <div class="slide-description">The smallest planet in our solar system and nearest to the Sun, Mercury is only slightly larger than Earth's Moon. Mercury is the fastest planet, zipping around the Sun every 88 Earth days.</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">mercury</div>
+                        <div class="planet-subtitle">hot and cold</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Length of Year</div>
+                            <div class="stat-value">88 Earth Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Planet Type</div>
+                            <div class="stat-value">Terrestrial</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">2,439 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">distance from sun</div>
+                            <div class="stat-value">50,784,911 km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Venus Slide -->
+        <div class="slide venus">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/venus.png');"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">3 / 9</div>
+                        <div class="slide-description">Venus is a terrestrial planet and is sometimes called Earth's "sister planet" because of their similar size, mass, proximity to the Sun, and bulk composition. It is radically different from Earth in other respects.</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">venus</div>
+                        <div class="planet-subtitle">the Evening Star</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Length of Year</div>
+                            <div class="stat-value">225 Earth Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Planet Type</div>
+                            <div class="stat-value">Terrestrial</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">6,051 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">distance from sun</div>
+                            <div class="stat-value">107,480,968 km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earth Slide -->
+        <div class="slide earth">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/earth.png');"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">4 / 9</div>
+                        <div class="slide-description">Earth is the third planet from the Sun and the only astronomical object known to harbor life. While large amounts of water can be found throughout the Solar System, only Earth sustains liquid surface water.</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">earth</div>
+                        <div class="planet-subtitle">home sweet home</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Length of Year</div>
+                            <div class="stat-value">365 Earth Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Planet Type</div>
+                            <div class="stat-value">Terrestrial</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">6,371 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">distance from sun</div>
+                            <div class="stat-value">147,295,031 km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mars Slide -->
+        <div class="slide mars">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/mars.png');"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">5 / 9</div>
+                        <div class="slide-description">Mars is a terrestrial planet with a thin atmosphere, with surface features reminiscent of the impact craters of the Moon, and the valleys, deserts and polar ice caps of Earth.</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">mars</div>
+                        <div class="planet-subtitle">the red planet</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Length of Year</div>
+                            <div class="stat-value">687 Earth Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Planet Type</div>
+                            <div class="stat-value">Terrestrial</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">3,390 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">distance from sun</div>
+                            <div class="stat-value">224,894,231 km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jupiter Slide -->
+        <div class="slide jupiter">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/jupiter.png');"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">6 / 9</div>
+                        <div class="slide-description">Jupiter is the fifth planet from the Sun and the largest in the Solar System. It is a gas giant with a mass more than two and a half times that of all the other planets in the Solar System combined</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">jupiter</div>
+                        <div class="planet-subtitle">the king</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Length of Year</div>
+                            <div class="stat-value">4,333 Earth Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Planet Type</div>
+                            <div class="stat-value">Gas Giant</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">71,492 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">distance from sun</div>
+                            <div class="stat-value">746,122,626 km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Saturn Slide -->
+        <div class="slide saturn">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/saturn.png');"></div>
+            <div class="saturn-rings" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-9.7677deg); width: 994px; height: 367px; background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/saturn_ring.png'); background-size: cover; background-repeat: no-repeat; background-position: center; z-index: 6;"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">7 / 9</div>
+                        <div class="slide-description">Saturn is the sixth planet from the Sun and the second-largest planet in our solar system. Saturn is not the only planet to have rings, but none are as spectacular or as complex as Saturn's. Saturn also has dozens of moons.</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">saturn</div>
+                        <div class="planet-subtitle">The Ringed One</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Length of Year</div>
+                            <div class="stat-value">10,759 Earth Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Planet Type</div>
+                            <div class="stat-value">Gas Giant</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">58,232 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">distance from sun</div>
+                            <div class="stat-value">147,295,031 km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Uranus Slide -->
+        <div class="slide uranus">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/uranus.png');"></div>
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="slide-info">
+                        <div class="slide-counter">8 / 9</div>
+                        <div class="slide-description">The seventh planet from the Sun with the third largest diameter in our solar system, Uranus is very cold and windy. It is surrounded by 13 faint rings and 27 small moons as it rotates at a nearly 90-degree angle from the plane of its orbit.</div>
+                        <a href="#" class="learn-more">learn more</a>
+                    </div>
+                    <div class="planet-center">
+                        <div class="planet-title">uranus</div>
+                        <div class="planet-subtitle">SEVENTH WANDERER</div>
+                    </div>
+                    <div class="planet-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">Length of Year</div>
+                            <div class="stat-value">30.687 Earth Days</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Planet Type</div>
+                            <div class="stat-value">Ice Giant</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Radius</div>
+                            <div class="stat-value">25,362 kilometers</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">distance from sun</div>
+                            <div class="stat-value">2,935,484,463 km</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Neptune Slide -->
+        <div class="slide neptune">
+            <div class="slide-bg">
+                <video autoplay muted loop>
+                    <source src="https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/galaxy.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="planet-image" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/solar-system-showcase-slider/neptune.png'); position: absolute; top: 50%; left: 10%; transform: translate(-50%, -50%); width: 121px; height: 120px;"></div>
+            <div class="slide-content" style="justify-content: center; align-items: center; text-align: center;">
+                <div class="content-row" style="flex-direction: column; align-items: center; max-width: 600px;">
+                    <div class="planet-center" style="order: 1; margin-bottom: 30px;">
+                        <div class="planet-title" style="font-size: 38px; line-height: 57px;">neptune</div>
+                        <div class="planet-subtitle" style="display: none;">Way Out There</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; width: 100%; order: 2;">
+                        <div style="flex: 1; text-align: left;">
+                            <div class="slide-counter" style="display: none;">9 / 9</div>
+                            <div class="slide-description" style="font-size: 7px; line-height: 9px; margin-bottom: 9px;">Neptune is the eighth and farthest-known Solar planet from the Sun. In the Solar System, it is the fourth-largest planet by diameter, the third-most-massive planet, and the densest giant planet.</div>
+                            <a href="#" class="learn-more" style="font-size: 6px; letter-spacing: 0.470833px; line-height: 7px; display: none;">learn more</a>
+                        </div>
+                        <div style="flex: 1; text-align: right;">
+                            <div class="stat-item" style="margin-bottom: 0;">
+                                <div class="stat-label" style="font-size: 9px; line-height: 9px;">Length of Year</div>
+                                <div class="stat-value" style="font-size: 7px; line-height: 8px; padding-left: 71px;">165 Earth Days</div>
+                            </div>
+                            <div class="stat-item" style="margin-bottom: 0; margin-top: -7px;">
+                                <div class="stat-label" style="font-size: 9px; line-height: 9px;">Planet Type</div>
+                                <div class="stat-value" style="font-size: 7px; line-height: 8px; padding-left: 71px;">Ice Giant</div>
+                            </div>
+                            <div class="stat-item" style="margin-bottom: 0; margin-top: -7px;">
+                                <div class="stat-label" style="font-size: 9px; line-height: 9px;">Radius</div>
+                                <div class="stat-value" style="font-size: 7px; line-height: 8px; padding-left: 71px;">24,622 kilometers</div>
+                            </div>
+                            <div class="stat-item" style="margin-bottom: 0; margin-top: -7px;">
+                                <div class="stat-label" style="font-size: 9px; line-height: 9px;">distance from sun</div>
+                                <div class="stat-value" style="font-size: 7px; line-height: 8px; padding-left: 71px;">4,475,931,034 km</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="nav-row">
+            <div class="nav-left">
+                <button class="nav-btn icon" onclick="previousSlide()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="nav-btn text" onclick="previousSlide()">prev</button>
+            </div>
+            <div class="nav-center">
+                <button class="nav-btn scroll-btn" onclick="toggleAutoplay()">scroll</button>
+            </div>
+            <div class="nav-right">
+                <button class="nav-btn text" onclick="nextSlide()">next</button>
+                <button class="nav-btn icon" onclick="nextSlide()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        let currentSlide = 0;
+        let autoplayInterval;
+        let isAutoplay = true;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            const next = (currentSlide + 1) % totalSlides;
+            showSlide(next);
+        }
+
+        function previousSlide() {
+            const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+            showSlide(prev);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            closeSideNav();
+        }
+
+        function toggleSideNav() {
+            const sideNav = document.getElementById('sideNav');
+            sideNav.classList.toggle('open');
+        }
+
+        function closeSideNav() {
+            const sideNav = document.getElementById('sideNav');
+            sideNav.classList.remove('open');
+        }
+
+        function startAutoplay() {
+            autoplayInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopAutoplay() {
+            clearInterval(autoplayInterval);
+        }
+
+        function toggleAutoplay() {
+            if (isAutoplay) {
+                stopAutoplay();
+                isAutoplay = false;
+                document.querySelector('.scroll-btn').textContent = 'paused';
+            } else {
+                startAutoplay();
+                isAutoplay = true;
+                document.querySelector('.scroll-btn').textContent = 'scroll';
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'Escape') {
+                closeSideNav();
+            }
+        });
+
+        // Touch/swipe navigation
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        }
+
+        // Close side nav when clicking outside
+        document.addEventListener('click', function(e) {
+            const sideNav = document.getElementById('sideNav');
+            const menuIcon = document.querySelector('.menu-icon');
+            
+            if (!sideNav.contains(e.target) && !menuIcon.contains(e.target)) {
+                closeSideNav();
+            }
+        });
+
+        // Initialize autoplay
+        startAutoplay();
+
+        // Pause autoplay when tab is not visible
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopAutoplay();
+            } else if (isAutoplay) {
+                startAutoplay();
+            }
+        });
+    </script>
+</body>
+</html>

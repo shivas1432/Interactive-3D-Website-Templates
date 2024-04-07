@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Portal Hero Slider</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Manrope, sans-serif;
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #rs-fullblock {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .wp-block-group {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .wp-block-group__inner-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .wp-block-themepunch-revslider {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .revslider {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* Essential styles for slider elements */
+        sr7-module {
+            display: block !important;
+            width: 100% !important;
+            height: 100vh !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        sr7-adjuster {
+            display: block !important;
+            width: 100% !important;
+            height: 100vh !important;
+        }
+
+        sr7-content {
+            display: block !important;
+            width: 100% !important;
+            height: 100vh !important;
+            position: relative !important;
+        }
+
+        sr7-slide {
+            display: block !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100vh !important;
+            overflow: hidden !important;
+        }
+
+        sr7-slide:not(.sr7-staticslide) {
+            z-index: 1;
+        }
+
+        sr7-slide.sr7-staticslide {
+            z-index: 10 !important;
+            pointer-events: auto !important;
+        }
+
+        sr7-zone, sr7-row, sr7-row-con, sr7-col, sr7-col-con, sr7-col-bg, sr7-mask, sr7-bg, sr7-media, sr7-poster, sr7-grp, sr7-loop {
+            display: block !important;
+            position: relative;
+        }
+
+        sr7-txt {
+            display: block !important;
+            position: relative;
+            color: white;
+            font-family: Manrope, sans-serif;
+        }
+
+        sr7-img {
+            display: block !important;
+            position: absolute;
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        /* Video backgrounds */
+        video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            z-index: -1 !important;
+        }
+
+        sr7-media {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            z-index: 0 !important;
+        }
+
+        /* Make sure text is visible */
+        sr7-txt {
+            z-index: 10 !important;
+            position: relative !important;
+        }
+
+        /* Social media icons */
+        .fa-facebook-f::before { content: "📘"; }
+        .fa-instagram::before { content: "📷"; }
+        .fa-youtube-play::before { content: "▶️"; }
+
+        /* Bullet styles - make them more visible */
+        sr7-bullets {
+            position: fixed !important;
+            bottom: 50px !important;
+            left: 50px !important;
+            display: flex !important;
+            gap: 15px !important;
+            z-index: 1000 !important;
+        }
+
+        sr7-bullet {
+            width: 15px !important;
+            height: 15px !important;
+            background: rgba(255, 255, 255, 0.5) !important;
+            border: 2px solid rgba(243, 204, 19, 0.8) !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            display: block !important;
+        }
+
+        sr7-bullet.selected,
+        sr7-bullet:hover {
+            background: rgb(243, 204, 19) !important;
+            transform: scale(1.3) !important;
+            border-color: rgb(243, 204, 19) !important;
+        }
+
+        /* Portal gates - make them more visible */
+        .portal-gate {
+            cursor: pointer !important;
+            z-index: 100 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .portal-gate:hover {
+            filter: brightness(1.2) !important;
+            transform: scale(1.05) !important;
+        }
+
+        /* Navigation elements */
+        #SR7_1604_1-3931-16, #SR7_1604_1-3931-17, #SR7_1604_1-3931-18,
+        #SR7_1604_1-3931-20, #SR7_1604_1-3931-25 {
+            z-index: 1000 !important;
+            position: fixed !important;
+        }
+
+        /* Smooth transitions */
+        sr7-slide {
+            transition: opacity 0.6s ease, transform 0.6s ease !important;
+        }
+
+        sr7-txt {
+            transition: opacity 0.6s ease, transform 0.6s ease !important;
+        }
+
+        /* Show the active slide content */
+        sr7-slide[style*="display: block"] sr7-txt {
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        /* Force visibility for static elements */
+        .sr7-staticslide {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* Debug styles - remove after testing */
+        sr7-slide {
+            border: 2px solid rgba(255, 0, 0, 0.3);
+        }
+
+        sr7-slide[style*="display: block"] {
+            border-color: rgba(0, 255, 0, 0.8);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            sr7-row {
+                padding: 20px !important;
+            }
+            
+            sr7-txt {
+                font-size: 12px !important;
+            }
+
+            sr7-bullets {
+                bottom: 20px !important;
+                left: 20px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="rs-fullblock">
+        <div class="wp-block-group">
+            <div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow">
+                <div class="wp-block-themepunch-revslider revslider" data-modal="false" data-slidertitle="Portal Effect Hero Slider">
+                    
+                    <sr7-module data-alias="travel-portal" data-id="1604" id="SR7_1604_1" class="rs-respect-topbar rs-ov-hidden" data-version="6.7.35" style="height: 811px;" data-current="2494">
+                        <sr7-adjuster style="height: 811px;"></sr7-adjuster>
+                        <sr7-content style="height: 811px; left: 0px; width: 100%; top: 0px;">
+                            
+                            <!-- Slide 1 - Canyon -->
+                            <sr7-slide id="SR7_1604_1-2492" data-key="2492" style="pointer-events: none; visibility: visible; display: none; z-index: 1;">
+                                <sr7-zone id="SR7_1604_1-2492-10" class="sr7-layer" aria-hidden="true" style="line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 100%; height: auto; z-index: 18; position: absolute; vertical-align: top; display: block; left: 0px; top: 284px; visibility: visible; background: transparent;">
+                                    <sr7-row id="SR7_1604_1-2492-1" class="sr7-galign sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px 326px; width: auto; height: auto; float: none; clear: none; z-index: 2; position: relative; vertical-align: top; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 0; transform: perspective(600px) scale(7, 7); filter: blur(0px);">
+                                        <sr7-row-con style="padding: 0px; background: transparent;">
+                                            <sr7-col id="SR7_1604_1-2492-2" class="sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 50%; height: auto; float: none; clear: none; z-index: 3; position: relative; vertical-align: top; transform-origin: 50% 50%; display: table-cell; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px);" data-type="container" data-subtype="column">
+                                                <sr7-col-con style="padding: 0px;">
+                                                    <sr7-txt id="SR7_1604_1-2492-3" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 13px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 5.40667px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 0px 0px 27px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 4; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">teleport yourself</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2492-7" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 72px; font-weight: 800; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: -3.60444px; line-height: 63px; text-align: left; white-space: normal; overflow: visible; margin: 0px; padding: 0px; min-height: 0px; width: 390px; height: auto; float: none; clear: none; z-index: 5; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">Discover New Places</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2492-9" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 2.70333px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 45px 0px 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 6; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">01</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2492-5" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 600; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; text-decoration: none; letter-spacing: 2.70333px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 45px 0px 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 7; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">/04</sr7-txt>
+                                                </sr7-col-con>
+                                                <sr7-col-bg style="inset: 0px; background: transparent;"></sr7-col-bg>
+                                            </sr7-col>
+                                            <sr7-col id="SR7_1604_1-2492-4" class="sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 50%; height: auto; float: none; clear: none; z-index: 8; position: relative; vertical-align: top; transform-origin: 50% 50%; display: table-cell; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px);" data-type="container" data-subtype="column">
+                                                <sr7-col-con style="padding: 0px 0px 0px 300px;">
+                                                    <sr7-txt id="SR7_1604_1-2492-6" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 14px; font-weight: 300; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0.901111px; line-height: 27px; text-align: left; white-space: normal; overflow: visible; margin: 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 9; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">Teleportation is the transfer of matter or energy from one point to another without traversing the physical space between them.</sr7-txt>
+                                                    <a id="SR7_1604_1-2492-8" class="sr7-layer sr7-btn" href="#" target="_blank" rel="noopener noopener" aria-hidden="true" data-type="text" data-subtype="button" style="font-family: Manrope; font-size: 13px; font-weight: 700; color: rgb(0, 0, 0); text-transform: uppercase; text-decoration: none; letter-spacing: 0.901111px; line-height: 45px; text-align: center; white-space: normal; overflow: visible; margin: 63px 0px 0px; padding: 0px 32px; min-height: 0px; width: auto; height: 45.0556px; float: none; clear: none; z-index: 10; border-radius: 25px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: rgb(243, 204, 19);" plerdy-tracking-id="71485060001">learn more</a>
+                                                </sr7-col-con>
+                                                <sr7-col-bg style="inset: 0px; background: transparent;"></sr7-col-bg>
+                                            </sr7-col>
+                                        </sr7-row-con>
+                                    </sr7-row>
+                                </sr7-zone>
+                                <sr7-mask style="overflow: visible; min-height: auto; min-width: auto; width: 100%; height: 811px; z-index: 0; position: absolute; display: block; visibility: visible; left: 0px; top: 0px;">
+                                    <sr7-bg id="SR7_1604_1-2492-11" class="sr7-layer" aria-hidden="true" data-type="shape" data-subtype="slidebg" style="padding: 0px; width: 100%; height: 811px; display: block; visibility: visible; overflow: hidden; pointer-events: none; opacity: 1;">
+                                        <canvas width="2160" height="1215" style="width: 1920px; height: 1080px; z-index: 1; position: absolute; top: 0px; left: 0px; visibility: visible; background: transparent; opacity: 1; display: block;"></canvas>
+                                        <sr7-media id="SR7_1604_1-2492-11_video" class="sr7-media" style="width: 100%; height: 100%; visibility: visible; pointer-events: none; opacity: 1;">
+                                            <video id="SR7_1604_1-2492-11_video_html5" class="sr7-html5-video" src="https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/canyon-final.mp4" preload="metadata" playsinline="metadata" muted="" loop="" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                        </sr7-media>
+                                        <sr7-poster id="SR7_1604_1-2492-11_poster" class="sr7-poster"></sr7-poster>
+                                    </sr7-bg>
+                                </sr7-mask>
+                                <sr7-img id="SR7_1604_1-2492-0" class="sr7-layer portal-gate" aria-hidden="true" data-need-color-bg="false" style="overflow: visible; padding: 0px; width: 523px; height: 542px; z-index: 16; position: absolute; cursor: pointer; transform-origin: 50% 50%; display: block; background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/gate.png') 50% 50% / cover no-repeat transparent; left: 583.5px; top: 134.5px; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 0; transform: perspective(600px) scale(6, 6); filter: blur(10px); pointer-events: none;"></sr7-img>
+                            </sr7-slide>
+
+                            <!-- Slide 2 - Waterfall -->
+                            <sr7-slide id="SR7_1604_1-2493" data-key="2493" style="z-index: 2; pointer-events: none; visibility: visible; display: none;">
+                                <sr7-zone id="SR7_1604_1-2493-10" class="sr7-layer" aria-hidden="true" style="line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 100%; height: auto; z-index: 18; position: absolute; vertical-align: top; display: block; left: 0px; top: 284px; visibility: visible; background: transparent;">
+                                    <sr7-row id="SR7_1604_1-2493-1" class="sr7-galign sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px 326px; width: auto; height: auto; float: none; clear: none; z-index: 2; position: relative; vertical-align: top; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 0; transform: perspective(600px) scale(7, 7); filter: blur(0px);">
+                                        <sr7-row-con style="padding: 0px; background: transparent;">
+                                            <sr7-col id="SR7_1604_1-2493-2" class="sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 50%; height: auto; float: none; clear: none; z-index: 3; position: relative; vertical-align: top; transform-origin: 50% 50%; display: table-cell; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px);" data-type="container" data-subtype="column">
+                                                <sr7-col-con style="padding: 0px;">
+                                                    <sr7-txt id="SR7_1604_1-2493-3" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 13px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 5.40667px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 0px 0px 27px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 4; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">teleport yourself</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2493-7" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 72px; font-weight: 800; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: -3.60444px; line-height: 63px; text-align: left; white-space: normal; overflow: visible; margin: 0px; padding: 0px; min-height: 0px; width: 390px; height: auto; float: none; clear: none; z-index: 5; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">Discover New Places</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2493-9" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 2.70333px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 45px 0px 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 6; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">02</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2493-5" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 600; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; text-decoration: none; letter-spacing: 2.70333px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 45px 0px 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 7; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">/04</sr7-txt>
+                                                </sr7-col-con>
+                                                <sr7-col-bg style="inset: 0px; background: transparent;"></sr7-col-bg>
+                                            </sr7-col>
+                                            <sr7-col id="SR7_1604_1-2493-4" class="sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 50%; height: auto; float: none; clear: none; z-index: 8; position: relative; vertical-align: top; transform-origin: 50% 50%; display: table-cell; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px);" data-type="container" data-subtype="column">
+                                                <sr7-col-con style="padding: 0px 0px 0px 300px;">
+                                                    <sr7-txt id="SR7_1604_1-2493-6" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 14px; font-weight: 300; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0.901111px; line-height: 27px; text-align: left; white-space: normal; overflow: visible; margin: 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 9; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: transparent;">Teleportation is the transfer of matter or energy from one point to another without traversing the physical space between them.</sr7-txt>
+                                                    <a id="SR7_1604_1-2493-8" class="sr7-layer sr7-btn" href="#" target="_blank" rel="noopener noopener" plerdy-tracking-id="89279248601" aria-hidden="true" data-type="text" data-subtype="button" style="font-family: Manrope; font-size: 13px; font-weight: 700; color: rgb(0, 0, 0); text-transform: uppercase; text-decoration: none; letter-spacing: 0.901111px; line-height: 45px; text-align: center; white-space: normal; overflow: visible; margin: 63px 0px 0px; padding: 0px 32px; min-height: 0px; width: auto; height: 45.0556px; float: none; clear: none; z-index: 10; border-radius: 25px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none; background: rgb(243, 204, 19);">learn more</a>
+                                                </sr7-col-con>
+                                                <sr7-col-bg style="inset: 0px; background: transparent;"></sr7-col-bg>
+                                            </sr7-col>
+                                        </sr7-row-con>
+                                    </sr7-row>
+                                </sr7-zone>
+                                <sr7-mask style="overflow: visible; min-height: auto; min-width: auto; width: 100%; height: 811px; z-index: 0; position: absolute; display: block; visibility: visible; left: 0px; top: 0px;">
+                                    <sr7-bg id="SR7_1604_1-2493-11" class="sr7-layer" aria-hidden="true" data-type="shape" data-subtype="slidebg" style="padding: 0px; width: 100%; height: 811px; display: block; visibility: visible; overflow: hidden; pointer-events: none; opacity: 1;">
+                                        <canvas width="2160" height="1215" style="width: 1920px; height: 1080px; z-index: 1; position: absolute; top: 0px; left: 0px; visibility: visible; background: transparent; opacity: 1; display: block;"></canvas>
+                                        <sr7-media id="SR7_1604_1-2493-11_video" class="sr7-media" style="width: 100%; height: 100%; visibility: visible; pointer-events: none; opacity: 1;">
+                                            <video id="SR7_1604_1-2493-11_video_html5" class="sr7-html5-video" src="https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/waterfall-final2.mp4" preload="metadata" playsinline="metadata" muted="" loop="" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                        </sr7-media>
+                                        <sr7-poster id="SR7_1604_1-2493-11_poster" class="sr7-poster"></sr7-poster>
+                                    </sr7-bg>
+                                </sr7-mask>
+                                <sr7-img id="SR7_1604_1-2493-0" class="sr7-layer portal-gate" aria-hidden="true" data-need-color-bg="false" style="overflow: visible; padding: 0px; width: 523px; height: 542px; z-index: 16; position: absolute; cursor: pointer; transform-origin: 50% 50%; display: block; background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/gate.png') 50% 50% / cover no-repeat transparent; left: 583.5px; top: 134.5px; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 0; transform: perspective(600px) scale(6, 6); filter: blur(10px); pointer-events: none;"></sr7-img>
+                            </sr7-slide>
+
+                            <!-- Slide 3 - Field Tree (Active) -->
+                            <sr7-slide id="SR7_1604_1-2494" data-key="2494" style="z-index: 5; pointer-events: auto; visibility: visible; display: block;">
+                                <sr7-zone id="SR7_1604_1-2494-10" class="sr7-layer" aria-hidden="true" style="line-height: 10px; text-align: left; overflow: visible; padding: 0px; width: 100%; height: auto; z-index: 18; position: absolute; vertical-align: top; display: block; left: 0px; top: 81.5px; visibility: visible; background: transparent;">
+                                    <sr7-row id="SR7_1604_1-2494-1" class="sr7-galign sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 10px; text-align: left; overflow: visible; padding: 50px 40px 0px; width: auto; height: auto; float: none; clear: none; z-index: 2; position: relative; vertical-align: top; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: perspective(600px); filter: blur(0px);">
+                                        <sr7-row-con style="padding: 0px; background: transparent;">
+                                            <sr7-col id="SR7_1604_1-2494-2" class="sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 10px; text-align: center; overflow: visible; padding: 0px 0px 350px; width: 100%; height: auto; float: none; clear: none; z-index: 3; position: relative; vertical-align: top; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate(0px, 0px);" data-type="container" data-subtype="column">
+                                                <sr7-col-con style="padding: 0px;">
+                                                    <sr7-txt id="SR7_1604_1-2494-3" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 6px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 2.475px; line-height: 7px; text-align: center; white-space: normal; overflow: visible; margin: 0px 0px 4px; padding: 0px; width: auto; height: auto; float: none; clear: none; z-index: 4; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate(0px, 0px); pointer-events: auto; background: transparent;">teleport yourself</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2494-7" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 15px; font-weight: 800; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: -0.4125px; line-height: 18px; text-align: center; white-space: normal; overflow: visible; margin: 0px; padding: 0px; width: auto; height: auto; float: none; clear: none; z-index: 5; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate(0px, 0px); pointer-events: auto; background: transparent;">Discover New Places</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2494-9" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 8px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 1.2375px; line-height: 7px; text-align: left; white-space: normal; overflow: visible; margin: 21px 0px 0px; padding: 0px; width: auto; height: auto; float: none; clear: none; z-index: 6; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: none; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: auto; background: transparent;">03</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2494-5" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 8px; font-weight: 600; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; text-decoration: none; letter-spacing: 1.2375px; line-height: 7px; text-align: left; white-space: normal; overflow: visible; margin: 21px 0px 0px; padding: 0px; width: auto; height: auto; float: none; clear: none; z-index: 7; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: none; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: auto; background: transparent;">/04</sr7-txt>
+                                                </sr7-col-con>
+                                                <sr7-col-bg style="inset: 0px 0px 350px; background: transparent;"></sr7-col-bg>
+                                            </sr7-col>
+                                        </sr7-row-con>
+                                    </sr7-row>
+                                </sr7-zone>
+                                <sr7-mask style="overflow: visible; min-height: auto; min-width: auto; width: 100%; height: 811px; z-index: 0; position: absolute; display: block; visibility: visible; left: 0px; top: 0px;">
+                                    <sr7-bg id="SR7_1604_1-2494-11" class="sr7-layer" aria-hidden="true" data-type="shape" data-subtype="slidebg" style="padding: 0px; width: 100%; height: 811px; display: block; visibility: inherit; overflow: hidden; pointer-events: none; opacity: 1;">
+                                        <canvas width="1901" height="912" style="width: 1690px; height: 811px; z-index: 1; position: absolute; top: 0px; left: 0px; visibility: visible; background: transparent; opacity: 1; display: block;"></canvas>
+                                        <sr7-media id="SR7_1604_1-2494-11_video" class="sr7-media" style="width: 100%; height: 100%; visibility: visible; pointer-events: none; opacity: 1;">
+                                            <video id="SR7_1604_1-2494-11_video_html5" class="sr7-html5-video" src="https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/field-tree.mp4" preload="metadata" playsinline="metadata" muted="" loop="" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                        </sr7-media>
+                                        <sr7-poster id="SR7_1604_1-2494-11_poster" class="sr7-poster"></sr7-poster>
+                                    </sr7-bg>
+                                </sr7-mask>
+                                <sr7-img id="SR7_1604_1-2494-0" class="sr7-layer portal-gate" aria-hidden="true" data-need-color-bg="false" style="overflow: visible; padding: 0px; width: 139px; height: 144px; z-index: 16; position: absolute; cursor: pointer; transform-origin: 50% 50%; display: block; background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/gate.png') 50% 50% / cover no-repeat transparent; left: 29.5px; top: 333.5px; translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: perspective(600px); filter: blur(0px); pointer-events: auto;"></sr7-img>
+                            </sr7-slide>
+
+                            <!-- Slide 4 - Aurora -->
+                            <sr7-slide id="SR7_1604_1-2495" data-key="2495" style="z-index: 1; pointer-events: none; visibility: visible; display: none;">
+                                <sr7-zone id="SR7_1604_1-2495-10" class="sr7-layer" aria-hidden="true" style="line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 100%; height: auto; z-index: 18; position: absolute; vertical-align: top; display: block; left: 0px; top: 284px; visibility: visible; background: transparent;">
+                                    <sr7-row id="SR7_1604_1-2495-1" class="sr7-galign sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px 326px; width: auto; height: auto; float: none; clear: none; z-index: 2; position: relative; vertical-align: top; transform-origin: 50% 50%; display: block; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 0; transform: perspective(600px) scale(7, 7); filter: blur(0px);">
+                                        <sr7-row-con style="padding: 0px; background: transparent;">
+                                            <sr7-col id="SR7_1604_1-2495-2" class="sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 50%; height: auto; float: none; clear: none; z-index: 3; position: relative; vertical-align: top; transform-origin: 50% 50%; display: table-cell; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px);" data-type="container" data-subtype="column">
+                                                <sr7-col-con style="padding: 0px;">
+                                                    <sr7-txt id="SR7_1604_1-2495-3" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 13px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 5.40667px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 0px 0px 27px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 4; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; background: transparent; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none;">teleport yourself</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2495-7" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 72px; font-weight: 800; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: -3.60444px; line-height: 63px; text-align: left; white-space: normal; overflow: visible; margin: 0px; padding: 0px; min-height: 0px; width: 390px; height: auto; float: none; clear: none; z-index: 5; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; background: transparent; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none;">Discover New Places</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2495-9" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 600; color: rgb(243, 204, 19); text-transform: uppercase; text-decoration: none; letter-spacing: 2.70333px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 45px 0px 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 6; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; background: transparent; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none;">04</sr7-txt>
+                                                    <sr7-txt id="SR7_1604_1-2495-5" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 600; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; text-decoration: none; letter-spacing: 2.70333px; line-height: 16px; text-align: left; white-space: normal; overflow: visible; margin: 45px 0px 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 7; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; background: transparent; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none;">/04</sr7-txt>
+                                                </sr7-col-con>
+                                                <sr7-col-bg style="inset: 0px; background: transparent;"></sr7-col-bg>
+                                            </sr7-col>
+                                            <sr7-col id="SR7_1604_1-2495-4" class="sr7-layer" aria-hidden="true" style="pointer-events: none; line-height: 23px; text-align: left; overflow: visible; padding: 0px; width: 50%; height: auto; float: none; clear: none; z-index: 8; position: relative; vertical-align: top; transform-origin: 50% 50%; display: table-cell; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px);" data-type="container" data-subtype="column">
+                                                <sr7-col-con style="padding: 0px 0px 0px 300px;">
+                                                    <sr7-txt id="SR7_1604_1-2495-6" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 14px; font-weight: 300; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0.901111px; line-height: 27px; text-align: left; white-space: normal; overflow: visible; margin: 0px; padding: 0px; min-height: 0px; width: auto; height: auto; float: none; clear: none; z-index: 9; border-radius: 0px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: block; background: transparent; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none;">Teleportation is the transfer of matter or energy from one point to another without traversing the physical space between them.</sr7-txt>
+                                                    <a id="SR7_1604_1-2495-8" class="sr7-layer sr7-btn" href="#" target="_blank" rel="noopener noopener" plerdy-tracking-id="41760765601" aria-hidden="true" data-type="text" data-subtype="button" style="font-family: Manrope; font-size: 13px; font-weight: 700; color: rgb(0, 0, 0); text-transform: uppercase; text-decoration: none; letter-spacing: 0.901111px; line-height: 45px; text-align: center; white-space: normal; overflow: visible; margin: 63px 0px 0px; padding: 0px 32px; min-height: 0px; width: auto; height: 45.0556px; float: none; clear: none; z-index: 10; border-radius: 25px; position: relative; vertical-align: inherit; transform-origin: 50% 50%; display: inline-block; background: rgb(243, 204, 19); translate: none; rotate: none; scale: none; visibility: hidden; opacity: 1; transform: translate(0px, 0px); pointer-events: none;">learn more</a>
+                                                </sr7-col-con>
+                                                <sr7-col-bg style="inset: 0px; background: transparent;"></sr7-col-bg>
+                                            </sr7-col>
+                                        </sr7-row-con>
+                                    </sr7-row>
+                                </sr7-zone>
+                                <sr7-mask style="overflow: visible; min-height: auto; min-width: auto; width: 100%; height: 811px; z-index: 0; position: absolute; display: block; visibility: visible; left: 0px; top: 0px;">
+                                    <sr7-bg id="SR7_1604_1-2495-11" class="sr7-layer" aria-hidden="true" data-type="shape" data-subtype="slidebg" style="padding: 0px; width: 100%; height: 811px; display: block; visibility: visible; overflow: hidden; pointer-events: none; opacity: 1;">
+                                        <canvas width="2160" height="1215" style="width: 1920px; height: 1080px; z-index: 1; position: absolute; top: 0px; left: 0px; visibility: visible; background: transparent; opacity: 1; display: block;"></canvas>
+                                        <sr7-media id="SR7_1604_1-2495-11_video" class="sr7-media" style="width: 100%; height: 100%; visibility: visible; pointer-events: none; opacity: 1;">
+                                            <video id="SR7_1604_1-2495-11_video_html5" class="sr7-html5-video" src="https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/aurora-final.mp4" preload="metadata" playsinline="metadata" muted="" loop="" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                        </sr7-media>
+                                        <sr7-poster id="SR7_1604_1-2495-11_poster" class="sr7-poster"></sr7-poster>
+                                    </sr7-bg>
+                                </sr7-mask>
+                                <sr7-img id="SR7_1604_1-2495-0" class="sr7-layer portal-gate" aria-hidden="true" data-need-color-bg="false" style="overflow: visible; padding: 0px; width: 523px; height: 542px; z-index: 16; position: absolute; cursor: pointer; transform-origin: 50% 50%; display: block; background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/travel-portal/gate.png') 50% 50% / cover no-repeat transparent; left: 583.5px; top: 134.5px; translate: none; rotate: none; scale: none; visibility: hidden; opacity: 0; transform: perspective(600px) scale(6, 6); filter: blur(10px); pointer-events: none;"></sr7-img>
+                            </sr7-slide>
+
+                            <!-- Static Slide (Navigation/UI) -->
+                            <sr7-slide id="SR7_1604_1-3931" data-key="3931" class="sr7-staticslide sr7-staticslide-high" style="pointer-events: auto; display: block; visibility: visible;">
+                                <!-- Social Media Links -->
+                                <sr7-grp id="SR7_1604_1-3931-19" class="sr7-layer" aria-hidden="true" style="line-height: 0px; text-align: left; overflow: visible; padding: 0px; width: 62px; height: 16px; z-index: 17; position: absolute; vertical-align: top; transform-origin: 50% 50%; display: block; left: 68px; top: 770.25px; translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: perspective(600px); filter: blur(0px); pointer-events: auto; background: transparent;">
+                                    <a id="SR7_1604_1-3931-18" class="sr7-layer sr7-btn" href="https://www.youtube.com/user/ThemePunch" target="_blank" rel="noopener noopener" plerdy-tracking-id="26523368301" aria-hidden="true" data-type="text" data-subtype="button" style="font-family: Roboto; font-size: 7px; font-weight: 500; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0px; line-height: 17px; text-align: center; white-space: normal; overflow: visible; padding: 0px; width: 17px; height: 16.5px; float: none; clear: none; border-style: solid; border-width: 0px; border-color: rgb(243, 204, 19); z-index: 16; border-radius: 25px; position: absolute; vertical-align: top; transform-origin: 50% 50%; display: block; left: 45px; top: 0px; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate3d(0px, 0px, 0px); pointer-events: auto; background: rgba(0, 0, 0, 0);"><i class="fa-youtube-play"></i></a>
+                                    <a id="SR7_1604_1-3931-17" class="sr7-layer sr7-btn" href="https://www.instagram.com/sliderrevolution" target="_blank" rel="noopener noopener" plerdy-tracking-id="26363330601" aria-hidden="true" data-type="text" data-subtype="button" style="font-family: Roboto; font-size: 7px; font-weight: 500; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0px; line-height: 17px; text-align: center; white-space: normal; overflow: visible; padding: 0px; width: 17px; height: 16.5px; float: none; clear: none; border-style: solid; border-width: 0px; border-color: rgb(243, 204, 19); z-index: 15; border-radius: 25px; position: absolute; vertical-align: top; transform-origin: 50% 50%; display: block; left: 22.5px; top: 0px; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate3d(0px, 0px, 0px); pointer-events: auto; background: rgba(0, 0, 0, 0);"><i class="fa-instagram"></i></a>
+                                    <a id="SR7_1604_1-3931-16" class="sr7-layer sr7-btn" href="https://www.facebook.com/official.sliderrevolution" target="_blank" rel="noopener noopener" plerdy-tracking-id="75241072401" aria-hidden="true" data-type="text" data-subtype="button" style="font-family: Roboto; font-size: 7px; font-weight: 500; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0px; line-height: 17px; text-align: center; white-space: normal; overflow: visible; padding: 0px; width: 17px; height: 16.5px; float: none; clear: none; border-style: solid; border-width: 0px; border-color: rgb(243, 204, 19); z-index: 14; border-radius: 25px; position: absolute; vertical-align: top; transform-origin: 50% 50%; display: block; left: 0px; top: 0px; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate3d(0px, 0px, 0px); pointer-events: auto; background: rgba(0, 0, 0, 0);"><i class="fa-facebook-f"></i></a>
+                                </sr7-grp>
+
+                                <!-- Get in Touch Link -->
+                                <sr7-loop style="width: auto; height: auto; z-index: 18; position: absolute; transform-origin: 50% 50%; transform: translate(0px, 0px); display: block; visibility: visible; left: 133.25px; top: 24.75px;">
+                                    <a id="SR7_1604_1-3931-20" class="sr7-layer sr7-btn" href="#" target="_blank" rel="noopener noopener" plerdy-tracking-id="15320694701" aria-hidden="true" data-type="text" data-subtype="button" style="font-family: Manrope; font-size: 7px; font-weight: 400; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0px; line-height: 12px; text-align: left; white-space: nowrap; overflow: visible; padding: 0px; border-style: solid; border-width: 0px; border-color: rgb(243, 204, 19); border-radius: 0px; vertical-align: top; transform-origin: 50% 50%; width: auto; height: auto; display: block; visibility: visible; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); filter: blur(0px); pointer-events: auto; background: rgba(0, 0, 0, 0);">Get in Touch</a>
+                                </sr7-loop>
+
+                                <!-- Instructions Text -->
+                                <sr7-loop style="width: auto; height: auto; z-index: 19; position: absolute; transform-origin: 50% 50%; transform: translate(0px, 0px); display: block; visibility: visible; left: 13px; top: 745.25px;">
+                                    <sr7-txt id="SR7_1604_1-3931-22" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 5px; font-weight: 400; color: rgba(255, 255, 255, 0.65); text-transform: uppercase; text-decoration: none; letter-spacing: 1.65px; line-height: 8px; text-align: center; white-space: nowrap; overflow: visible; padding: 0px; vertical-align: top; transform-origin: 50% 50%; width: auto; height: auto; display: block; visibility: visible; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); filter: blur(0px); pointer-events: auto; background: transparent;">click the Gate to switch between places</sr7-txt>
+                                </sr7-loop>
+
+                                <!-- Logo -->
+                                <sr7-grp id="SR7_1604_1-3931-25" class="sr7-layer" aria-hidden="true" style="line-height: 0px; text-align: left; overflow: visible; padding: 0px; width: 14px; height: 18px; z-index: 22; position: absolute; cursor: pointer; vertical-align: top; transform-origin: 50% 50%; display: block; left: 24.75px; top: 20.625px; translate: none; rotate: none; scale: none; visibility: visible; opacity: 1; transform: perspective(600px); filter: blur(0px); pointer-events: auto; background: transparent;">
+                                    <sr7-txt id="SR7_1604_1-3931-23" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 800; color: rgb(255, 255, 255); text-transform: none; text-decoration: none; letter-spacing: 0px; line-height: 17px; text-align: left; white-space: nowrap; overflow: visible; padding: 0px; width: auto; height: auto; float: none; clear: none; z-index: 21; position: absolute; vertical-align: top; transform-origin: 50% 50%; display: block; left: 0px; top: 0px; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate(0px, 0px); pointer-events: auto; background: transparent;">p</sr7-txt>
+                                    <sr7-txt id="SR7_1604_1-3931-24" class="sr7-layer" aria-hidden="true" style="font-family: Manrope; font-size: 17px; font-weight: 800; color: rgb(243, 204, 19); text-transform: none; text-decoration: none; letter-spacing: 0px; line-height: 17px; text-align: left; white-space: nowrap; overflow: visible; padding: 0px; width: auto; height: auto; float: none; clear: none; z-index: 20; position: absolute; vertical-align: top; transform-origin: 50% 50%; display: block; left: 9px; top: 0px; translate: none; rotate: none; scale: none; visibility: inherit; opacity: 1; transform: translate(0px, 0px); pointer-events: auto; background: transparent;">.</sr7-txt>
+                                </sr7-grp>
+
+                                <!-- Arrow Icon -->
+                                <sr7-loop style="width: 12px; height: 12px; z-index: 23; position: absolute; transform-origin: 50% 50%; transform: translate3d(0px, 8.1875px, 0px); display: block; visibility: visible; left: 93px; top: 724.75px;">
+                                    <sr7-svg id="SR7_1604_1-3931-26" class="sr7-layer" aria-hidden="true" style="overflow: visible; padding: 0px; transform-origin: 50% 50%; width: 12px; height: 12px; display: block; visibility: visible; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); filter: blur(0px); fill: rgb(255, 255, 255); pointer-events: auto; background: transparent;">
+                                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 32.2 19.2" style="enable-background:new 0 0 32.2 19.2;" xml:space="preserve" plerdy-tracking-id="11942306301">
+                                            <g>
+                                                <polygon points="32.2,10.3 32.2,19.2 27.7,16.3 16.1,8.9 4.5,16.3 0,19.2 0,10.3 4.5,7.4 16.1,0 27.7,7.4 "></polygon>
+                                            </g>
+                                        </svg>
+                                    </sr7-svg>
+                                </sr7-loop>
+                            </sr7-slide>
+
+                            <!-- Module Shadow -->
+                            <sr7-module-shadow class="sr7-shdw-0"></sr7-module-shadow>
+                            
+                            <!-- Static Slide Low -->
+                            <sr7-slide id="SR7_1604_1-3931_2" class="sr7-staticslide sr7-staticslide-low" data-key="3931_2" style="display: block; visibility: visible;"></sr7-slide>
+                            
+                            <!-- Slide Bullets/Navigation -->
+                            <sr7-bullets class="sr7-bullets hesperiden sr7-ndh sr7-nphl sr7-npvb" style="opacity: 1; width: 60px; height: 12px; translate: none; rotate: none; scale: none; transform: translate(60px, -65px); inset: auto auto 0px 0px; pointer-events: auto; display: block;">
+                                <sr7-bullet class="sr7-bullet" data-key="2492" aria-hidden="true" style="top: 0px; left: 0px;"></sr7-bullet>
+                                <sr7-bullet class="sr7-bullet" data-key="2493" aria-hidden="true" style="top: 0px; left: 15px;"></sr7-bullet>
+                                <sr7-bullet class="sr7-bullet selected" data-key="2494" aria-hidden="true" style="top: 0px; left: 30px;"></sr7-bullet>
+                                <sr7-bullet class="sr7-bullet" data-key="2495" aria-hidden="true" style="top: 0px; left: 45px;"></sr7-bullet>
+                            </sr7-bullets>
+                        </sr7-content>
+                    </sr7-module>
+                </div>
+            </div>
+        </div>
+        <p></p>
+    </div>
+
+    <!-- Link to external JavaScript file -->
+    <script src="slider-script.js"></script>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Scene Animation</title>
+    <style>
+        *, *::before, *::after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            perspective: 800px;
+            overflow: clip;
+            font-size: 12px;
+        }
+
+        body * {
+            transform-style: preserve-3d;
+        }
+
+        .scene {
+            position: relative;
+            animation: scene 144s linear infinite;
+        }
+
+        .scene * {
+            position: absolute;
+        }
+
+        @keyframes scene {
+            from { transform: rotateX(30deg) rotateZ(0deg); }
+            to { transform: rotateX(30deg) rotateZ(-360deg); }
+        }
+
+        .floor {
+            inset: -40em;
+            background-color: #fff2;
+            background:
+                radial-gradient(closest-side, transparent, black),
+                repeating-conic-gradient(#aaf8 0 30deg, #003 0 60deg) 0 0 / 2em 2em;
+        }
+
+        .wall {    
+            inset: -3.25em -6.5em;
+            translate: 0 -3.25em;
+            transform-origin: bottom;
+        }
+
+        .wall i {
+            --color: hsl(200 0% var(--i) * 4%);
+            inset: 0;
+            border-radius: 50% / 100% 100% 0 0;
+            border: solid hsl(0 0% calc(var(--i) * 3%)) 0.5em;
+            border-bottom: none;
+            transform: translateZ(calc(var(--i) * 2px));
+        }
+
+        .wall i:first-child {
+            filter: blur(0.3em);
+        }
+
+        .wall.main {
+            animation: mainWall 2s linear infinite;
+        }
+
+        .wall.out {
+            transform: rotate(calc(var(--w) * 45deg)) translateY(-20em);
+        }
+
+        .wall.out i {
+            animation: outWall 6s calc(var(--w) * -3.75s) linear infinite;
+        }
+
+        @keyframes mainWall {
+            to { rotate: 360deg; }
+        }
+
+        @keyframes outWall {
+            0%, 35%, 100% {
+                opacity: 0.05;
+                transform: translateZ(0);
+            }
+            10%, 25% {
+                opacity: 1;
+                transform: translateZ(calc(var(--i) * 2px));
+            }
+        }
+
+        .ball-container {
+            inset: -2em;
+            border-radius: 50%;
+            background-color: #0008;
+            box-shadow: 0 0 1em #000;
+            rotate: calc(var(--b) * -90deg); 
+            animation: ballContainer 18s calc(var(--b) * -0.5s) linear infinite;
+        }
+
+        .ball {
+            --rotateZ: calc(var(--b) * 90deg);
+            inset: 0;
+            border-radius: 50%;
+            background: 
+                radial-gradient(ellipse at 30% 25%, 
+                    rgba(255, 255, 255, 0.9) 0%, 
+                    rgba(255, 255, 255, 0.3) 15%, 
+                    transparent 40%),
+                radial-gradient(ellipse at 70% 30%, 
+                    rgba(255, 255, 255, 0.4) 0%, 
+                    transparent 25%),
+                radial-gradient(ellipse at 25% 70%, 
+                    rgba(0, 0, 0, 0.3) 0%, 
+                    transparent 30%),
+                radial-gradient(ellipse at 80% 80%, 
+                    rgba(0, 0, 0, 0.8) 0%, 
+                    rgba(0, 0, 0, 0.4) 40%, 
+                    transparent 70%),
+                linear-gradient(135deg, 
+                    hsl(calc(var(--b) * 45) 75% 60%) 0%,
+                    hsl(calc(var(--b) * 45 + 30) 85% 50%) 30%,
+                    hsl(calc(var(--b) * 45 + 60) 70% 45%) 70%,
+                    hsl(calc(var(--b) * 45 + 90) 60% 35%) 100%);
+            box-shadow: 
+                0 0 20px rgba(0, 0, 0, 0.8),
+                inset -10px -10px 20px rgba(0, 0, 0, 0.4),
+                inset 10px 10px 20px rgba(255, 255, 255, 0.1);
+            animation: ball 144s linear infinite;
+        }
+
+        @keyframes ballContainer {
+            0% { transform: rotate(0deg) translateY(0em) rotate(0deg) translateX(4em) rotate(0deg); }
+            2.5% { transform: rotate(-90deg) translateY(0em) rotate(0deg) translateX(4em) rotate(90deg); }
+            11.25% { transform: rotate(-90deg) translateY(-20em) rotate(0deg) translateX(4em) rotate(90deg); }
+            16.25% { transform: rotate(-90deg) translateY(-20em) rotate(-180deg) translateX(4em) rotate(270deg); }
+            25% { transform: rotate(-90deg) translateY(0em) rotate(-180deg) translateX(4em) rotate(270deg); }
+            27.5% { transform: rotate(-180deg) translateY(0em) rotate(-180deg) translateX(4em) rotate(360deg); }
+            36.25% { transform: rotate(-180deg) translateY(20em) rotate(-180deg) translateX(4em) rotate(360deg); }
+            41.25% { transform: rotate(-180deg) translateY(20em) rotate(-360deg) translateX(4em) rotate(540deg); }
+            50% { transform: rotate(-180deg) translateY(0em) rotate(-360deg) translateX(4em) rotate(540deg); }
+            52.5% { transform: rotate(-270deg) translateY(0em) rotate(-360deg) translateX(4em) rotate(630deg); }
+            61.25% { transform: rotate(-270deg) translateY(-20em) rotate(-360deg) translateX(4em) rotate(630deg); }
+            66.25% { transform: rotate(-270deg) translateY(-20em) rotate(-540deg) translateX(4em) rotate(810deg); }
+            75% { transform: rotate(-270deg) translateY(0em) rotate(-540deg) translateX(4em) rotate(810deg); }
+            77.5% { transform: rotate(-360deg) translateY(0em) rotate(-540deg) translateX(4em) rotate(900deg); }
+            86.25% { transform: rotate(-360deg) translateY(20em) rotate(-540deg) translateX(4em) rotate(900deg); }
+            91.25% { transform: rotate(-360deg) translateY(20em) rotate(-720deg) translateX(4em) rotate(1080deg); }
+            100% { transform: rotate(-360deg) translateY(0em) rotate(-720deg) translateX(4em) rotate(1080deg); }
+        }
+
+        @keyframes ball {
+            from { transform: translateZ(2em) rotateZ(var(--rotateZ)) rotateZ(0deg) rotateX(-30deg); }
+            to   { transform: translateZ(2em) rotateZ(var(--rotateZ)) rotateZ(360deg) rotateX(-30deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="scene">
+        <div class="floor"></div>
+        <div class="walls">
+            <div class="wall main">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 0;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 1;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 2;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 3;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 4;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 5;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 6;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+            <div class="wall out" style="--w: 7;">
+                <i style="--i: 0;"></i>
+                <i style="--i: 8;"></i>
+                <i style="--i: 9;"></i>
+                <i style="--i: 10;"></i>
+                <i style="--i: 11;"></i>
+                <i style="--i: 12;"></i>
+                <i style="--i: 13;"></i>
+                <i style="--i: 14;"></i>
+                <i style="--i: 15;"></i>
+            </div>
+        </div>
+        <div class="balls">
+            <div class="ball-container" style="--b: 0;">
+                <div class="ball"></div>
+            </div>
+            <div class="ball-container" style="--b: 1.5;">
+                <div class="ball"></div>
+            </div>
+            <div class="ball-container" style="--b: 3;">
+                <div class="ball"></div>
+            </div>
+            <div class="ball-container" style="--b: 4.5;">
+                <div class="ball"></div>
+            </div>
+            <div class="ball-container" style="--b: 6;">
+                <div class="ball"></div>
+            </div>
+            <div class="ball-container" style="--b: 7.5;">
+                <div class="ball"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

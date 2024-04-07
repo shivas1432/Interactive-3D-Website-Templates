@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Festive Christmas Slider with Particle Snow Effect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Urbanist', sans-serif;
+            background: #0c0c0c;
+            overflow-x: hidden;
+        }
+        
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 811px;
+            background: #0c0c0c;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .slide-1 {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/sl-bg-2.jpg');
+        }
+        
+        .slide-2 {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/sl-bg-1.jpg');
+        }
+        
+        .slide-3 {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/sl-bg-3.jpg');
+        }
+        
+        .slide-4 {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/sl-bg-5.jpg');
+        }
+        
+        .slide-image {
+            position: absolute;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: scale(1.02);
+            transition: transform 3s ease-out;
+        }
+        
+        .slide-1 .slide-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/2santa-yoga.png');
+            width: 100%;
+            height: 516px;
+            top: 294px;
+            left: 0;
+        }
+        
+        .slide-2 .slide-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/santa-1.png');
+            width: 940px;
+            height: 694px;
+            top: 117px;
+            left: 72px;
+        }
+        
+        .slide-3 .slide-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/santa-air.png');
+            width: 912px;
+            height: 508px;
+            top: 151px;
+            left: 86px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .slide-4 .slide-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Festive-Christmas-Slider-with-Particle-Snow-Effect/santa-skate.png');
+            width: 606px;
+            height: 520px;
+            top: 141px;
+            left: 239px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1.02); }
+            50% { transform: translateY(-20px) scale(1.02); }
+        }
+        
+        .content-zone {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            padding: 0 0 0 0;
+        }
+        
+        .nav-row {
+            padding: 0 90px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+        }
+        
+        .title-column {
+            flex: 2;
+        }
+        
+        .nav-column {
+            flex: 1;
+            text-align: right;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0;
+        }
+        
+        /* 🎨 Updated Text Design */
+        .slide-title {
+            font-size: clamp(3.5rem, 6vw, 5rem);
+            font-weight: 700;
+            color: white;
+            line-height: 1.1;
+            margin-bottom: 0;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+        
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b9d 0%, #c44569 100%);
+            border-radius: 2px;
+        }
+        
+        .nav-item {
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            line-height: 23px;
+            position: relative;
+            letter-spacing: 1px;
+        }
+        
+        .nav-prev, .nav-next {
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 8px 16px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-separator {
+            color: white;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+        
+        .nav-prev:hover, .nav-next:hover {
+            color: white;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .content-row {
+            padding: 0 50px;
+            margin-bottom: 0;
+        }
+        
+        .content-container {
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: none;
+            background: rgba(12, 12, 12, 0.1);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .content-left {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+        
+        .content-right {
+            flex: 1;
+            text-align: right;
+        }
+        
+        /* 🎯 Enhanced Number Design */
+        .slide-number {
+            font-size: 4rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.1);
+            line-height: 1;
+            position: relative;
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+        }
+        
+        .slide-number::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border: 2px solid rgba(255, 107, 157, 0.2);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        /* 📝 Enhanced Description */
+        .slide-description {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.7;
+            padding: 8px 0;
+            max-width: 66.67%;
+            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .slide-description::before {
+            content: '"';
+            font-size: 3rem;
+            color: rgba(255, 107, 157, 0.3);
+            position: absolute;
+            top: -10px;
+            left: -20px;
+            font-family: Georgia, serif;
+        }
+        
+        /* 🎯 Enhanced CTA Button */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 0 29px;
+            line-height: 57px;
+            border: 1px solid #db5c5c;
+            border-bottom: none;
+            border-radius: 50px;
+            background: linear-gradient(305deg, #ad2727 0%, #ff286c 100%);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(255, 40, 108, 0.2);
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 40, 108, 0.4);
+            border-color: #ff6b9d;
+        }
+        
+        .cta-button::after {
+            content: '→';
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            padding: 20px 90px 0;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* 🎨 Enhanced Logo */
+        .logo {
+            font-size: 45px;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header-nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header-nav a {
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 10px 16px;
+            line-height: 1;
+            transition: all 0.3s ease;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: 1px;
+        }
+        
+        .header-nav a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        /* Snow animation */
+        .snow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Enhanced Progress bar */
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ad2727 0%, #ff286c 100%);
+            z-index: 15;
+            animation: progress 4s linear infinite;
+            box-shadow: 0 0 10px rgba(255, 40, 108, 0.5);
+        }
+        
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .nav-row, .header {
+                padding-left: 50px;
+                padding-right: 50px;
+            }
+            
+            .slide-title {
+                font-size: clamp(2.5rem, 5vw, 3.5rem);
+            }
+            
+            .slide-number {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-row, .header {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            
+            .content-row {
+                padding: 0 20px;
+            }
+            
+            .slide-title {
+                font-size: clamp(2rem, 4vw, 2.5rem);
+                text-align: center;
+            }
+            
+            .nav-column {
+                justify-content: center;
+                margin-top: 20px;
+            }
+            
+            .nav-row {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .title-column {
+                flex: none;
+            }
+            
+            .content-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+                border-radius: 20px;
+                padding: 30px 20px;
+            }
+            
+            .content-left {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .slide-description {
+                max-width: 100%;
+                text-align: center;
+            }
+            
+            .slide-description::before {
+                display: none;
+            }
+            
+            .content-right {
+                text-align: center;
+            }
+            
+            .header-nav {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .logo {
+                font-size: 32px;
+            }
+        }
+        
+        /* ✨ Additional Enhancements */
+        @keyframes glow {
+            0%, 100% { text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5); }
+            50% { text-shadow: 2px 2px 30px rgba(255, 107, 157, 0.3); }
+        }
+        
+        .slide.active .slide-title {
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        .slide-description {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .slide-description::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, #ff6b9d 0%, transparent 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <!-- Snow Effect -->
+        <div class="snow-container" id="snow-container"></div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <a href="#" class="logo">xmas</a>
+                <nav class="header-nav">
+                    <a href="#">about</a>
+                    <a href="#">templates</a>
+                    <a href="#">contact</a>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Slide 1 -->
+        <div class="slide slide-1 active" data-slide="1">
+            <div class="slide-image"></div>
+            <div class="content-zone">
+                <div class="nav-row">
+                    <div class="title-column">
+                        <h1 class="slide-title">Find Your<br>Festive Balance</h1>
+                    </div>
+                    <div class="nav-column">
+                        <span class="nav-item nav-prev" onclick="previousSlide()">prev</span>
+                        <span class="nav-item nav-separator">/</span>
+                        <span class="nav-item nav-next" onclick="nextSlide()">next</span>
+                    </div>
+                </div>
+                <div class="content-row">
+                    <div class="content-container">
+                        <div class="content-left">
+                            <div class="slide-number">01</div>
+                            <div class="slide-description">Even Santa takes a moment to breathe this season. Unwrap new ways to bring harmony, health, and holiday spirit into your life.</div>
+                        </div>
+                        <div class="content-right">
+                            <a href="#" class="cta-button">Find Your Flow</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 2 -->
+        <div class="slide slide-2" data-slide="2">
+            <div class="slide-image"></div>
+            <div class="content-zone">
+                <div class="nav-row">
+                    <div class="title-column">
+                        <h1 class="slide-title">Celebrate<br> in a New Reality</h1>
+                    </div>
+                    <div class="nav-column">
+                        <span class="nav-item nav-prev" onclick="previousSlide()">prev</span>
+                        <span class="nav-item nav-separator">/</span>
+                        <span class="nav-item nav-next" onclick="nextSlide()">next</span>
+                    </div>
+                </div>
+                <div class="content-row">
+                    <div class="content-container">
+                        <div class="content-left">
+                            <div class="slide-number">02</div>
+                            <div class="slide-description">Santa's gone virtual, and so can you—dive into a world of festive innovation and joy.</div>
+                        </div>
+                        <div class="content-right">
+                            <a href="#" class="cta-button">Explore the Magic</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 3 -->
+        <div class="slide slide-3" data-slide="3">
+            <div class="slide-image"></div>
+            <div class="content-zone">
+                <div class="nav-row">
+                    <div class="title-column">
+                        <h1 class="slide-title">Drop Into New<br>Holiday Adventures</h1>
+                    </div>
+                    <div class="nav-column">
+                        <span class="nav-item nav-prev" onclick="previousSlide()">prev</span>
+                        <span class="nav-item nav-separator">/</span>
+                        <span class="nav-item nav-next" onclick="nextSlide()">next</span>
+                    </div>
+                </div>
+                <div class="content-row">
+                    <div class="content-container">
+                        <div class="content-left">
+                            <div class="slide-number">03</div>
+                            <div class="slide-description">From unexpected thrills to timeless traditions, discover fresh ways to celebrate this season.</div>
+                        </div>
+                        <div class="content-right">
+                            <a href="#" class="cta-button">Take the Leap</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 4 -->
+        <div class="slide slide-4" data-slide="4">
+            <div class="slide-image"></div>
+            <div class="content-zone">
+                <div class="nav-row">
+                    <div class="title-column">
+                        <h1 class="slide-title">Roll Into a<br> Season of Joy</h1>
+                    </div>
+                    <div class="nav-column">
+                        <span class="nav-item nav-prev" onclick="previousSlide()">prev</span>
+                        <span class="nav-item nav-separator">/</span>
+                        <span class="nav-item nav-next" onclick="nextSlide()">next</span>
+                    </div>
+                </div>
+                <div class="content-row">
+                    <div class="content-container">
+                        <div class="content-left">
+                            <div class="slide-number">04</div>
+                            <div class="slide-description">From old traditions to new adventures, celebrate the holidays at your own speed.</div>
+                        </div>
+                        <div class="content-right">
+                            <a href="#" class="cta-button">Catch the Spirit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar"></div>
+    </div>
+    
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+        let slideInterval;
+        
+        // Auto-slide functionality
+        function startSlideShow() {
+            slideInterval = setInterval(() => {
+                nextSlide();
+            }, 4000);
+        }
+        
+        function stopSlideShow() {
+            clearInterval(slideInterval);
+        }
+        
+        // Navigation functions
+        function nextSlide() {
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.remove('active');
+            currentSlide = currentSlide >= totalSlides ? 1 : currentSlide + 1;
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.add('active');
+        }
+        
+        function previousSlide() {
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.remove('active');
+            currentSlide = currentSlide <= 1 ? totalSlides : currentSlide - 1;
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.add('active');
+        }
+        
+        // Snow effect
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+            snowflake.style.opacity = Math.random() * 0.5 + 0.3;
+            
+            document.getElementById('snow-container').appendChild(snowflake);
+            
+            setTimeout(() => {
+                snowflake.remove();
+            }, 5000);
+        }
+        
+        // Initialize snow effect
+        function initSnow() {
+            setInterval(createSnowflake, 200);
+        }
+        
+        // Pause auto-slide on hover
+        document.querySelector('.slider-container').addEventListener('mouseenter', stopSlideShow);
+        document.querySelector('.slider-container').addEventListener('mouseleave', startSlideShow);
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            startSlideShow();
+            initSnow();
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

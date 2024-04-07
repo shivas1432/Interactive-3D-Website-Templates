@@ -1,485 +1,247 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cosmic Odyssey Slider</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Kanit', sans-serif;
-      background: #0c0808;
-      overflow: hidden;
-      height: 100vh;
-    }
-    
-    .cosmic-slider {
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .slide {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      transition: opacity 1.5s ease-in-out;
-      background-size: cover;
-      background-position: center;
-    }
-    
-    .slide.active {
-      opacity: 1;
-    }
-    
-    .slide-1 {
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/nightskybg2.jpg') center/cover;
-    }
-    
-    .slide-2 {
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/skybg23.jpg') center/cover;
-    }
-    
-    .slide-3 {
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/skybg33.jpg') center/cover;
-    }
-    
-    .slide-container {
-      position: relative;
-      width: 90%;
-      height: 80%;
-      left: 5%;
-      top: 10%;
-      border: 2px solid white;
-      background: transparent;
-      overflow: hidden;
-    }
-    
-    .content-area {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .background-planet {
-      position: absolute;
-      width: 120%;
-      height: 120%;
-      left: -10%;
-      top: -10%;
-      background-size: cover;
-      background-position: center;
-      z-index: 1;
-    }
-    
-    .slide-1 .background-planet {
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planetbg2-resized.webp') center/cover;
-    }
-    
-    .slide-2 .background-planet {
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/frontscene1-reduced.webp') center/cover;
-    }
-    
-    .slide-3 .background-planet {
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planetsurface-reduced.webp') center/cover;
-    }
-    
-    .main-planet {
-      position: absolute;
-      z-index: 3;
-      background-size: cover;
-      background-position: center;
-    }
-    
-    .slide-1 .main-planet {
-      width: 466px;
-      height: 470px;
-      right: 20%;
-      top: 50%;
-      transform: translateY(-50%);
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planet-resized.webp') center/cover;
-      animation: float-planet 8s ease-in-out infinite;
-    }
-    
-    .slide-3 .main-planet {
-      width: 447px;
-      height: 444px;
-      right: 25%;
-      top: 50%;
-      transform: translateY(-50%);
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planet3-reduced.webp') center/cover;
-      animation: float-planet 8s ease-in-out infinite;
-    }
-    
-    .gradient-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      z-index: 2;
-    }
-    
-    .slide-1 .gradient-overlay {
-      background: linear-gradient(rgba(13, 10, 8, 0) 0%, rgb(13, 10, 8) 50%, rgb(13, 10, 8) 100%);
-    }
-    
-    .slide-2 .gradient-overlay {
-      background: linear-gradient(rgba(17, 16, 21, 0) 0%, rgb(17, 16, 21) 50%, rgb(17, 16, 21) 100%);
-    }
-    
-    .slide-3 .gradient-overlay {
-      background: linear-gradient(rgba(13, 10, 8, 0) 0%, rgb(13, 10, 8) 50%, rgb(13, 10, 8) 100%);
-    }
-    
-    .color-effect {
-      position: absolute;
-      width: 699px;
-      height: 311px;
-      left: 50%;
-      top: 30%;
-      transform: translateX(-50%);
-      z-index: 2;
-      opacity: 0.5;
-      filter: blur(70px);
-    }
-    
-    .slide-1 .color-effect {
-      background: linear-gradient(90deg, rgba(7, 7, 7, 0.75) 0%, rgba(7, 7, 7, 0.75) 9%, rgba(214, 61, 74, 0.75) 24%, rgba(246, 118, 20, 0.75) 31%, rgba(120, 254, 255, 0.75) 56%, rgba(7, 7, 7, 0.75) 76%, rgba(7, 7, 7, 0.75) 100%);
-    }
-    
-    .slide-2 .color-effect {
-      background: linear-gradient(90deg, rgba(7, 7, 7, 0.75) 0%, rgba(7, 7, 7, 0.75) 9%, rgba(236, 103, 219, 0.75) 31%, rgba(7, 7, 7, 0.75) 47%, rgba(7, 7, 7, 0.75) 100%);
-      filter: blur(70px);
-    }
-    
-    .slide-3 .color-effect {
-      background: linear-gradient(90deg, rgba(7, 7, 7, 0.75) 0%, rgba(7, 7, 7, 0.75) 15%, rgba(74, 255, 247, 0.75) 54%, rgba(7, 7, 7, 0.75) 85%, rgba(7, 7, 7, 0.75) 100%);
-      filter: blur(0px);
-      opacity: 1;
-    }
-    
-    .title-background {
-      position: absolute;
-      font-size: 150px;
-      font-weight: 700;
-      text-align: center;
-      white-space: nowrap;
-      z-index: 4;
-      left: 50%;
-      top: 20%;
-      transform: translateX(-50%);
-      line-height: 155px;
-    }
-    
-    .slide-1 .title-background {
-      color: rgb(28, 21, 16);
-    }
-    
-    .slide-2 .title-background {
-      color: rgb(29, 28, 45);
-    }
-    
-    .slide-3 .title-background {
-      color: rgb(22, 28, 43);
-    }
-    
-    .title-foreground {
-      position: absolute;
-      font-size: 155px;
-      font-weight: 700;
-      color: white;
-      text-align: center;
-      white-space: nowrap;
-      z-index: 5;
-      left: 50%;
-      top: 32%;
-      transform: translateX(-50%);
-      line-height: 155px;
-      text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
-    }
-    
-    .description-box {
-      position: absolute;
-      bottom: 12%;
-      left: 0;
-      width: 35%;
-      background: rgba(12, 8, 8, 0.9);
-      border: 2px solid white;
-      border-right: none;
-      border-bottom: none;
-      padding: 31px 31px 23px;
-      transform: skew(-7deg) scale(1, 0.9925);
-      z-index: 6;
-    }
-    
-    .slide-2 .description-box {
-      background: rgba(17, 16, 21, 0.9);
-    }
-    
-    .slide-3 .description-box {
-      background: rgba(11, 11, 17, 0.9);
-    }
-    
-    .description-text {
-      font-size: 16px;
-      font-weight: 200;
-      color: white;
-      line-height: 20px;
-      transform: skew(7deg);
-    }
-    
-    .cta-button {
-      position: absolute;
-      bottom: 12%;
-      right: 15%;
-      background: rgba(12, 8, 8, 0.9);
-      color: white;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 19px;
-      border: 2px solid white;
-      border-left: none;
-      border-bottom: none;
-      padding: 0 31px;
-      line-height: 54px;
-      transform: skew(-7deg) scale(1, 0.9925);
-      transition: all 0.3s ease;
-      z-index: 6;
-    }
-    
-    .slide-2 .cta-button {
-      background: rgba(17, 16, 21, 0.9);
-    }
-    
-    .slide-3 .cta-button {
-      background: rgba(11, 11, 17, 0.9);
-    }
-    
-    .cta-button:hover {
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-    }
-    
-    .navigation {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%) skew(-7deg) scale(1, 0.9925);
-      z-index: 10;
-      background: rgba(12, 8, 8, 0.9);
-      border: 2px solid white;
-      width: 54px;
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .slide-2.active ~ .navigation,
-    .slide-2.active ~ .nav-prev {
-      background: rgba(17, 16, 21, 0.9);
-    }
-    
-    .slide-3.active ~ .navigation,
-    .slide-3.active ~ .nav-next {
-      background: rgba(11, 11, 17, 0.9);
-    }
-    
-    .navigation:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    
-    .nav-prev {
-      left: 5%;
-      border-right: none;
-    }
-    
-    .nav-next {
-      right: 5%;
-      border-left: none;
-    }
-    
-    .nav-icon {
-      color: white;
-      font-size: 24px;
-      transform: skew(7deg);
-    }
-    
-    .probe {
-      position: absolute;
-      z-index: 7;
-      background-size: cover;
-      background-position: center;
-      animation: float-probe 6s ease-in-out infinite;
-    }
-    
-    .slide-1 .probe {
-      width: 194px;
-      height: 200px;
-      top: -2%;
-      left: 3.5%;
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/probe1reduced.webp') center/cover;
-    }
-    
-    .slide-2 .probe {
-      width: 194px;
-      height: 194px;
-      top: 3%;
-      right: 10%;
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/probe2-reduced.webp') center/cover;
-      animation-delay: 2s;
-    }
-    
-    .slide-3 .probe {
-      width: 194px;
-      height: 194px;
-      top: 21%;
-      right: 20%;
-      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/probe33-reduced.webp') center/cover;
-      animation-delay: 4s;
-    }
-    
-    @keyframes float-planet {
-      0%, 100% { transform: translateY(-50%) translate(0, 0px); }
-      25% { transform: translateY(-50%) translate(-5px, -10px); }
-      50% { transform: translateY(-50%) translate(5px, -5px); }
-      75% { transform: translateY(-50%) translate(-3px, -8px); }
-    }
-    
-    @keyframes float-probe {
-      0%, 100% { transform: translate(0, 0px) rotate(0deg); }
-      25% { transform: translate(-10px, -15px) rotate(2deg); }
-      50% { transform: translate(5px, -10px) rotate(-1deg); }
-      75% { transform: translate(-5px, -5px) rotate(1deg); }
-    }
-    
-    @media (max-width: 1200px) {
-      .title-background { font-size: 120px; }
-      .title-foreground { font-size: 125px; }
-      .main-planet { width: 350px; height: 350px; }
-      .probe { width: 150px; height: 150px; }
-    }
-    
-    @media (max-width: 768px) {
-      .slide-container { width: 95%; left: 2.5%; }
-      .title-background { font-size: 80px; }
-      .title-foreground { font-size: 85px; }
-      .description-box { width: 50%; padding: 20px; }
-      .description-text { font-size: 14px; line-height: 18px; }
-      .main-planet { width: 250px; height: 250px; right: 10%; }
-      .probe { width: 100px; height: 100px; }
-      .navigation { width: 44px; height: 44px; }
-      .nav-prev { left: 2%; }
-      .nav-next { right: 2%; }
-    }
-  </style>
-</head>
-<body>
-  <div class="cosmic-slider">
-    
-    <div class="slide slide-1 active">
-      <div class="slide-container">
-        <div class="content-area">
-          <div class="background-planet"></div>
-          <div class="color-effect"></div>
-          <div class="gradient-overlay"></div>
-          <div class="main-planet"></div>
-          
-          <div class="title-background">STELLAR</div>
-          <div class="title-foreground">ODYSSEY</div>
-          
-          <div class="description-box">
-            <div class="description-text">Beneath the shimmering glow of a nebular tide, the world of Elarion spins silently, cloaked in an atmosphere of iridescent haze and forgotten history.</div>
-          </div>
-          
-          <div class="probe"></div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="slide slide-2">
-      <div class="slide-container">
-        <div class="content-area">
-          <div class="background-planet"></div>
-          <div class="color-effect"></div>
-          <div class="gradient-overlay"></div>
-          
-          <div class="title-background">CELESTIAL</div>
-          <div class="title-foreground">RELICS</div>
-          
-          <div class="description-box">
-            <div class="description-text">Among drifting asteroid fields, remnants of a long-extinct civilization pulse faintly with energy — their secrets encoded in crystalline archives untouched for millennia.</div>
-          </div>
-          
-          <div class="probe"></div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="slide slide-3">
-      <div class="slide-container">
-        <div class="content-area">
-          <div class="background-planet"></div>
-          <div class="color-effect"></div>
-          <div class="gradient-overlay"></div>
-          <div class="main-planet"></div>
-          
-          <div class="title-background">COSMIC</div>
-          <div class="title-foreground">FRONTIER</div>
-          
-          <div class="description-box">
-            <div class="description-text">Shrouded in polar storms and endless auroras, the rogue planet Zenthra drifts through interstellar voids, hiding lifeforms forged in total darkness.</div>
-          </div>
-          
-          <div class="probe"></div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="navigation nav-prev" onclick="previousSlide()">
-      <div class="nav-icon">‹</div>
-    </div>
-    
-    <div class="navigation nav-next" onclick="nextSlide()">
-      <div class="nav-icon">›</div>
-    </div>
-  </div>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elastic Vertex Destruction with TSL</title>
+    <meta name="author" content="Lolo Armdz for Codrops">
+    <link rel="icon" type="image/svg+xml" href="https://tympanus.net/favicon/favicon.svg">
+    <link rel="shortcut icon" href="https://tympanus.net/favicon/favicon.ico">
+    <script async="" src="//tympanus.net/matomo/matomo.js"></script><script src="//tympanus.net/codrops/adpacks/analytics.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overscroll-behavior: contain;
+        touch-action: none;
+      }
 
-  <script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    const totalSlides = slides.length;
-    
-    function showSlide(index) {
-      slides.forEach(slide => slide.classList.remove('active'));
-      slides[index].classList.add('active');
-    }
-    
-    function nextSlide() {
-      currentSlide = (currentSlide + 1) % totalSlides;
-      showSlide(currentSlide);
-    }
-    
-    function previousSlide() {
-      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-      showSlide(currentSlide);
-    }
-    
-    setInterval(nextSlide, 9000);
-  </script>
-</body>
+      html,
+      body {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
 
-</html>
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+      }
+
+      *,
+      *::after,
+      *::before {
+        box-sizing: border-box;
+      }
+
+      :root {
+        font-size: 12px;
+        --color-text: #808080;
+        --color-bg: #1a1e27;
+        --color-link: #fff;
+        --color-link-hover: #fff;
+        --page-padding: 1.5rem;
+      }
+
+      body {
+        margin: 0;
+        color: var(--color-text);
+        background-color: var(--color-bg);
+        font-family: ui-monospace, monospace;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      @media (scripting: enabled) {
+        .loading {
+          &::before,
+          &::after {
+            content: '';
+            position: fixed;
+            z-index: 10000;
+          }
+
+          &::before {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+          }
+
+          &::after {
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 1px;
+            margin: 0 0 0 -50px;
+            background: var(--color-link);
+            animation: loaderAnim 1.5s ease-in-out infinite alternate forwards;
+          }
+        }
+      }
+
+      @keyframes loaderAnim {
+        0% {
+          transform: scaleX(0);
+          transform-origin: 0% 50%;
+        }
+
+        50% {
+          transform: scaleX(1);
+          transform-origin: 0% 50%;
+        }
+
+        50.1% {
+          transform: scaleX(1);
+          transform-origin: 100% 50%;
+        }
+
+        100% {
+          transform: scaleX(0);
+          transform-origin: 100% 50%;
+        }
+      }
+
+      a {
+        text-decoration: none;
+        color: var(--color-link);
+        outline: none;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+          color: var(--color-link-hover);
+        }
+
+        &:focus {
+          outline: none;
+          background: lightgrey;
+
+          &:not(:focus-visible) {
+            background: transparent;
+          }
+
+          &:focus-visible {
+            outline: 2px solid red;
+            background: transparent;
+          }
+        }
+      }
+
+      .frame {
+        padding: 3rem var(--page-padding) 0;
+        display: grid;
+        z-index: 1000;
+        position: relative;
+        grid-row-gap: 1rem;
+        grid-column-gap: 2rem;
+        pointer-events: none;
+        justify-items: start;
+        grid-template-columns: auto auto;
+        grid-template-areas:
+          'title'
+          'back'
+          'archive'
+          'github'
+          'tags'
+          'sponsor';
+
+        #cdawrap {
+          justify-self: start;
+          grid-area: sponsor;
+        }
+
+        a,
+        button {
+          pointer-events: auto;
+        }
+
+        .frame__title {
+          grid-area: title;
+          font-size: inherit;
+          margin: 0;
+        }
+
+        .frame__back {
+          grid-area: back;
+          justify-self: start;
+        }
+
+        .frame__archive {
+          grid-area: archive;
+          justify-self: start;
+        }
+
+        .frame__github {
+          grid-area: github;
+        }
+
+        .frame__tags {
+          grid-area: tags;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        @media screen and (min-width: 53em) {
+          padding: var(--page-padding);
+          height: 100%;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          grid-template-columns: auto auto auto auto 1fr;
+          grid-template-rows: auto auto;
+          align-content: space-between;
+          grid-template-areas:
+            'title back github archive ...'
+            'tags tags tags sponsor sponsor';
+
+          .frame__tags {
+            align-self: end;
+          }
+
+          #cdawrap {
+            justify-self: end;
+            text-align: right;
+            max-width: 300px;
+          }
+        }
+      }
+    </style>
+    <script type="module" crossorigin="" src="./assets/index-Bw4VjMoO.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://tympanus.net/codrops/adpacks/cda_sponsor.css?1753354316879"><style type="text/css">.dg ul{list-style:none;margin:0;padding:0;width:100%;clear:both}.dg.ac{position:fixed;top:0;left:0;right:0;height:0;z-index:0}.dg:not(.ac) .main{overflow:hidden}.dg.main{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear}.dg.main.taller-than-window{overflow-y:auto}.dg.main.taller-than-window .close-button{opacity:1;margin-top:-1px;border-top:1px solid #2c2c2c}.dg.main ul.closed .close-button{opacity:1 !important}.dg.main:hover .close-button,.dg.main .close-button.drag{opacity:1}.dg.main .close-button{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear;border:0;line-height:19px;height:20px;cursor:pointer;text-align:center;background-color:#000}.dg.main .close-button.close-top{position:relative}.dg.main .close-button.close-bottom{position:absolute}.dg.main .close-button:hover{background-color:#111}.dg.a{float:right;margin-right:15px;overflow-y:visible}.dg.a.has-save>ul.close-top{margin-top:0}.dg.a.has-save>ul.close-bottom{margin-top:27px}.dg.a.has-save>ul.closed{margin-top:0}.dg.a .save-row{top:0;z-index:1002}.dg.a .save-row.close-top{position:relative}.dg.a .save-row.close-bottom{position:fixed}.dg li{-webkit-transition:height .1s ease-out;-o-transition:height .1s ease-out;-moz-transition:height .1s ease-out;transition:height .1s ease-out;-webkit-transition:overflow .1s linear;-o-transition:overflow .1s linear;-moz-transition:overflow .1s linear;transition:overflow .1s linear}.dg li:not(.folder){cursor:auto;height:27px;line-height:27px;padding:0 4px 0 5px}.dg li.folder{padding:0;border-left:4px solid rgba(0,0,0,0)}.dg li.title{cursor:pointer;margin-left:-4px}.dg .closed li:not(.title),.dg .closed ul li,.dg .closed ul li>*{height:0;overflow:hidden;border:0}.dg .cr{clear:both;padding-left:3px;height:27px;overflow:hidden}.dg .property-name{cursor:default;float:left;clear:left;width:40%;overflow:hidden;text-overflow:ellipsis}.dg .cr.function .property-name{width:100%}.dg .c{float:left;width:60%;position:relative}.dg .c input[type=text]{border:0;margin-top:4px;padding:3px;width:100%;float:right}.dg .has-slider input[type=text]{width:30%;margin-left:0}.dg .slider{float:left;width:66%;margin-left:-5px;margin-right:0;height:19px;margin-top:4px}.dg .slider-fg{height:100%}.dg .c input[type=checkbox]{margin-top:7px}.dg .c select{margin-top:5px}.dg .cr.function,.dg .cr.function .property-name,.dg .cr.function *,.dg .cr.boolean,.dg .cr.boolean *{cursor:pointer}.dg .cr.color{overflow:visible}.dg .selector{display:none;position:absolute;margin-left:-9px;margin-top:23px;z-index:10}.dg .c:hover .selector,.dg .selector.drag{display:block}.dg li.save-row{padding:0}.dg li.save-row .button{display:inline-block;padding:0px 6px}.dg.dialogue{background-color:#222;width:460px;padding:15px;font-size:13px;line-height:15px}#dg-new-constructor{padding:10px;color:#222;font-family:Monaco, monospace;font-size:10px;border:0;resize:none;box-shadow:inset 1px 1px 1px #888;word-wrap:break-word;margin:12px 0;display:block;width:440px;overflow-y:scroll;height:100px;position:relative}#dg-local-explain{display:none;font-size:11px;line-height:17px;border-radius:3px;background-color:#333;padding:8px;margin-top:10px}#dg-local-explain code{font-size:10px}#dat-gui-save-locally{display:none}.dg{color:#eee;font:11px 'Lucida Grande', sans-serif;text-shadow:0 -1px 0 #111}.dg.main::-webkit-scrollbar{width:5px;background:#1a1a1a}.dg.main::-webkit-scrollbar-corner{height:0;display:none}.dg.main::-webkit-scrollbar-thumb{border-radius:5px;background:#676767}.dg li:not(.folder){background:#1a1a1a;border-bottom:1px solid #2c2c2c}.dg li.save-row{line-height:25px;background:#dad5cb;border:0}.dg li.save-row select{margin-left:5px;width:108px}.dg li.save-row .button{margin-left:5px;margin-top:1px;border-radius:2px;font-size:9px;line-height:7px;padding:4px 4px 5px 4px;background:#c5bdad;color:#fff;text-shadow:0 1px 0 #b0a58f;box-shadow:0 -1px 0 #b0a58f;cursor:pointer}.dg li.save-row .button.gears{background:#c5bdad url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAANCAYAAAB/9ZQ7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQJJREFUeNpiYKAU/P//PwGIC/ApCABiBSAW+I8AClAcgKxQ4T9hoMAEUrxx2QSGN6+egDX+/vWT4e7N82AMYoPAx/evwWoYoSYbACX2s7KxCxzcsezDh3evFoDEBYTEEqycggWAzA9AuUSQQgeYPa9fPv6/YWm/Acx5IPb7ty/fw+QZblw67vDs8R0YHyQhgObx+yAJkBqmG5dPPDh1aPOGR/eugW0G4vlIoTIfyFcA+QekhhHJhPdQxbiAIguMBTQZrPD7108M6roWYDFQiIAAv6Aow/1bFwXgis+f2LUAynwoIaNcz8XNx3Dl7MEJUDGQpx9gtQ8YCueB+D26OECAAQDadt7e46D42QAAAABJRU5ErkJggg==) 2px 1px no-repeat;height:7px;width:8px}.dg li.save-row .button:hover{background-color:#bab19e;box-shadow:0 -1px 0 #b0a58f}.dg li.folder{border-bottom:0}.dg li.title{padding-left:16px;background:#000 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.2)}.dg .closed li.title{background-image:url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlGIWqMCbWAEAOw==)}.dg .cr.boolean{border-left:3px solid #806787}.dg .cr.color{border-left:3px solid}.dg .cr.function{border-left:3px solid #e61d5f}.dg .cr.number{border-left:3px solid #2FA1D6}.dg .cr.number input[type=text]{color:#2FA1D6}.dg .cr.string{border-left:3px solid #1ed36f}.dg .cr.string input[type=text]{color:#1ed36f}.dg .cr.function:hover,.dg .cr.boolean:hover{background:#111}.dg .c input[type=text]{background:#303030;outline:none}.dg .c input[type=text]:hover{background:#3c3c3c}.dg .c input[type=text]:focus{background:#494949;color:#fff}.dg .c .slider{background:#303030;cursor:ew-resize}.dg .c .slider-fg{background:#2FA1D6;max-width:100%}.dg .c .slider:hover{background:#3c3c3c}.dg .c .slider:hover .slider-fg{background:#44abda}
+</style><style type="text/css">.dg ul{list-style:none;margin:0;padding:0;width:100%;clear:both}.dg.ac{position:fixed;top:0;left:0;right:0;height:0;z-index:0}.dg:not(.ac) .main{overflow:hidden}.dg.main{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear}.dg.main.taller-than-window{overflow-y:auto}.dg.main.taller-than-window .close-button{opacity:1;margin-top:-1px;border-top:1px solid #2c2c2c}.dg.main ul.closed .close-button{opacity:1 !important}.dg.main:hover .close-button,.dg.main .close-button.drag{opacity:1}.dg.main .close-button{-webkit-transition:opacity .1s linear;-o-transition:opacity .1s linear;-moz-transition:opacity .1s linear;transition:opacity .1s linear;border:0;line-height:19px;height:20px;cursor:pointer;text-align:center;background-color:#000}.dg.main .close-button.close-top{position:relative}.dg.main .close-button.close-bottom{position:absolute}.dg.main .close-button:hover{background-color:#111}.dg.a{float:right;margin-right:15px;overflow-y:visible}.dg.a.has-save>ul.close-top{margin-top:0}.dg.a.has-save>ul.close-bottom{margin-top:27px}.dg.a.has-save>ul.closed{margin-top:0}.dg.a .save-row{top:0;z-index:1002}.dg.a .save-row.close-top{position:relative}.dg.a .save-row.close-bottom{position:fixed}.dg li{-webkit-transition:height .1s ease-out;-o-transition:height .1s ease-out;-moz-transition:height .1s ease-out;transition:height .1s ease-out;-webkit-transition:overflow .1s linear;-o-transition:overflow .1s linear;-moz-transition:overflow .1s linear;transition:overflow .1s linear}.dg li:not(.folder){cursor:auto;height:27px;line-height:27px;padding:0 4px 0 5px}.dg li.folder{padding:0;border-left:4px solid rgba(0,0,0,0)}.dg li.title{cursor:pointer;margin-left:-4px}.dg .closed li:not(.title),.dg .closed ul li,.dg .closed ul li>*{height:0;overflow:hidden;border:0}.dg .cr{clear:both;padding-left:3px;height:27px;overflow:hidden}.dg .property-name{cursor:default;float:left;clear:left;width:40%;overflow:hidden;text-overflow:ellipsis}.dg .cr.function .property-name{width:100%}.dg .c{float:left;width:60%;position:relative}.dg .c input[type=text]{border:0;margin-top:4px;padding:3px;width:100%;float:right}.dg .has-slider input[type=text]{width:30%;margin-left:0}.dg .slider{float:left;width:66%;margin-left:-5px;margin-right:0;height:19px;margin-top:4px}.dg .slider-fg{height:100%}.dg .c input[type=checkbox]{margin-top:7px}.dg .c select{margin-top:5px}.dg .cr.function,.dg .cr.function .property-name,.dg .cr.function *,.dg .cr.boolean,.dg .cr.boolean *{cursor:pointer}.dg .cr.color{overflow:visible}.dg .selector{display:none;position:absolute;margin-left:-9px;margin-top:23px;z-index:10}.dg .c:hover .selector,.dg .selector.drag{display:block}.dg li.save-row{padding:0}.dg li.save-row .button{display:inline-block;padding:0px 6px}.dg.dialogue{background-color:#222;width:460px;padding:15px;font-size:13px;line-height:15px}#dg-new-constructor{padding:10px;color:#222;font-family:Monaco, monospace;font-size:10px;border:0;resize:none;box-shadow:inset 1px 1px 1px #888;word-wrap:break-word;margin:12px 0;display:block;width:440px;overflow-y:scroll;height:100px;position:relative}#dg-local-explain{display:none;font-size:11px;line-height:17px;border-radius:3px;background-color:#333;padding:8px;margin-top:10px}#dg-local-explain code{font-size:10px}#dat-gui-save-locally{display:none}.dg{color:#eee;font:11px 'Lucida Grande', sans-serif;text-shadow:0 -1px 0 #111}.dg.main::-webkit-scrollbar{width:5px;background:#1a1a1a}.dg.main::-webkit-scrollbar-corner{height:0;display:none}.dg.main::-webkit-scrollbar-thumb{border-radius:5px;background:#676767}.dg li:not(.folder){background:#1a1a1a;border-bottom:1px solid #2c2c2c}.dg li.save-row{line-height:25px;background:#dad5cb;border:0}.dg li.save-row select{margin-left:5px;width:108px}.dg li.save-row .button{margin-left:5px;margin-top:1px;border-radius:2px;font-size:9px;line-height:7px;padding:4px 4px 5px 4px;background:#c5bdad;color:#fff;text-shadow:0 1px 0 #b0a58f;box-shadow:0 -1px 0 #b0a58f;cursor:pointer}.dg li.save-row .button.gears{background:#c5bdad url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAANCAYAAAB/9ZQ7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQJJREFUeNpiYKAU/P//PwGIC/ApCABiBSAW+I8AClAcgKxQ4T9hoMAEUrxx2QSGN6+egDX+/vWT4e7N82AMYoPAx/evwWoYoSYbACX2s7KxCxzcsezDh3evFoDEBYTEEqycggWAzA9AuUSQQgeYPa9fPv6/YWm/Acx5IPb7ty/fw+QZblw67vDs8R0YHyQhgObx+yAJkBqmG5dPPDh1aPOGR/eugW0G4vlIoTIfyFcA+QekhhHJhPdQxbiAIguMBTQZrPD7108M6roWYDFQiIAAv6Aow/1bFwXgis+f2LUAynwoIaNcz8XNx3Dl7MEJUDGQpx9gtQ8YCueB+D26OECAAQDadt7e46D42QAAAABJRU5ErkJggg==) 2px 1px no-repeat;height:7px;width:8px}.dg li.save-row .button:hover{background-color:#bab19e;box-shadow:0 -1px 0 #b0a58f}.dg li.folder{border-bottom:0}.dg li.title{padding-left:16px;background:#000 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.2)}.dg .closed li.title{background-image:url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlGIWqMCbWAEAOw==)}.dg .cr.boolean{border-left:3px solid #806787}.dg .cr.color{border-left:3px solid}.dg .cr.function{border-left:3px solid #e61d5f}.dg .cr.number{border-left:3px solid #2FA1D6}.dg .cr.number input[type=text]{color:#2FA1D6}.dg .cr.string{border-left:3px solid #1ed36f}.dg .cr.string input[type=text]{color:#1ed36f}.dg .cr.function:hover,.dg .cr.boolean:hover{background:#111}.dg .c input[type=text]{background:#303030;outline:none}.dg .c input[type=text]:hover{background:#3c3c3c}.dg .c input[type=text]:focus{background:#494949;color:#fff}.dg .c .slider{background:#303030;cursor:ew-resize}.dg .c .slider-fg{background:#2FA1D6;max-width:100%}.dg .c .slider:hover{background:#3c3c3c}.dg .c .slider:hover .slider-fg{background:#44abda}
+</style></head>
+  <body class="">
+    
+    <header class="frame">
+      <h1 class="frame__title">
+        Interactive Text Destruction by
+        <a href="http://nuevosmiedos.xyz" target="_blank">Lolo Armdz</a>
+      </h1>
+      <a class="frame__back" href="https://tympanus.net/codrops/?p=96654">Tutorial</a>
+      <a class="frame__archive" href="https://tympanus.net/codrops/demos/">All demos</a>
+      <a class="frame__github" href="https://github.com/armdz/tsl_elastic_vertex_destruction">Code</a>
+      <nav class="frame__tags">
+        <a href="https://tympanus.net/codrops/demos/?tag=webgpu">#webgpu</a>
+        <a href="https://tympanus.net/codrops/demos/?tag=three-js">#three.js</a>
+        <a href="https://tympanus.net/codrops/demos/?tag=tsl">#tsl</a>
+        <a href="https://tympanus.net/codrops/demos/?tag=typography">#typography</a>
+      </nav>
+    <div id="cdawrap" class="cdawrap">
+    <a href="https://bit.ly/codrops-diviai" class="cda-sponsor-link" target="_blank" rel="nofollow noopener">
+      Divi AI: On demand content creation, code writing &amp; image generation.
+    </a>
+  </div></header>
+    <script src="https://tympanus.net/codrops/adpacks/cda_sponsor.js"></script>
+  
+
+<canvas id="canvas" data-engine="three.js r177 webgpu" width="242" height="912" style="width: 194px; height: 730px;"></canvas><div class="dg ac"><div class="dg main a" style="width: 245px;"><div style="width: 6px; margin-left: -3px; height: 189px; cursor: ew-resize; position: absolute;"></div><ul style="height: auto;"><li class="cr color" style="border-left-color: rgb(33, 33, 33);"><div><span class="property-name">text_color</span><div class="c"><input type="text" style="outline: none; text-align: center; color: rgb(255, 255, 255); border: 0px; font-weight: bold; text-shadow: rgba(0, 0, 0, 0.7) 0px 1px 1px; background-color: rgb(33, 33, 33);"><div class="selector" style="width: 122px; height: 102px; padding: 3px; background-color: rgb(34, 34, 34); box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px;"><div class="field-knob" style="position: absolute; width: 12px; height: 12px; border: 2px solid rgb(255, 255, 255); box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px; border-radius: 12px; z-index: 1; margin-left: -7px; margin-top: 80.0588px; background-color: rgb(33, 33, 33);"></div><div class="saturation-field" style="width: 100px; height: 100px; border: 1px solid rgb(85, 85, 85); margin-right: 3px; display: inline-block; cursor: pointer; background: -webkit-linear-gradient(left, rgb(255, 255, 255) 0%, rgb(255, 0, 0) 100%);"><div style="width: 100%; height: 100%; background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);"></div></div><div class="hue-field" style="width: 15px; height: 100px; border: 1px solid rgb(85, 85, 85); cursor: ns-resize; position: absolute; top: 3px; right: 3px; background: -webkit-linear-gradient(top, rgb(255, 0, 0) 0%, rgb(255, 0, 255) 17%, rgb(0, 0, 255) 34%, rgb(0, 255, 255) 50%, rgb(0, 255, 0) 67%, rgb(255, 255, 0) 84%, rgb(255, 0, 0) 100%);"><div class="hue-knob" style="position: absolute; width: 15px; height: 2px; border-right: 4px solid rgb(255, 255, 255); z-index: 1; margin-top: 100px;"></div></div></div></div></div></li><li class="cr color" style="border-left-color: rgb(0, 0, 255);"><div><span class="property-name">emissive_color</span><div class="c"><input type="text" style="outline: none; text-align: center; color: rgb(255, 255, 255); border: 0px; font-weight: bold; text-shadow: rgba(0, 0, 0, 0.7) 0px 1px 1px; background-color: rgb(0, 0, 255);"><div class="selector" style="width: 122px; height: 102px; padding: 3px; background-color: rgb(34, 34, 34); box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px;"><div class="field-knob" style="position: absolute; width: 12px; height: 12px; border: 2px solid rgb(255, 255, 255); box-shadow: rgba(0, 0, 0, 0.5) 0px 1px 3px; border-radius: 12px; z-index: 1; margin-left: 93px; margin-top: -7px; background-color: rgb(0, 0, 255);"></div><div class="saturation-field" style="width: 100px; height: 100px; border: 1px solid rgb(85, 85, 85); margin-right: 3px; display: inline-block; cursor: pointer; background: -webkit-linear-gradient(left, rgb(255, 255, 255) 0%, rgb(0, 0, 255) 100%);"><div style="width: 100%; height: 100%; background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 100%);"></div></div><div class="hue-field" style="width: 15px; height: 100px; border: 1px solid rgb(85, 85, 85); cursor: ns-resize; position: absolute; top: 3px; right: 3px; background: -webkit-linear-gradient(top, rgb(255, 0, 0) 0%, rgb(255, 0, 255) 17%, rgb(0, 0, 255) 34%, rgb(0, 255, 255) 50%, rgb(0, 255, 0) 67%, rgb(255, 255, 0) 84%, rgb(255, 0, 0) 100%);"><div class="hue-knob" style="position: absolute; width: 15px; height: 2px; border-right: 4px solid rgb(255, 255, 255); z-index: 1; margin-top: 33.3333px;"></div></div></div></div></div></li><li class="cr number has-slider"><div><span class="property-name">Emissive Boost</span><div class="c"><div><input type="text"></div><div class="slider"><div class="slider-fg" style="width: 44.4444%;"></div></div></div></div></li><li class="cr number has-slider"><div><span class="property-name">Noise Amplitude</span><div class="c"><div><input type="text"></div><div class="slider"><div class="slider-fg" style="width: 53.3333%;"></div></div></div></div></li><li class="cr number has-slider"><div><span class="property-name">Explode Amplitude</span><div class="c"><div><input type="text"></div><div class="slider"><div class="slider-fg" style="width: 58.3333%;"></div></div></div></div></li><li class="cr number has-slider"><div><span class="property-name">Spring</span><div class="c"><div><input type="text"></div><div class="slider"><div class="slider-fg" style="width: 50%;"></div></div></div></div></li><li class="cr number has-slider"><div><span class="property-name">Friction</span><div class="c"><div><input type="text"></div><div class="slider"><div class="slider-fg" style="width: 90.9091%;"></div></div></div></div></li></ul><div class="close-button close-bottom" style="width: 245px;">Close Controls</div></div></div></body></html>

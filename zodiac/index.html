@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horoscope Slider with Zodiac Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne:wght@400&family=Baskervville:wght@400&family=Forum:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Forum', serif;
+            background: #0c0c0c;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .horoscope-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Navigation */
+        .nav-header {
+            position: absolute;
+            top: 30px;
+            left: 45px;
+            right: 45px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+        }
+
+        .menu-icon {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .menu-icon span {
+            position: absolute;
+            height: 1px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .menu-icon span:nth-child(1) {
+            width: 15px;
+            top: 14px;
+            left: 0;
+        }
+
+        .menu-icon span:nth-child(2) {
+            width: 30px;
+            top: 24.5px;
+            left: 0;
+        }
+
+        .menu-icon span:nth-child(3) {
+            width: 15px;
+            top: 35px;
+            left: 15px;
+        }
+
+        .logo {
+            font-family: 'Baskervville', serif;
+            font-size: 41px;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-family: 'Forum', serif;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.9px;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: white;
+        }
+
+        /* Slide Container */
+        .slide-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        /* Background Images - Original Slider Revolution Images */
+        .slide.aries { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/aries-bg-3.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .slide.taurus { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/taurus-bg2.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .slide.gemini { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/gemini-bg2.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .slide.cancer { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/cancer-bg3.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .slide.leo { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/leo-bg2.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .slide.virgo { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/virgo-bg-2.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Radial Overlay */
+        .radial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(12, 12, 12, 0.05) 0%, rgba(12, 12, 12, 0.7) 90%, rgba(12, 12, 12, 0.7) 100%);
+            z-index: 1;
+        }
+
+        /* Content Area */
+        .content-area {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%);
+            z-index: 8;
+            padding: 0 100px;
+        }
+
+        .content-row {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .content-left {
+            flex: 1;
+            max-width: 50%;
+        }
+
+        .content-right {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .title-the {
+            font-family: 'Parisienne', cursive;
+            font-size: 72px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 72px;
+            margin-bottom: 0;
+        }
+
+        .title-main {
+            font-family: 'Baskervville', serif;
+            font-size: 72px;
+            color: white;
+            text-transform: uppercase;
+            line-height: 72px;
+            margin-bottom: 36px;
+        }
+
+        .description {
+            font-family: 'Forum', serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 27px;
+            width: 66.67%;
+        }
+
+        /* Zodiac Card */
+        .zodiac-card {
+            background: transparent;
+            width: 450px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .zodiac-icon {
+            width: 54px;
+            height: 72px;
+            margin-bottom: 18px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .zodiac-name {
+            font-family: 'Baskervville', serif;
+            font-size: 41px;
+            color: white;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .zodiac-dates {
+            font-family: 'Forum', serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Icon backgrounds - Original Slider Revolution Icons */
+        .icon-aries { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/aries-icon.png');
+        }
+        .icon-taurus { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/taurus-icon.png');
+        }
+        .icon-gemini { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/gemini-icon.png');
+        }
+        .icon-cancer { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/cancer-icon.png');
+        }
+        .icon-leo { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/leo-icon.png');
+        }
+        .icon-virgo { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/virgo-icon.png');
+        }
+        .icon-libra { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/libra-icon.png');
+        }
+        .icon-scorpio { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/scorpio-icon.png');
+        }
+        .icon-sagittarius { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/sagitarius-icon.png');
+        }
+        .icon-capricorn { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/capricorn-icon.png');
+        }
+        .icon-aquarius { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/aquarius-icon.png');
+        }
+        .icon-pisces { 
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Horoscope-Slider-with-Zodiac-Showcase/pisces-icon.png');
+        }
+
+        /* Footer Navigation */
+        .footer-nav {
+            position: absolute;
+            bottom: 50px;
+            left: 45px;
+            right: 45px;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .slide-counter {
+            font-family: 'Forum', serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .current-slide {
+            color: white;
+        }
+
+        .nav-button {
+            font-family: 'Forum', serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 5px;
+            transition: color 0.3s;
+        }
+
+        .nav-button:hover {
+            color: white;
+        }
+
+        .nav-divider {
+            color: white;
+            margin: 0 5px;
+        }
+
+        /* Zodiac Menu Overlay */
+        .zodiac-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(12, 12, 12, 0.65);
+            z-index: 200;
+            display: none;
+            padding-top: 118px;
+        }
+
+        .zodiac-menu.active {
+            display: block;
+        }
+
+        .zodiac-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 23px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 50px;
+        }
+
+        .zodiac-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 18px;
+        }
+
+        .zodiac-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .zodiac-item-icon {
+            width: 36px;
+            height: 45px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 18px;
+        }
+
+        .zodiac-item-name {
+            font-family: 'Forum', serif;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+        }
+
+        /* Constellation Background */
+        .constellation {
+            position: absolute;
+            top: 50px;
+            right: 30px;
+            width: 350px;
+            height: 350px;
+            z-index: 11;
+        }
+
+        .constellation svg {
+            width: 100%;
+            height: 100%;
+            animation: rotate 60s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Stars */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .title-main { font-size: 60px; }
+            .title-the { font-size: 60px; }
+            .content-area { padding: 0 40px; }
+            .zodiac-card { width: 350px; height: 350px; }
+        }
+
+        @media (max-width: 768px) {
+            .content-row { flex-direction: column; text-align: center; }
+            .content-left { max-width: 100%; }
+            .title-main { font-size: 46px; }
+            .title-the { font-size: 46px; }
+            .description { width: 100%; }
+            .zodiac-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="horoscope-container">
+        <!-- Navigation -->
+        <div class="nav-header">
+            <div class="nav-left">
+                <div class="menu-icon" onclick="toggleZodiacMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <a href="#" class="logo">Zodiac Signs</a>
+            </div>
+          
+        </div>
+
+        <!-- Stars Background -->
+        <div class="stars" id="stars"></div>
+
+        <!-- Slide Container -->
+        <div class="slide-container">
+            <!-- Aries Slide -->
+            <div class="slide aries active" data-sign="aries">
+                <div class="radial-overlay"></div>
+                <div class="content-area">
+                    <div class="content-row">
+                        <div class="content-left">
+                            <div class="title-the">The</div>
+                            <div class="title-main">Pioneering Spirit</div>
+                            <div class="description">
+                                Aries, the first sign of the zodiac, embodies leadership, courage, and determination. Known for their dynamic energy and unwavering ambition, Arians blaze trails with their pioneering spirit.
+                            </div>
+                        </div>
+                        <div class="content-right">
+                            <div class="zodiac-card">
+                                <div class="zodiac-icon icon-aries"></div>
+                                <div class="zodiac-name">Aries</div>
+                                <div class="zodiac-dates">March 21 - April 19</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Taurus Slide -->
+            <div class="slide taurus" data-sign="taurus">
+                <div class="radial-overlay"></div>
+                <div class="content-area">
+                    <div class="content-row">
+                        <div class="content-left">
+                            <div class="title-the">The</div>
+                            <div class="title-main">Steadfast Provider</div>
+                            <div class="description">
+                                Taurus, a sign grounded in the earth, symbolizes reliability, patience, and sensuality. Taureans build the world around them with their dedication to consistency, luxury, and comfort.
+                            </div>
+                        </div>
+                        <div class="content-right">
+                            <div class="zodiac-card">
+                                <div class="zodiac-icon icon-taurus"></div>
+                                <div class="zodiac-name">Taurus</div>
+                                <div class="zodiac-dates">April 20 - May 20</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gemini Slide -->
+            <div class="slide gemini" data-sign="gemini">
+                <div class="radial-overlay"></div>
+                <div class="content-area">
+                    <div class="content-row">
+                        <div class="content-left">
+                            <div class="title-the">The</div>
+                            <div class="title-main">Communicative Explorer</div>
+                            <div class="description">
+                                Gemini, the sign of the twins, represents adaptability, intelligence, and curiosity. Geminis thrive on exchange and variety, constantly seeking new experiences and knowledge.
+                            </div>
+                        </div>
+                        <div class="content-right">
+                            <div class="zodiac-card">
+                                <div class="zodiac-icon icon-gemini"></div>
+                                <div class="zodiac-name">Gemini</div>
+                                <div class="zodiac-dates">May 21 - June 20</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancer Slide -->
+            <div class="slide cancer" data-sign="cancer">
+                <div class="radial-overlay"></div>
+                <div class="content-area">
+                    <div class="content-row">
+                        <div class="content-left">
+                            <div class="title-the">The</div>
+                            <div class="title-main">Nurturing Guardian</div>
+                            <div class="description">
+                                Cancer, with its deep emotional reservoir, symbolizes care, intuition, and sensitivity. Cancers are devoted to family and home, providing a nurturing haven for those they love.
+                            </div>
+                        </div>
+                        <div class="content-right">
+                            <div class="zodiac-card">
+                                <div class="zodiac-icon icon-cancer"></div>
+                                <div class="zodiac-name">Cancer</div>
+                                <div class="zodiac-dates">June 21 - July 22</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leo Slide -->
+            <div class="slide leo" data-sign="leo">
+                <div class="radial-overlay"></div>
+                <div class="content-area">
+                    <div class="content-row">
+                        <div class="content-left">
+                            <div class="title-the">The</div>
+                            <div class="title-main">Radiant King</div>
+                            <div class="description">
+                                Leo, ruled by the sun, embodies warmth, creativity, and generosity. Leos shine brightly, drawing others in with their confidence and magnanimous spirit.
+                            </div>
+                        </div>
+                        <div class="content-right">
+                            <div class="zodiac-card">
+                                <div class="zodiac-icon icon-leo"></div>
+                                <div class="zodiac-name">Leo</div>
+                                <div class="zodiac-dates">July 23 - August 22</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Virgo Slide -->
+            <div class="slide virgo" data-sign="virgo">
+                <div class="radial-overlay"></div>
+                <div class="content-area">
+                    <div class="content-row">
+                        <div class="content-left">
+                            <div class="title-the">The</div>
+                            <div class="title-main">Meticulous Planner</div>
+                            <div class="description">
+                                Virgo, an emblem of meticulousness and practicality, stands for analytical skills, attention to detail, and a strong sense of duty. Virgos approach life with precision and care, always striving for perfection.
+                            </div>
+                        </div>
+                        <div class="content-right">
+                            <div class="zodiac-card">
+                                <div class="zodiac-icon icon-virgo"></div>
+                                <div class="zodiac-name">Virgo</div>
+                                <div class="zodiac-dates">Aug 23 - Sep 22</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Constellation -->
+      
+
+        <!-- Footer Navigation -->
+        <div class="footer-nav">
+            <span class="slide-counter"><span class="current-slide">01</span>/06</span>
+            <button class="nav-button" onclick="previousSlide()">prev</button>
+            <span class="nav-divider">/</span>
+            <button class="nav-button" onclick="nextSlide()">next</button>
+        </div>
+
+        <!-- Zodiac Menu Overlay -->
+        <div class="zodiac-menu" id="zodiacMenu">
+            <div class="zodiac-grid">
+                <div class="zodiac-item" onclick="goToSlide(0)">
+                    <div class="zodiac-item-icon icon-aries"></div>
+                    <div class="zodiac-item-name">Aries</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(1)">
+                    <div class="zodiac-item-icon icon-taurus"></div>
+                    <div class="zodiac-item-name">Taurus</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(2)">
+                    <div class="zodiac-item-icon icon-gemini"></div>
+                    <div class="zodiac-item-name">Gemini</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(3)">
+                    <div class="zodiac-item-icon icon-cancer"></div>
+                    <div class="zodiac-item-name">Cancer</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(4)">
+                    <div class="zodiac-item-icon icon-leo"></div>
+                    <div class="zodiac-item-name">Leo</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(5)">
+                    <div class="zodiac-item-icon icon-virgo"></div>
+                    <div class="zodiac-item-name">Virgo</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(6)">
+                    <div class="zodiac-item-icon icon-libra"></div>
+                    <div class="zodiac-item-name">Libra</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(7)">
+                    <div class="zodiac-item-icon icon-scorpio"></div>
+                    <div class="zodiac-item-name">Scorpio</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(8)">
+                    <div class="zodiac-item-icon icon-sagittarius"></div>
+                    <div class="zodiac-item-name">Sagittarius</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(9)">
+                    <div class="zodiac-item-icon icon-capricorn"></div>
+                    <div class="zodiac-item-name">Capricorn</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(10)">
+                    <div class="zodiac-item-icon icon-aquarius"></div>
+                    <div class="zodiac-item-name">Aquarius</div>
+                </div>
+                <div class="zodiac-item" onclick="goToSlide(11)">
+                    <div class="zodiac-item-icon icon-pisces"></div>
+                    <div class="zodiac-item-name">Pisces</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

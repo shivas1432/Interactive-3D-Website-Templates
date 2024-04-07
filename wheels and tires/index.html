@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rims & Tires - Premium Automotive Products</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #0c0c0c;
+            color: white;
+            overflow: hidden;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #0c0c0c;
+        }
+
+        /* Header Navigation */
+        .header-nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px 0px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Inter', sans-serif;
+            font-size: 19px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 19px;
+        }
+
+        .hamburger {
+            width: 50px;
+            height: 20px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.8);
+            position: absolute;
+        }
+
+        .hamburger span:nth-child(1) { top: 0; }
+        .hamburger span:nth-child(2) { top: 9.5px; width: 50%; left: 12.5px; }
+        .hamburger span:nth-child(3) { bottom: 0; }
+
+        .contact-link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.951172px;
+            text-decoration: none;
+        }
+
+        /* Slide Structure */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Background Images */
+        .slide-bg {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .slide:nth-child(1) .slide-bg {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer1.jpg');
+        }
+
+        .slide:nth-child(2) .slide-bg {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer2.jpg');
+        }
+
+        .slide:nth-child(3) .slide-bg {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer3.jpg');
+        }
+
+        .slide:nth-child(4) .slide-bg {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer4.jpg');
+        }
+
+        /* Overlay Effects */
+        .slide-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 2;
+        }
+
+        .background-frame {
+            position: absolute;
+            width: 95%;
+            height: 648.8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: none;
+            border-radius: 15px;
+            left: 24.35px;
+            top: 81.1px;
+            z-index: 7;
+        }
+
+        .gradient-bottom {
+            position: absolute;
+            width: 100%;
+            height: 270.333px;
+            bottom: 0;
+            background: linear-gradient(rgba(12, 12, 12, 0) 0%, rgb(12, 12, 12) 100%);
+            z-index: 10;
+        }
+
+        /* Content Layout */
+        .slide-content {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            top: 206.5px;
+            z-index: 14;
+            padding: 0px 50px;
+        }
+
+        .content-row {
+            display: flex;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .content-left {
+            width: 66.6667%;
+            padding-right: 50px;
+        }
+
+        .content-right {
+            width: 33.3333%;
+            padding: 20px;
+            background: linear-gradient(rgba(12, 12, 12, 0.4) 0%, rgba(215, 215, 215, 0) 100%);
+            border-radius: 15px;
+        }
+
+        /* Product Information */
+        .product-tagline {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 400;
+            color: #000;
+            margin: 8px 0 8px 8px;
+            line-height: 47px;
+        }
+
+        .product-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-style: italic;
+            line-height: 65px;
+            margin: 0;
+        }
+
+        .slide:nth-child(1) .product-title,
+        .slide:nth-child(3) .product-title,
+        .slide:nth-child(4) .product-title {
+            font-size: 99px;
+            letter-spacing: -1.80222px;
+            line-height: 81px;
+        }
+
+        .slide:nth-child(2) .product-title {
+            font-size: 76px;
+            letter-spacing: -0.951172px;
+            line-height: 65px;
+        }
+
+        .slide:nth-child(3) .product-title {
+            font-size: 90px;
+            line-height: 72px;
+        }
+
+        .title-main {
+            color: white;
+            text-shadow: 0 18.0222px 27.0333px rgba(0, 0, 0, 0.25);
+            display: block;
+        }
+
+        .title-accent {
+            color: #fc4d00;
+            margin-top: -8px;
+            display: block;
+        }
+
+        .slide:nth-child(3) .title-accent {
+            margin-top: -6px;
+        }
+
+        .product-description {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 23px;
+            margin-top: 16px;
+            padding: 16px;
+            width: 45%;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0);
+        }
+
+        .slide:nth-child(2) .product-description {
+            width: 45%;
+        }
+
+        .slide:nth-child(1) .product-description,
+        .slide:nth-child(3) .product-description,
+        .slide:nth-child(4) .product-description {
+            width: 40%;
+            margin-top: 18px;
+            padding: 18px;
+            line-height: 22px;
+        }
+
+        /* Specifications Panel */
+        .season-section {
+            margin-bottom: 8px;
+        }
+
+        .season-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 1.80222px;
+            line-height: 45px;
+            margin-right: 27px;
+            padding: 0 9px;
+            display: inline-block;
+        }
+
+        .slide:nth-child(2) .season-label {
+            letter-spacing: 0.951172px;
+            line-height: 48px;
+            margin-right: 10px;
+            padding: 0 8px;
+        }
+
+        .season-toggle {
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            position: relative;
+            line-height: 0;
+        }
+
+        .season-option {
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            color: white;
+            padding: 0 14px;
+            line-height: 48px;
+            display: inline-block;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .season-option:last-child {
+            margin-left: -1px;
+        }
+
+        .season-indicator {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #fc4d00;
+            border-radius: 7px;
+            top: 4px;
+            left: 3px;
+            z-index: 7;
+        }
+
+        /* Sizes Section */
+        .sizes-section {
+            margin: 8px 0;
+        }
+
+        .section-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1.80222px;
+            line-height: 18px;
+            margin-bottom: 8px;
+            padding: 0 9px;
+            display: block;
+        }
+
+        .slide:nth-child(2) .section-label {
+            letter-spacing: 0.951172px;
+            line-height: 15px;
+            padding: 0 8px;
+        }
+
+        .size-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .size-option {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 600;
+            color: white;
+            background: rgba(12, 12, 12, 0.25);
+            border-radius: 5px;
+            margin: 0 5px 5px 5px;
+            display: inline-block;
+        }
+
+        .slide:nth-child(1) .size-option,
+        .slide:nth-child(3) .size-option,
+        .slide:nth-child(4) .size-option {
+            font-size: 12px;
+            line-height: 27px;
+            padding: 0 9px;
+        }
+
+        .slide:nth-child(2) .size-option {
+            font-size: 11px;
+            line-height: 24px;
+            padding: 0 8px;
+            margin: 0 4px 4px 4px;
+        }
+
+        /* Spec Items */
+        .spec-item {
+            margin: 8px 0;
+        }
+
+        .spec-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1.80222px;
+            line-height: 18px;
+            padding: 0 9px;
+            display: inline-block;
+        }
+
+        .slide:nth-child(2) .spec-label {
+            letter-spacing: 0.951172px;
+            line-height: 15px;
+            padding: 0 8px;
+        }
+
+        .spec-value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 700;
+            color: white;
+            padding: 0 9px;
+            display: block;
+        }
+
+        .slide:nth-child(1) .spec-value,
+        .slide:nth-child(3) .spec-value,
+        .slide:nth-child(4) .spec-value {
+            font-size: 14px;
+            line-height: 27px;
+            margin-bottom: 9px;
+        }
+
+        .slide:nth-child(2) .spec-value {
+            font-size: 11px;
+            line-height: 23px;
+            margin-bottom: 8px;
+            padding: 0 8px;
+        }
+
+        /* Pricing */
+        .price-section {
+            margin: 16px 0;
+        }
+
+        .price-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1.80222px;
+            line-height: 27px;
+            padding: 0 9px;
+            display: block;
+        }
+
+        .slide:nth-child(2) .price-label {
+            letter-spacing: 0.951172px;
+            line-height: 23px;
+            padding: 0 8px;
+        }
+
+        .price-value {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 18px;
+        }
+
+        .slide:nth-child(2) .price-value {
+            margin-bottom: 16px;
+        }
+
+        .price-amount {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            padding: 0 9px;
+            display: inline-block;
+        }
+
+        .slide:nth-child(1) .price-amount,
+        .slide:nth-child(3) .price-amount,
+        .slide:nth-child(4) .price-amount {
+            font-size: 18px;
+            line-height: 27px;
+        }
+
+        .slide:nth-child(2) .price-amount {
+            font-size: 11px;
+            line-height: 23px;
+            padding: 0 8px;
+        }
+
+        .price-unit {
+            font-family: 'IBM Plex Mono', monospace;
+            font-weight: 400;
+            color: white;
+        }
+
+        .slide:nth-child(1) .price-unit,
+        .slide:nth-child(3) .price-unit,
+        .slide:nth-child(4) .price-unit {
+            font-size: 13px;
+            line-height: 27px;
+        }
+
+        .slide:nth-child(2) .price-unit {
+            font-size: 11px;
+            line-height: 23px;
+        }
+
+        /* CTA Button */
+        .cta-button {
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            background: #ff4e00;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .slide:nth-child(1) .cta-button,
+        .slide:nth-child(3) .cta-button,
+        .slide:nth-child(4) .cta-button {
+            letter-spacing: 0.901111px;
+            line-height: 45px;
+            padding: 0 32px;
+        }
+
+        .slide:nth-child(2) .cta-button {
+            line-height: 48px;
+            padding: 0 14px;
+        }
+
+        /* Tire Showcase */
+        .tire-showcase {
+            position: absolute;
+            width: 333px;
+            height: 332px;
+            z-index: 12;
+        }
+
+        .slide:nth-child(1) .tire-showcase,
+        .slide:nth-child(3) .tire-showcase,
+        .slide:nth-child(4) .tire-showcase {
+            width: 429px;
+            height: 428px;
+            right: 60px;
+            top: 191.036px;
+        }
+
+        .slide:nth-child(2) .tire-showcase {
+            width: 333px;
+            height: 332px;
+            right: 320.5px;
+            top: 239.5px;
+        }
+
+        .tire-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tire-image {
+            position: absolute;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .summer-tire {
+            width: 100%;
+            height: 100%;
+            top: -0.5px;
+            left: 0;
+            z-index: 8;
+        }
+
+        .slide:nth-child(1) .summer-tire {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer-tire.png');
+        }
+
+        .slide:nth-child(2) .summer-tire {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer-tire.png');
+        }
+
+        .slide:nth-child(3) .summer-tire {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer-tire.png');
+        }
+
+        .slide:nth-child(4) .summer-tire {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/summer-tire.png');
+        }
+
+        .winter-tire {
+            width: 100%;
+            height: 100%;
+            top: -0.5px;
+            left: 0;
+            z-index: 9;
+            opacity: 0;
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/winter-tire.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .rim-image {
+            z-index: 10;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .slide:nth-child(1) .rim-image,
+        .slide:nth-child(3) .rim-image,
+        .slide:nth-child(4) .rim-image {
+            width: 333px;
+            height: 332.51px;
+            top: 47.745px;
+            left: 48px;
+        }
+
+        .slide:nth-child(2) .rim-image {
+            width: 257px;
+            height: 256.816px;
+            top: 38px;
+            left: 38px;
+        }
+
+        .slide:nth-child(1) .rim-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/rim1.png');
+        }
+
+        .slide:nth-child(2) .rim-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/rim2.png');
+        }
+
+        .slide:nth-child(3) .rim-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/rim4.png');
+            top: 48px;
+        }
+
+        .slide:nth-child(4) .rim-image {
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Wheels--Tires-Automotive-Product-Slider/rim3.png');
+            top: 48px;
+        }
+
+        .tire-shadow {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgb(12, 12, 12) 0%, rgba(12, 12, 12, 0) 100%);
+            z-index: 7;
+        }
+
+        .slide:nth-child(1) .tire-shadow,
+        .slide:nth-child(3) .tire-shadow,
+        .slide:nth-child(4) .tire-shadow {
+            width: 287px;
+            height: 38.7478px;
+            top: 403.67px;
+            left: 71px;
+        }
+
+        .slide:nth-child(2) .tire-shadow {
+            width: 249px;
+            height: 33.291px;
+            top: 311.074px;
+            left: 42px;
+            filter: blur(5px);
+        }
+
+        /* Footer Navigation */
+        .footer-nav {
+            position: absolute;
+            bottom: 70px;
+            left: 60px;
+            right: 60px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-btn {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.951172px;
+            line-height: 48px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+
+        .nav-separator {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            color: #fc4d00;
+            padding: 0 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 8px;
+        }
+
+        .social-link {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 0 19px;
+            line-height: 48px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: absolute;
+            bottom: 70px;
+            right: 60px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+        }
+
+        .counter-current {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            color: white;
+        }
+
+        .counter-separator {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 0 10px;
+        }
+
+        .counter-total {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Pagination Bullets */
+        .pagination {
+            position: absolute;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 25px;
+        }
+
+        .pagination-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .pagination-dot.active {
+            background: white;
+        }
+
+        .pagination-dot::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #0c0c0c;
+            opacity: 0;
+        }
+
+        .pagination-dot.active::before {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <!-- Header Navigation -->
+        <div class="header-nav">
+            <div class="logo">Rims<br>&Tires</div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="#" class="contact-link">contact</a>
+        </div>
+
+        <!-- Slide 1: Titan Vortex -->
+        <div class="slide active">
+            <div class="slide-bg"></div>
+            <div class="slide-overlay"></div>
+            <div class="background-frame"></div>
+            <div class="gradient-bottom"></div>
+            
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="content-left">
+                        <div class="sizes-section">
+                            <div class="section-label">sizes</div>
+                            <div class="size-options">
+                                <span class="size-option">225/35 R19</span>
+                                <span class="size-option">235/40 R19</span>
+                                <span class="size-option">245/30 R20</span>
+                                <span class="size-option">255/35 R21</span>
+                            </div>
+                        </div>
+                        
+                        <div class="spec-item">
+                            <span class="spec-label">Max Speed</span>
+                            <div class="spec-value">200 mph (320 km/h)</div>
+                        </div>
+                        
+                        <div class="price-section">
+                            <div class="price-label">starting at</div>
+                            <div class="price-value">
+                                <span class="price-amount">$420</span>
+                                <span class="price-unit">/per wheel</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="cta-button">get yours</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tire-showcase">
+                <div class="tire-container">
+                    <div class="tire-image summer-tire"></div>
+                    <div class="tire-image winter-tire"></div>
+                    <div class="tire-image rim-image"></div>
+                    <div class="tire-shadow"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Monarch Evo -->
+        <div class="slide">
+            <div class="slide-bg"></div>
+            <div class="slide-overlay"></div>
+            <div class="background-frame"></div>
+            <div class="gradient-bottom"></div>
+            
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="content-left">
+                        <div class="product-tagline">Elegance in Motion</div>
+                        <h1 class="product-title">
+                            <span class="title-main">Monarch</span>
+                            <span class="title-accent">Evo</span>
+                        </h1>
+                        <p class="product-description">
+                            The Monarch Evo blends timeless design with modern innovation. Made for those who seek luxury and performance in every turn.
+                        </p>
+                    </div>
+                    
+                    <div class="content-right">
+                        <div class="season-section">
+                            <span class="season-label">season</span>
+                            <div class="season-toggle">
+                                <div class="season-indicator"></div>
+                                <div class="season-option"><i class="fa fa-sun-o"></i></div>
+                                <div class="season-option"><i class="fa fa-snowflake-o"></i></div>
+                            </div>
+                        </div>
+                        
+                        <div class="sizes-section">
+                            <div class="section-label">sizes</div>
+                            <div class="size-options">
+                                <span class="size-option">235/45 R18</span>
+                                <span class="size-option">245/40 R19</span>
+                                <span class="size-option">255/35 R20</span>
+                                <span class="size-option">265/30 R21</span>
+                            </div>
+                        </div>
+                        
+                        <div class="spec-item">
+                            <span class="spec-label">Max Speed</span>
+                            <div class="spec-value">160 mph (260 km/h)</div>
+                        </div>
+                        
+                        <div class="price-section">
+                            <div class="price-label">starting at</div>
+                            <div class="price-value">
+                                <span class="price-amount">$480</span>
+                                <span class="price-unit">/per wheel</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="cta-button">get yours</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tire-showcase">
+                <div class="tire-container">
+                    <div class="tire-image summer-tire"></div>
+                    <div class="tire-image winter-tire"></div>
+                    <div class="tire-image rim-image"></div>
+                    <div class="tire-shadow"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Hyper Sport -->
+        <div class="slide">
+            <div class="slide-bg"></div>
+            <div class="slide-overlay"></div>
+            <div class="background-frame"></div>
+            <div class="gradient-bottom"></div>
+            
+            <div class="slide-content">
+                <div class="content-row">
+                    <div class="content-left">
+                        <div class="product-tagline">Precision Meets Performance</div>
+                        <h1 class="product-title">
+                            <span class="title-main">Hyper</span>
+                            <span class="title-accent">Sport</span>
+                        </h1>
+                        <p class="product-description">
+                            Designed for the track but perfect for the street, the HyperSport is crafted to provide unbeatable performance while keeping your ride looking flawless.
+                        </p>
+                    </div>
+                    
+                    <div class="content-right">
+                        <div class="season-section">
+                            <span class="season-label">season</span>
+                            <div class="season-toggle">
+                                <div class="season-indicator"></div>
+                                <div class="season-option"><i class="fa fa-sun-o"></i></div>
+                                <div class="season-option"><i class="fa fa-snowflake-o"></i></div>
+                            </div>
+                        </div>
+                        
+                        <div class="sizes-section">
+                            <div class="section-label">sizes</div>
+                            <div class="size-options">
+                                <span class="size-option">255/35 R18</span>
+                                <span class="size-option">265/40 R19</span>
+                                <span class="size-option">275/35 R20</span>
+                                <span class="size-option">285/30 R21</span>
+                            </div>
+                        </div>
+                        
+                        <div class="spec-item">
+                            <span class="spec-label">Max Speed</span>
+                            <div class="spec-value">220 mph (355 km/h)</div>
+                        </div>
+                        
+                        <div class="price-section">
+                            <div class="price-label">starting at</div>
+                            <div class="price-value">
+                                <span class="price-amount">$500</span>
+                                <span class="price-unit">/per wheel</span>
+                            </div>
+                        </div>
+                        
+                        <a href="#" class="cta-button">get yours</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tire-showcase">
+                <div class="tire-container">
+                    <div class="tire-image summer-tire"></div>
+                    <div class="tire-image winter-tire"></div>
+                    <div class="tire-image rim-image"></div>
+                    <div class="tire-shadow"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="footer-nav">
+            <div class="nav-controls">
+                <button class="nav-btn" id="prevBtn">
+                    <i class="material-icons">subdirectory_arrow_left</i> prev
+                </button>
+                <span class="nav-separator">/</span>
+                <button class="nav-btn" id="nextBtn">
+                    next <i class="material-icons">subdirectory_arrow_right</i>
+                </button>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+
+        <!-- Slide Counter -->
+        <div class="slide-counter">
+            <span class="counter-current">02</span>
+            <span class="counter-separator">-</span>
+            <span class="counter-total">04</span>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <div class="pagination-dot active" data-slide="0"></div>
+            <div class="pagination-dot" data-slide="1"></div>
+            <div class="pagination-dot" data-slide="2"></div>
+            <div class="pagination-dot" data-slide="3"></div>
+        </div>
+    </div>
+
+    <script>
+        // Basic slide functionality - placeholder for your animation scripts
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const paginationDots = document.querySelectorAll('.pagination-dot');
+        const slideCounter = document.querySelector('.counter-current');
+
+        function updateSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            paginationDots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.add('active');
+            paginationDots[index].classList.add('active');
+            
+            slideCounter.textContent = String(index + 1).padStart(2, '0');
+            currentSlide = index;
+        }
+
+        // Basic navigation - replace with your animation scripts
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            const next = (currentSlide + 1) % totalSlides;
+            updateSlide(next);
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlide(prev);
+        });
+
+        paginationDots.forEach((dot, index) => {
+            dot.addEventListener('click', () => updateSlide(index));
+        });
+
+        // Season toggle functionality
+        document.querySelectorAll('.season-toggle').forEach(toggle => {
+            const indicator = toggle.querySelector('.season-indicator');
+            const options = toggle.querySelectorAll('.season-option');
+            
+            options.forEach((option, index) => {
+                option.addEventListener('click', () => {
+                    const offsetX = index * 48;
+                    indicator.style.transform = `translateX(${offsetX}px)`;
+                });
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
