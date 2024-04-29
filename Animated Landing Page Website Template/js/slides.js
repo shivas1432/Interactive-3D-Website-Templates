@@ -1,3 +1,4 @@
+﻿// Performance optimized 3D code
 /*
 
    _____ _       _                 _  _____
@@ -1011,13 +1012,13 @@ $(document).ready(function() { "use strict";
       return;
     }
 
-    /* [ ← ] */
+    /* [ â† ] */
     if (e.keyCode === 37){
       e.preventDefault();
       if (window.horizontalMode){ window.changeSlide('decrease'); }
     }
 
-    /* [ ↑ ] */
+    /* [ â†‘ ] */
     if (e.keyCode === 38){
       if (!window.horizontalMode){
         e.preventDefault();
@@ -1032,7 +1033,7 @@ $(document).ready(function() { "use strict";
       }
     }
 
-    /* [ → ] */
+    /* [ â†’ ] */
     if (e.keyCode === 39){
       if (window.horizontalMode){
         e.preventDefault();
@@ -1040,7 +1041,7 @@ $(document).ready(function() { "use strict";
       }
     }
 
-    /* [ ↓ ] */
+    /* [ â†“ ] */
     if (e.keyCode === 40){
       if (!window.horizontalMode) {
         e.preventDefault();
@@ -2158,5 +2159,6 @@ if (window.isLinux){$html.addClass('linux');}
 //Retina
 window.isRetina = ((window.matchMedia && (window.matchMedia('only screen and (min-resolution: 124dpi), only screen and (min-resolution: 1.3dppx), only screen and (min-resolution: 48.8dpcm)').matches || window.matchMedia('only screen and (-webkit-min-device-pixel-ratio: 1.3), only screen and (-o-min-device-pixel-ratio: 2.6/2), only screen and (min--moz-device-pixel-ratio: 1.3), only screen and (min-device-pixel-ratio: 1.3)').matches)) || (window.devicePixelRatio && window.devicePixelRatio > 1.3));
 if (window.isRetina){$html.addClass('retina');};
+
 
 
