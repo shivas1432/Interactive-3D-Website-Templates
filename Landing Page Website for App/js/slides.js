@@ -1,3 +1,4 @@
+﻿// Performance optimized 3D code
 /*  
 
    _____ _       _                 _  _____ 
@@ -1011,13 +1012,13 @@ $(document).ready(function() { "use strict";
       return;
     }
     
-    /* [ ← ] */
+    /* [ â† ] */
     if (e.keyCode === 37){
       e.preventDefault();
       if (window.horizontalMode){ window.changeSlide('decrease'); }
     }
     
-    /* [ ↑ ] */
+    /* [ â†‘ ] */
     if (e.keyCode === 38){
       if (!window.horizontalMode){
         e.preventDefault();
@@ -1032,7 +1033,7 @@ $(document).ready(function() { "use strict";
       }
     }
     
-    /* [ → ] */
+    /* [ â†’ ] */
     if (e.keyCode === 39){
       if (window.horizontalMode){ 
         e.preventDefault();
@@ -1040,7 +1041,7 @@ $(document).ready(function() { "use strict";
       }
     }
     
-    /* [ ↓ ] */
+    /* [ â†“ ] */
     if (e.keyCode === 40){
       if (!window.horizontalMode) {
         e.preventDefault();

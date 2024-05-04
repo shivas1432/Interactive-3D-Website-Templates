@@ -1,3 +1,4 @@
+﻿// Performance optimized 3D code
 // Horoscope Slider with Zodiac Showcase - JavaScript
 // Based on Slider Revolution SR7 implementation
 
@@ -293,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('loaded');
     }, 500);
     
-    console.log('🌟 Horoscope Slider initialized with SR7 configuration');
+    console.log('ðŸŒŸ Horoscope Slider initialized with SR7 configuration');
 });
 
 // Export functions for global access
