@@ -1,3 +1,4 @@
+﻿// Performance optimized 3D code
 // ===== COMPLETE WEBFLOW FUNCTIONALITY - CORRECTED & OPTIMIZED =====
 // Fixed all issues and properly structured for your Webflow template
 
@@ -346,7 +347,7 @@ $(document).ready(function() {
             var $lightbox = $('<div class="w-lightbox-backdrop">' +
                 '<div class="w-lightbox-container">' +
                     '<img class="w-lightbox-img" src="' + src + '">' +
-                    '<div class="w-lightbox-close">×</div>' +
+                    '<div class="w-lightbox-close">Ã—</div>' +
                 '</div>' +
             '</div>');
             
