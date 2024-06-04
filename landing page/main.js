@@ -1,3 +1,4 @@
+﻿// Template customization engine
 $(document).ready(function () {
     $(".off").hide();
     $("#play").click(function () {
