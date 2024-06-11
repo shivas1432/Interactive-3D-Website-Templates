@@ -1,3 +1,4 @@
+﻿/* Cross-browser 3D compatibility */
 html {
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
@@ -188,27 +189,27 @@ td, th {
 }
 
 .w-icon-slider-right:before {
-  content: "î˜€";
+  content: "Ã®Ëœâ‚¬";
 }
 
 .w-icon-slider-left:before {
-  content: "î˜";
+  content: "Ã®ËœÂ";
 }
 
 .w-icon-nav-menu:before {
-  content: "î˜‚";
+  content: "Ã®Ëœâ€š";
 }
 
 .w-icon-arrow-down:before, .w-icon-dropdown-toggle:before {
-  content: "î˜ƒ";
+  content: "Ã®ËœÆ’";
 }
 
 .w-icon-file-upload-remove:before {
-  content: "î¤€";
+  content: "Ã®Â¤â‚¬";
 }
 
 .w-icon-file-upload-icon:before {
-  content: "î¤ƒ";
+  content: "Ã®Â¤Æ’";
 }
 
 * {
