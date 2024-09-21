@@ -1,0 +1,33 @@
+@import url('https://cdn.prod.website-files.com/6886ca8da44c595ac854e507/css/archena-podcast-site.webflow.shared.dc4a95c1e.css');
+
+/* Hide Made with Webflow badges and links */
+.w-webflow-badge {
+    display: none !important;
+}
+
+a.w-webflow-badge {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+[aria-label*="Made in Webflow"],
+[title*="Made in Webflow"],
+[aria-label*="Made with Webflow"],
+[title*="Made with Webflow"] {
+    display: none !important;
+}
+
+/* Hide any "Made with Webflow" text or links */
+a[href*="webflow.com"]:not([href*="templates"]),
+.made-with-webflow,
+[class*="made-with-webflow"],
+[class*="webflow-badge"],
+a[href="https://webflow.com?utm_campaign=brandjs"],
+a[href*="webflow.com?utm_campaign"],
+.webflow-link,
+[class*="webflow-link"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}

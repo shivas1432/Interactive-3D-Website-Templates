@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiva Shanker - Full Stack Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: #0A0A0A;
+            overflow-x: hidden;
+        }
+
+        .hero-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .animated-gradient-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transform: scale(1.5);
+            animation: gradientEntrance 2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        @keyframes gradientEntrance {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .gradient-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(125% 125% at 50% 20%, #0A0A0A 35%, #2979FF 50%, #FF80AB 60%, #FF6D00 70%, #FFD600 80%, #00E676 90%, #3D5AFE 100%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100%;
+            padding: 0 1rem;
+            padding-top: 8rem;
+            text-align: center;
+        }
+
+        .intro-section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1.2s ease-out 0.5s forwards;
+        }
+
+        .intro-greeting {
+            font-size: 1.5rem;
+            color: #64748b;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.8s forwards;
+        }
+
+        .intro-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #2979FF, #FF80AB, #FFD600, #00E676);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.1s forwards, gradientShift 4s ease-in-out infinite;
+        }
+
+        .intro-title {
+            font-size: 1.8rem;
+            color: #e2e8f0;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.4s forwards;
+        }
+
+        .intro-subtitle {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            font-weight: 400;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.7s forwards;
+        }
+
+        .lottie-container {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+            animation: fadeInScale 1.5s ease-out 2s forwards;
+        }
+
+        .description {
+            margin-top: 1.5rem;
+            font-size: 1.125rem;
+            color: #cbd5e1;
+            max-width: 32rem;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 2.3s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .intro-name::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #2979FF, #FF80AB);
+            border-radius: 2px;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 1.8s forwards;
+        }
+
+        .intro-name {
+            position: relative;
+            display: inline-block;
+            animation: fadeInUp 1s ease-out 1.1s forwards, gradientShift 4s ease-in-out infinite, float 3s ease-in-out infinite;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .intro-name {
+                font-size: 2.5rem;
+            }
+            
+            .intro-title {
+                font-size: 1.4rem;
+            }
+            
+            .intro-greeting {
+                font-size: 1.2rem;
+            }
+            
+            .lottie-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .description {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro-name {
+                font-size: 2rem;
+            }
+            
+            .intro-title {
+                font-size: 1.2rem;
+            }
+            
+            .lottie-container {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero-container">
+        <!-- Animated Gradient Background -->
+        <div class="animated-gradient-background">
+            <div class="gradient-inner" id="gradientInner"></div>
+        </div>
+
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <!-- Intro Section -->
+            <div class="intro-section">
+                <div class="intro-greeting">Hello, I'm</div>
+                <h1 class="intro-name">SHIVA SHANKER</h1>
+                <h2 class="intro-title">Full Stack Web Developer</h2>
+                <p class="intro-subtitle">Crafting Digital Experiences</p>
+            </div>
+
+            <!-- Lottie Animation -->
+            <div class="lottie-container">
+                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+                <lottie-player
+                    src="https://lottie.host/8cf4ba71-e5fb-44f3-8134-178c4d389417/0CCsdcgNIP.json"
+                    background="transparent"
+                    speed="1"
+                    style="width: 100%; height: 100%;"
+                    loop
+                    autoplay>
+                </lottie-player>
+            </div>
+
+           
+        </div>
+    </div>
+
+    <script>
+        // Animated Gradient Background Logic
+        class AnimatedGradientBackground {
+            constructor() {
+                this.gradientInner = document.getElementById('gradientInner');
+                this.startingGap = 125;
+                this.breathing = true;
+                this.gradientColors = [
+                    "#0A0A0A",
+                    "#2979FF", 
+                    "#FF80AB",
+                    "#FF6D00",
+                    "#FFD600",
+                    "#00E676",
+                    "#3D5AFE"
+                ];
+                this.gradientStops = [35, 50, 60, 70, 80, 90, 100];
+                this.animationSpeed = 0.02;
+                this.breathingRange = 5;
+                this.topOffset = 0;
+                
+                this.width = this.startingGap;
+                this.directionWidth = 1;
+                this.animationFrame = null;
+                
+                this.init();
+            }
+
+            init() {
+                this.animate();
+            }
+
+            animate() {
+                if (this.width >= this.startingGap + this.breathingRange) {
+                    this.directionWidth = -1;
+                }
+                if (this.width <= this.startingGap - this.breathingRange) {
+                    this.directionWidth = 1;
+                }
+
+                if (!this.breathing) {
+                    this.directionWidth = 0;
+                }
+
+                this.width += this.directionWidth * this.animationSpeed;
+
+                const gradientStopsString = this.gradientStops
+                    .map((stop, index) => `${this.gradientColors[index]} ${stop}%`)
+                    .join(", ");
+
+                const gradient = `radial-gradient(${this.width}% ${this.width + this.topOffset}% at 50% 20%, ${gradientStopsString})`;
+
+                if (this.gradientInner) {
+                    this.gradientInner.style.background = gradient;
+                }
+
+                this.animationFrame = requestAnimationFrame(() => this.animate());
+            }
+
+            destroy() {
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                }
+            }
+        }
+
+        // Initialize the gradient background
+        let gradientBackground;
+        
+        window.addEventListener('load', () => {
+            gradientBackground = new AnimatedGradientBackground();
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (gradientBackground) {
+                gradientBackground.destroy();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+@import url('https://cdn.prod.website-files.com/66aa15add5b3293aa92ef8ec/css/kitzykids.webflow.2b1eff1c7.css');
+
+/* Hide Made with Webflow badges and links */
+.w-webflow-badge {
+    display: none !important;
+}
+
+a.w-webflow-badge {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+[aria-label*="Made in Webflow"],
+[title*="Made in Webflow"],
+[aria-label*="Made with Webflow"],
+[title*="Made with Webflow"] {
+    display: none !important;
+}
+
+/* Hide any "Made with Webflow" text or links */
+a[href*="webflow.com"]:not([href*="templates"]),
+.made-with-webflow,
+[class*="made-with-webflow"],
+[class*="webflow-badge"],
+a[href="https://webflow.com?utm_campaign=brandjs"],
+a[href*="webflow.com?utm_campaign"],
+.webflow-link,
+[class*="webflow-link"] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
