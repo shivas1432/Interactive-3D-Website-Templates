@@ -1,0 +1,22 @@
+
+.w-webflow-badge {
+  display: none !important;
+}
+
+a[href*="webflow.com?utm_campaign=brandjs"] {
+  display: none !important;
+}
+
+a[href*="webflow.com?utm_source=brandjs"] {
+  display: none !important;
+}
+
+/* Hide the specific badge element */
+.w-bottom {
+  display: none !important;
+}
+
+/* Target the actual badge container */
+div[style*="webflow"] {
+  display: none !important;
+}
