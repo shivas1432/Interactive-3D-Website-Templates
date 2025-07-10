@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>studio-template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #12301e 30%, #546e48 70%, #000000 100%);
+            color: #f8fafc;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        .section {
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .home-hero {
+            position: relative;
+            z-index: 10;
+            padding: 80px 40px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .home-left-content {
+            max-width: 600px;
+        }
+
+        .home-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 700;
+            line-height: 0.95;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(100px);
+            animation: slideUp 1s ease-out 0.5s forwards;
+            letter-spacing: -0.02em;
+        }
+
+        .font-color-secondary {
+            background: linear-gradient(45deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease-in-out infinite;
+            font-style: italic;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { 
+                background-position: 0% 50%;
+                filter: hue-rotate(0deg);
+            }
+            25% { 
+                background-position: 100% 50%;
+                filter: hue-rotate(90deg);
+            }
+            50% { 
+                background-position: 200% 50%;
+                filter: hue-rotate(180deg);
+            }
+            75% { 
+                background-position: 300% 50%;
+                filter: hue-rotate(270deg);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .button-primary {
+            display: inline-flex;
+            align-items: center;
+            padding: 18px 36px;
+            background: linear-gradient(135deg, #000000 0%, #1e293b 30%, #3b82f6 100%);
+            border: 2px solid transparent;
+            border-radius: 60px;
+            color: white;
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 15px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1s forwards;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .button-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.5);
+            background: linear-gradient(135deg, #1e293b 0%, #3b82f6 50%, #06b6d4 100%);
+        }
+
+        .button-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .button-primary:hover::before {
+            left: 100%;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .home-paragraph {
+            font-family: 'Inter', sans-serif;
+            font-size: 19px;
+            font-weight: 300;
+            line-height: 1.7;
+            margin-top: 30px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1.5s forwards;
+            color: #cbd5e1;
+            letter-spacing: 0.01em;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .home-bg-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 2s ease;
+        }
+
+        .image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 20s ease, filter 2s ease;
+        }
+
+        .image.is-first {
+            animation: slowZoom 20s ease-in-out infinite;
+        }
+
+        .image.is-second {
+            animation: slowZoom 20s ease-in-out 10s infinite;
+        }
+
+        @keyframes slowZoom {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 40px;
+        }
+
+        .heading-homepage {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #3b82f6 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .home-paragraph {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 50px;
+        }
+
+        .double-button-wrapper {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 80px;
+            flex-wrap: wrap;
+        }
+
+        .secondary-button {
+            padding: 18px 36px;
+            background: transparent;
+            border: 2px solid #3b82f6;
+            border-radius: 60px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .secondary-button:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .home-page-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .card-video-homepage {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            animation: cardSlideUp 0.8s ease-out forwards;
+        }
+
+        .card-video-homepage:nth-child(1) { animation-delay: 0.1s; }
+        .card-video-homepage:nth-child(2) { animation-delay: 0.2s; }
+        .card-video-homepage:nth-child(3) { animation-delay: 0.3s; }
+        .card-video-homepage:nth-child(4) { animation-delay: 0.4s; }
+        .card-video-homepage:nth-child(5) { animation-delay: 0.5s; }
+        .card-video-homepage:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes cardSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-video-homepage:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .home-card-video-wrap {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image, .card-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card-video-homepage:hover .card-image,
+        .card-video-homepage:hover .card-video {
+            transform: scale(1.1);
+        }
+
+        .video-card-content {
+            padding: 28px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 17px;
+            color: #f8fafc;
+            letter-spacing: 0.02em;
+        }
+
+        .cta-wrapper {
+            background: linear-gradient(135deg, #000000 0%, #1e293b 30%, #3b82f6 70%, #06b6d4 100%);
+            padding: 120px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 70%, rgba(59,130,246,0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(6,182,212,0.2) 0%, transparent 50%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .heading-cta {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 40px;
+            color: white;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .primary-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            padding: 22px 45px;
+            background: linear-gradient(135deg, #000000 0%, #3b82f6 50%, #06b6d4 100%);
+            border-radius: 60px;
+            color: white;
+            text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 17px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .primary-button:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.6);
+            background: linear-gradient(135deg, #1e293b 0%, #3b82f6 30%, #06b6d4 100%);
+        }
+
+        .page-scroller {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .page-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #000000, #3b82f6, #06b6d4);
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .divider-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #3b82f6, #06b6d4, transparent);
+            margin: 80px 0;
+            animation: lineGrow 2s ease-out;
+            border-radius: 1px;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        @keyframes lineGrow {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .interaction-overflow {
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .home-hero {
+                padding: 40px 20px;
+            }
+            
+            .container {
+                padding: 40px 20px;
+            }
+            
+            .home-page-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .double-button-wrapper {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Hide mobile header on desktop */
+        .mobile-header {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hide-mobile {
+                display: none;
+            }
+            
+            .mobile-header {
+                display: block;
+            }
+        }
+
+        /* Additional animations for scroll triggers */
+        .template-component {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .template-component.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Background video simulation */
+        .background-video-homepage {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .background-video-homepage::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0,0,0,0.1), rgba(59,130,246,0.1), rgba(6,182,212,0.1));
+            animation: videoShimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes videoShimmer {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+    <section class="section">
+        <div class="home-hero">
+            <div class="home-left-content">
+                <div class="home-header">
+                    <div class="hide-mobile">
+                        <div class="interaction-overflow">
+                            <h1>Crafting identities that</h1>
+                        </div>
+                        <div class="interaction-overflow">
+                            <h1>spark <span class="font-color-secondary">connections</span></h1>
+                        </div>
+                    </div>
+                    <div class="mobile-header">
+                        <h1>Crafting identities that spark <span class="font-color-secondary">connections</span></h1>
+                    </div>
+                    <a href="#contact" class="button-primary">
+                        <div>Book a 15-min call</div>
+                    </a>
+                </div>
+                <div class="hide-landscape">
+                </div>
+            </div>
+        </div>
+        <div class="bg-image">
+            <div class="home-bg-wrapper" style="opacity: 1;">
+                <img class="image is-first" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f79818d19f819f059ac5cc_cdc0af1b1706b5e54bef530df2fa5125_Home-1.jpg" alt="Background Image">
+            </div>
+            <div class="home-bg-wrapper" style="opacity: 1;">
+                <img class="image is-second" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f79ac3c9394f6d98b06b0a_Home-1%20(1).jpg" alt="Background Image">
+            </div>
+        </div>
+    </section>
+
+    <section id="Scroll" class="section">
+        <div class="container">
+            <div class="template-component">
+                <div class="heading-component-homepage">
+                    <h2 class="heading-homepage">Explore every corner of Boulevard Studio</h2>
+                    <div>
+                        <p class="home-paragraph">Elevate your online presence, boost your agency, and stand out with Boulevard Studio - your Ultimate Creative Template solution</p>
+                    </div>
+                    <div class="double-button-wrapper">
+                        <a href="#purchase" class="button-primary">
+                            <div>Get Started</div>
+                        </a>
+                        <a href="#All-Pages" class="secondary-button">Explore</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="template-component-homepage">
+                <div class="home-template-wrap">
+                    <div id="All-Pages" class="home-page-cards-grid">
+                        <a href="#home1" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f%2F67f80fe69ad9632dfb2d67e4_2025-04-10%2015-35-17-poster-00001.jpg" alt="Home 1">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>Home 1</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#home2" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f%2F67f80ff599defd37ae37e8df_2025-04-10%2015-35-54-poster-00001.jpg" alt="Home 2">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>Home 2</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#home3" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f%2F67f80ffaae6aa4c287f57f8e_2025-04-10%2015-36-45-poster-00001.jpg" alt="Home 3">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>Home 3</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#about1" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67468df510e400f65368a4ca%2F67504fba257ed13034f70402_2024-12-04%2009-47-23-poster-00001.jpg" alt="About 1">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>About 1</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#about2" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67468df510e400f65368a4ca%2F67504fbe1101e8de20de01fc_2024-12-04%2009-47-50-poster-00001.jpg" alt="About 2">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>About 2</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#about3" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67468df510e400f65368a4ca%2F67504fc3528adbf3d0d14e3d_2024-12-04%2009-48-17-poster-00001.jpg" alt="About 3">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>About 3</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#work1" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67468df510e400f65368a4ca%2F67505018a7ac73570673d1a7_2024-12-04%2009-49-21-poster-00001.jpg" alt="Work 1">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>Work 1</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#work2" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67468df510e400f65368a4ca%2F6750501c7ebef58964337823_2024-12-04%2009-50-00-poster-00001.jpg" alt="Work 2">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>Work 2</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#work3" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <div class="background-video-homepage">
+                                    <img class="card-image" src="https://cdn.prod.website-files.com/67468df510e400f65368a4ca%2F6750501c7ebef58964337823_2024-12-04%2009-50-00-poster-00001.jpg" alt="Work 3">
+                                </div>
+                            </div>
+                            <div class="video-card-content">
+                                <div>Work 3</div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="divider-line"></div>
+                    
+                    <div class="home-page-cards-grid">
+                        <a href="#contact1" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d90a_Contact%201.jpg" alt="Contact 01">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Contact 01</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#contact2" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d909_Contact%202.jpg" alt="Contact 02">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Contact 02</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#contact3" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d905_Contact%203.jpg" alt="Contact 03">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Contact 03</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#blog-post" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d903_Blog%20CMS.jpg" alt="Blog Post">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Blog Post</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#blog" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d907_Blog.jpg" alt="Blog">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Blog</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#pricing" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d902_Pricing.jpg" alt="Pricing">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Pricing</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#ecommerce" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d8fc_E-commerce.jpg" alt="E-commerce">
+                            </div>
+                            <div class="video-card-content">
+                                <div>E-commerce</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#team" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d904_Team.jpg" alt="Team">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Team</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#team-cms" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d906_Team%20CMS.jpg" alt="Team CMS">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Team CMS</div>
+                            </div>
+                        </a>
+                        
+                        <a href="#work-cms" class="card-video-homepage">
+                            <div class="home-card-video-wrap">
+                                <img class="card-image" src="https://cdn.prod.website-files.com/67f796f12e8500b1f597d78f/67f796f12e8500b1f597d90c_Works%20CMS.jpg" alt="Work CMS">
+                            </div>
+                            <div class="video-card-content">
+                                <div>Work CMS</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="cta-wrapper" id="contact">
+        <div class="cta-background"></div>
+        <div class="cta-content">
+            <div>
+                <div class="interaction-overflow">
+                    <h2 class="heading-cta">This is where we get in touch</h2>
+                </div>
+                <div class="interaction-overflow">
+                    <h2 class="heading-cta">and discuss your ideas!</h2>
+                </div>
+            </div>
+            <a href="#contact-form" class="primary-button">
+                <div>🚀</div>
+                <div>
+                    <div>Discuss Project</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="page-scroller">
+        <div class="page-bar"></div>
+    </div>
+
+    <script>
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.page-bar').style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe template components
+        document.querySelectorAll('.template-component').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Background image rotation
+        let currentImageIndex = 0;
+        const imageWrappers = document.querySelectorAll('.home-bg-wrapper');
+        
+        function rotateImages() {
+            imageWrappers.forEach((wrapper, index) => {
+                if (index === currentImageIndex) {
+                    wrapper.style.opacity = '1';
+                } else {
+                    wrapper.style.opacity = '0';
+                }
+            });
+            
+            currentImageIndex = (currentImageIndex + 1) % imageWrappers.length;
+        }
+
+        // Rotate images every 6 seconds
+        setInterval(rotateImages, 6000);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Parallax effect for background images
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.image');
+            
+            parallaxElements.forEach(element => {
+                const speed = 0.5;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translate3d(0, ${yPos}px, 0)`;
+            });
+        });
+
+        // Card hover effects with 3D transform
+        document.querySelectorAll('.card-video-homepage').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) rotateX(5deg)';
+                this.style.transition = 'all 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) rotateX(0deg)';
+            });
+        });
+
+        // Text animation on scroll
+        const animateText = () => {
+            const textElements = document.querySelectorAll('.heading-cta');
+            textElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight * 0.8) {
+                    element.style.transform = 'translateY(0)';
+                    element.style.opacity = '1';
+                }
+            });
+        };
+
+        window.addEventListener('scroll', animateText);
+
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Trigger initial animations
+            setTimeout(() => {
+                document.querySelector('.template-component').classList.add('visible');
+            }, 1000);
+            
+            // Add stagger animation to cards
+            const cards = document.querySelectorAll('.card-video-homepage');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Mouse follower effect
+        let mouseX = 0;
+        let mouseY = 0;
+        let ballX = 0;
+        let ballY = 0;
+        let speed = 0.1;
+
+        function animate() {
+            let distX = mouseX - ballX;
+            let distY = mouseY - ballY;
+            
+            ballX = ballX + (distX * speed);
+            ballY = ballY + (distY * speed);
+            
+            requestAnimationFrame(animate);
+        }
+
+        document.addEventListener('mousemove', function(event) {
+            mouseX = event.clientX;
+            mouseY = event.clientY;
+        });
+
+        animate();
+
+        // Typing effect for headlines
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Performance optimization
+        let ticking = false;
+        
+        function updateScrollEffects() {
+            // Batch scroll-based updates
+            const scrolled = window.pageYOffset;
+            
+            // Update progress bar
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const progress = (scrolled / height) * 100;
+            document.querySelector('.page-bar').style.width = progress + '%';
+            
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(updateScrollEffects);
+                ticking = true;
+            }
+        });
+    </script>
+</body>
+</html>
