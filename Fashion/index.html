@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCUK - Fashion Template</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .hero-content {
+            position: absolute;
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+        }
+        
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 100;
+            letter-spacing: 0.3em;
+            margin-bottom: 1rem;
+            mix-blend-mode: exclusion;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8));
+            animation: fadeInUp 2s ease-out;
+        }
+        
+        .hero p {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 0.2em;
+            text-transform: lowercase;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
+            animation: fadeInUp 2s ease-out 0.5s both;
+        }
+        
+        .pixelated-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .pixelated-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 2rem;
+            background: rgba(10, 10, 10, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+        }
+        
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 300;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background: #ffffff;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        /* Section Styles */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 200;
+            letter-spacing: 0.1em;
+            margin-bottom: 3rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        /* Collection Section */
+        .collection {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        }
+        
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .collection-item {
+            position: relative;
+            aspect-ratio: 4/5;
+            overflow: hidden;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .collection-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .collection-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .collection-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .collection-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 2rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .collection-item:hover .collection-overlay {
+            transform: translateY(0);
+        }
+        
+        .collection-title {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .collection-price {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* About Section */
+        .about {
+            background: #0a0a0a;
+            text-align: center;
+        }
+        
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .about p {
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 100;
+            color: #ffffff;
+            display: block;
+        }
+        
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        }
+        
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn {
+            background: transparent;
+            border: 1px solid #ffffff;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+        
+        .btn:hover {
+            background: #ffffff;
+            color: #0a0a0a;
+        }
+        
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.1rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: #ffffff;
+        }
+        
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1.5rem;
+            }
+            
+            nav a {
+                font-size: 0.8rem;
+            }
+            
+            section {
+                padding: 4rem 1rem;
+            }
+            
+            .collection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#collection">Collection</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="pixelated-container">
+            <img id="hero-image" src="https://images.unsplash.com/photo-1709990742347-07f67cc136cf?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Fashion Hero" crossorigin="anonymous">
+            <div class="canvas-container" id="canvas-container"></div>
+        </div>
+        <div class="hero-content">
+            <h1>FCUK</h1>
+            <p>LOOK • SHOP • WEAR</p>
+        </div>
+    </section>
+
+    <!-- Collection Section -->
+    <section id="collection" class="collection">
+        <h2>Latest Collection</h2>
+        <div class="collection-grid">
+            <div class="collection-item">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop" alt="Fashion Item 1">
+                <div class="collection-overlay">
+                    <div class="collection-title">Quantum Blazer</div>
+                    <div class="collection-price">$489</div>
+                </div>
+            </div>
+            <div class="collection-item">
+                <img src="https://images.unsplash.com/photo-1544022613-e87ca75a784a?q=80&w=1920&auto=format&fit=crop" alt="Fashion Item 2">
+                <div class="collection-overlay">
+                    <div class="collection-title">Neural Dress</div>
+                    <div class="collection-price">$329</div>
+                </div>
+            </div>
+            <div class="collection-item">
+                <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1920&auto=format&fit=crop" alt="Fashion Item 1">
+                <div class="collection-overlay">
+                    <div class="collection-title">Matrix Coat</div>
+                    <div class="collection-price">$675</div>
+                </div>
+            </div>
+            <div class="collection-item">
+                <img src="https://images.unsplash.com/photo-1542295669297-4d352b042bca?q=80&w=1920&auto=format&fit=crop" alt="Fashion Item 4">
+                <div class="collection-overlay">
+                    <div class="collection-title">Pixel Pants</div>
+                    <div class="collection-price">$245</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <h2>About FCUK</h2>
+        <div class="about-content">
+            <p>We are pioneers in digital fashion, where technology meets style. Our designs blur the boundaries between the physical and digital realms, creating garments that respond to movement, light, and emotion.</p>
+            <p>Each piece in our collection is crafted with precision, incorporating cutting-edge materials and innovative techniques that push the limits of what fashion can be.</p>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-number">2019</span>
+                    <span class="stat-label">Founded</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Collections</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">15K+</span>
+                    <span class="stat-label">Customers</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">25</span>
+                    <span class="stat-label">Countries</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2>Connect</h2>
+        <form class="contact-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Grid</h3>
+                <p>Redefining fashion through digital innovation and creative expression.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="#collection">Collection</a></p>
+                <p><a href="#about">About</a></p>
+                <p><a href="#contact">Contact</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow</h3>
+                <p><a href="#">Instagram</a></p>
+                <p><a href="#">Twitter</a></p>
+                <p><a href="#">LinkedIn</a></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 FCK Fashion. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Pixelation Effect Class
+        class PixelationEffect {
+            constructor(container, img, options = {}) {
+                this.container = container;
+                this.img = img;
+                this.width = container.offsetWidth;
+                this.height = container.offsetHeight;
+
+                this.settings = {
+                    grid: options.grid || 15,
+                    mouse: options.mouse || 0.13,
+                    strength: options.strength || 0.15,
+                    relaxation: options.relaxation || 0.9,
+                };
+
+                this.size = this.settings.grid;
+                this.mouse = {
+                    x: 0,
+                    y: 0,
+                    prevX: 0,
+                    prevY: 0,
+                    vX: 0,
+                    vY: 0
+                };
+
+                this.scene = new THREE.Scene();
+                this.time = 0;
+                this.isPlaying = true;
+                this.animationId = null;
+                this.imageAspect = 1 / 1.5;
+
+                this.init();
+            }
+
+            init() {
+                this.renderer = new THREE.WebGLRenderer({ 
+                    alpha: true, 
+                    antialias: true,
+                    preserveDrawingBuffer: false,
+                    powerPreference: "high-performance"
+                });
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.setSize(this.width, this.height);
+                this.renderer.setClearColor(0x000000, 0);
+                
+                this.container.appendChild(this.renderer.domElement);
+
+                const frustumSize = 1;
+                this.camera = new THREE.OrthographicCamera(
+                    frustumSize / -2, frustumSize / 2, 
+                    frustumSize / 2, frustumSize / -2, 
+                    -1000, 1000
+                );
+                this.camera.position.set(0, 0, 2);
+
+                this.geometry = new THREE.PlaneGeometry(1, 1, 1, 1);
+                
+                this.regenerateGrid();
+                this.addObjects();
+                this.resize();
+                this.setupEventListeners();
+                this.render();
+            }
+
+            setupEventListeners() {
+                const handleMouseMove = (e) => {
+                    const rect = this.container.getBoundingClientRect();
+                    this.mouse.x = (e.clientX - rect.left) / this.width;
+                    this.mouse.y = (e.clientY - rect.top) / this.height;
+
+                    this.mouse.vX = this.mouse.x - this.mouse.prevX;
+                    this.mouse.vY = this.mouse.y - this.mouse.prevY;
+
+                    this.mouse.prevX = this.mouse.x;
+                    this.mouse.prevY = this.mouse.y;
+                };
+
+                const handleResize = () => {
+                    this.resize();
+                };
+
+                this.container.addEventListener('mousemove', handleMouseMove);
+                window.addEventListener('resize', handleResize);
+
+                this.cleanupListeners = () => {
+                    this.container.removeEventListener('mousemove', handleMouseMove);
+                    window.removeEventListener('resize', handleResize);
+                };
+            }
+
+            resize() {
+                this.width = this.container.offsetWidth;
+                this.height = this.container.offsetHeight;
+                this.renderer.setSize(this.width, this.height);
+
+                let a1, a2;
+                if (this.height / this.width > this.imageAspect) {
+                    a1 = (this.width / this.height) * this.imageAspect;
+                    a2 = 1;
+                } else {
+                    a1 = 1;
+                    a2 = (this.height / this.width) / this.imageAspect;
+                }
+
+                if (this.material) {
+                    this.material.uniforms.resolution.value.x = this.width;
+                    this.material.uniforms.resolution.value.y = this.height;
+                    this.material.uniforms.resolution.value.z = a1;
+                    this.material.uniforms.resolution.value.w = a2;
+                }
+
+                this.camera.updateProjectionMatrix();
+                this.regenerateGrid();
+            }
+
+            regenerateGrid() {
+                this.size = this.settings.grid;
+                const width = this.size;
+                const height = this.size;
+                const size = width * height;
+                const data = new Float32Array(4 * size);
+
+                for (let i = 0; i < size; i++) {
+                    const r = Math.random() * 255 - 125;
+                    const r1 = Math.random() * 255 - 125;
+                    const stride = i * 4;
+
+                    data[stride] = r;
+                    data[stride + 1] = r1;
+                    data[stride + 2] = r;
+                    data[stride + 3] = 255;
+                }
+
+                this.texture = new THREE.DataTexture(
+                    data, width, height, 
+                    THREE.RGBAFormat, THREE.FloatType
+                );
+                this.texture.magFilter = this.texture.minFilter = THREE.NearestFilter;
+
+                if (this.material) {
+                    this.material.uniforms.uDataTexture.value = this.texture;
+                    this.material.uniforms.uDataTexture.value.needsUpdate = true;
+                }
+            }
+
+            addObjects() {
+                this.regenerateGrid();
+                const texture = new THREE.Texture(this.img);
+                texture.needsUpdate = true;
+                texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+                texture.minFilter = texture.magFilter = THREE.LinearFilter;
+
+                const fragmentShader = `
+                    precision mediump float;
+                    uniform float time;
+                    uniform sampler2D uDataTexture;
+                    uniform sampler2D uTexture;
+                    uniform vec4 resolution;
+                    varying vec2 vUv;
+                    varying vec3 vPosition;
+                    void main() {
+                        vec2 newUV = (vUv - vec2(0.5)) * resolution.zw + vec2(0.5);
+                        vec4 offset = texture2D(uDataTexture, vUv);
+                        
+                        vec2 displacedUV = newUV - 0.02 * offset.rg;
+                        vec4 color = texture2D(uTexture, displacedUV);
+                        
+                        gl_FragColor = color;
+                    }
+                `;
+
+                const vertexShader = `
+                    precision mediump float;
+                    uniform float time;
+                    varying vec2 vUv;
+                    varying vec3 vPosition;
+                    void main() {
+                        vUv = uv;
+                        vPosition = position;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `;
+
+                this.material = new THREE.ShaderMaterial({
+                    side: THREE.DoubleSide,
+                    uniforms: {
+                        time: { value: 0 },
+                        resolution: { value: new THREE.Vector4() },
+                        uTexture: { value: texture },
+                        uDataTexture: { value: this.texture },
+                    },
+                    vertexShader: vertexShader,
+                    fragmentShader: fragmentShader,
+                    transparent: true,
+                });
+
+                this.plane = new THREE.Mesh(this.geometry, this.material);
+                this.scene.add(this.plane);
+            }
+
+            updateDataTexture() {
+                if (!this.texture) return;
+                
+                const data = this.texture.image.data;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] *= this.settings.relaxation;
+                    data[i + 1] *= this.settings.relaxation;
+                }
+
+                const gridMouseX = this.size * this.mouse.x;
+                const gridMouseY = this.size * (1 - this.mouse.y);
+                const maxDist = this.size * this.settings.mouse;
+                const aspect = this.height / this.width;
+
+                for (let i = 0; i < this.size; i++) {
+                    for (let j = 0; j < this.size; j++) {
+                        const distance = ((gridMouseX - i) ** 2) / aspect + (gridMouseY - j) ** 2;
+                        const maxDistSq = maxDist ** 2;
+
+                        if (distance < maxDistSq) {
+                            const index = 4 * (i + this.size * j);
+                            let power = maxDist / Math.sqrt(distance);
+                            power = Math.max(0, Math.min(power, 10));
+
+                            data[index] += this.settings.strength * 100 * this.mouse.vX * power;
+                            data[index + 1] -= this.settings.strength * 100 * this.mouse.vY * power;
+                        }
+                    }
+                }
+
+                this.mouse.vX *= 0.9;
+                this.mouse.vY *= 0.9;
+                this.texture.needsUpdate = true;
+            }
+
+            render = () => {
+                if (!this.isPlaying) return;
+
+                this.time += 0.05;
+                this.updateDataTexture();
+                
+                if (this.material) {
+                    this.material.uniforms.time.value = this.time;
+                }
+
+                this.animationId = requestAnimationFrame(this.render);
+                this.renderer.render(this.scene, this.camera);
+            };
+
+            destroy() {
+                this.isPlaying = false;
+                
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                }
+
+                if (this.cleanupListeners) {
+                    this.cleanupListeners();
+                }
+
+                if (this.renderer.domElement.parentNode) {
+                    this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
+                }
+
+                this.renderer.dispose();
+                this.geometry.dispose();
+                
+                if (this.material) {
+                    this.material.dispose();
+                }
+                
+                if (this.texture) {
+                    this.texture.dispose();
+                }
+            }
+        }
+
+        // Initialize the pixelation effect
+        let pixelationEffect = null;
+
+        function initPixelationEffect() {
+            const container = document.getElementById('canvas-container');
+            const img = document.getElementById('hero-image');
+            
+            if (container && img && img.complete) {
+                pixelationEffect = new PixelationEffect(container, img, {
+                    grid: 15,
+                    mouse: 0.13,
+                    strength: 0.15,
+                    relaxation: 0.9
+                });
+            }
+        }
+
+        // Wait for image to load
+        document.getElementById('hero-image').addEventListener('load', initPixelationEffect);
+        
+        // If image is already loaded
+        if (document.getElementById('hero-image').complete) {
+            initPixelationEffect();
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (pixelationEffect) {
+                pixelationEffect.destroy();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuminarCraft - Illuminating Excellence Since 1952</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-cyan: #06b6d4;
+            --secondary-cyan: #22d3ee;
+            --dark-slate: #020617;
+            --light-slate: #64748b;
+            --text-light: #f1f5f9;
+            --text-gray: #94a3b8;
+            --accent-gold: #f59e0b;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-light);
+            background-color: var(--dark-slate);
+            overflow-x: hidden;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(2, 6, 23, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.15);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-cyan);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--secondary-cyan);
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-cyan);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-cyan);
+        }
+
+        /* Hero Section - Lamp Effect */
+        .hero {
+            position: relative;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: var(--dark-slate);
+            width: 100%;
+        }
+
+        .lamp-inner {
+            position: relative;
+            display: flex;
+            width: 100%;
+            flex: 1;
+            transform: scaleY(1.25);
+            align-items: center;
+            justify-content: center;
+            isolation: isolate;
+            z-index: 0;
+        }
+
+        .conic-gradient-left {
+            position: absolute;
+            right: 50%;
+            height: 14rem;
+            width: 30rem;
+            background: conic-gradient(from 70deg at center top, var(--primary-cyan), transparent, transparent);
+            opacity: 0.5;
+            animation: expandLeft 0.8s ease-in-out 0.3s forwards;
+        }
+
+        .conic-gradient-right {
+            position: absolute;
+            left: 50%;
+            height: 14rem;
+            width: 30rem;
+            background: conic-gradient(from 290deg at center top, transparent, transparent, var(--primary-cyan));
+            opacity: 0.5;
+            animation: expandRight 0.8s ease-in-out 0.3s forwards;
+        }
+
+        .mask-bottom-left, .mask-bottom-right {
+            position: absolute;
+            width: 100%;
+            background-color: var(--dark-slate);
+            height: 10rem;
+            bottom: 0;
+            z-index: 20;
+            mask-image: linear-gradient(to top, white, transparent);
+        }
+
+        .mask-left {
+            position: absolute;
+            width: 10rem;
+            height: 100%;
+            left: 0;
+            background-color: var(--dark-slate);
+            bottom: 0;
+            z-index: 20;
+            mask-image: linear-gradient(to right, white, transparent);
+        }
+
+        .mask-right {
+            position: absolute;
+            width: 10rem;
+            height: 100%;
+            right: 0;
+            background-color: var(--dark-slate);
+            bottom: 0;
+            z-index: 20;
+            mask-image: linear-gradient(to left, white, transparent);
+        }
+
+        .blur-background {
+            position: absolute;
+            top: 50%;
+            height: 12rem;
+            width: 100%;
+            transform: translateY(3rem) scaleX(1.5);
+            background-color: var(--dark-slate);
+            filter: blur(2rem);
+        }
+
+        .backdrop-blur {
+            position: absolute;
+            top: 50%;
+            z-index: 50;
+            height: 12rem;
+            width: 100%;
+            background-color: transparent;
+            opacity: 0.1;
+            backdrop-filter: blur(12px);
+        }
+
+        .large-glow {
+            position: absolute;
+            z-index: 50;
+            height: 9rem;
+            width: 28rem;
+            transform: translateY(-50%);
+            border-radius: 50%;
+            background-color: var(--primary-cyan);
+            opacity: 0.5;
+            filter: blur(3rem);
+        }
+
+        .medium-glow {
+            position: absolute;
+            z-index: 30;
+            height: 9rem;
+            width: 16rem;
+            transform: translateY(-6rem);
+            border-radius: 50%;
+            background-color: var(--secondary-cyan);
+            filter: blur(2rem);
+            animation: expandMedium 0.8s ease-in-out 0.3s forwards;
+        }
+
+        .light-bar {
+            position: absolute;
+            z-index: 50;
+            height: 0.125rem;
+            width: 30rem;
+            transform: translateY(-7rem);
+            background-color: var(--secondary-cyan);
+            animation: expandBar 0.8s ease-in-out 0.3s forwards;
+        }
+
+        .top-mask {
+            position: absolute;
+            z-index: 40;
+            height: 11rem;
+            width: 100%;
+            transform: translateY(-12.5rem);
+            background-color: var(--dark-slate);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 50;
+            display: flex;
+            transform: translateY(-20rem);
+            flex-direction: column;
+            align-items: center;
+            padding: 0 1.25rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            background: rgba(2, 6, 23, 0.3);
+            border: 1px solid rgba(6, 182, 212, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            margin-top: 2rem;
+            background: linear-gradient(to bottom right, #f8fafc, var(--light-slate));
+            padding: 1rem 0;
+            background-clip: text;
+            -webkit-background-clip: text;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: transparent;
+            opacity: 0.5;
+            transform: translateY(100px);
+            animation: titleSlideIn 0.8s ease-in-out 0.3s forwards;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-top: 1.5rem;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: subtitleSlideIn 0.8s ease-in-out 0.6s forwards;
+        }
+
+        .hero-cta {
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: ctaSlideIn 0.8s ease-in-out 0.9s forwards;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary-cyan) 0%, var(--secondary-cyan) 50%, #0891b2 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(6, 182, 212, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(6, 182, 212, 0.5);
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-light);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            margin-top: 4rem;
+        }
+
+        .about-text {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: var(--text-gray);
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .about-text.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .about-stats.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, rgba(34, 211, 238, 0.1) 100%);
+            border-radius: 15px;
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(6, 182, 212, 0.3);
+            border-color: rgba(6, 182, 212, 0.5);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-cyan);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Products Section */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .product-card {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.8) 100%);
+            border-radius: 20px;
+            padding: 0;
+            border: 1px solid rgba(6, 182, 212, 0.15);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(50px) rotateX(10deg);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-card.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(6, 182, 212, 0.25);
+            border-color: rgba(6, 182, 212, 0.4);
+        }
+
+        .product-card-content {
+            padding: 2rem;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+            filter: brightness(1) contrast(1.2);
+        }
+
+        .product-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .product-description {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 4rem 0 2rem;
+            border-top: 1px solid rgba(6, 182, 212, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-cyan);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: var(--text-gray);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary-cyan);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(6, 182, 212, 0.1);
+            color: var(--text-gray);
+        }
+
+        /* Animations */
+        @keyframes expandLeft {
+            from { width: 15rem; opacity: 0.5; }
+            to { width: 30rem; opacity: 1; }
+        }
+
+        @keyframes expandRight {
+            from { width: 15rem; opacity: 0.5; }
+            to { width: 30rem; opacity: 1; }
+        }
+
+        @keyframes expandMedium {
+            from { width: 8rem; }
+            to { width: 16rem; }
+        }
+
+        @keyframes expandBar {
+            from { width: 15rem; }
+            to { width: 30rem; }
+        }
+
+        @keyframes titleSlideIn {
+            from { opacity: 0.5; transform: translateY(100px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes subtitleSlideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes ctaSlideIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Initial states */
+        .conic-gradient-left,
+        .conic-gradient-right {
+            width: 15rem;
+        }
+
+        .medium-glow {
+            width: 8rem;
+        }
+
+        .light-bar {
+            width: 15rem;
+        }
+
+        /* Scroll reveal */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">LuminarCraft</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="lamp-inner">
+            <div class="conic-gradient-left">
+                <div class="mask-bottom-left"></div>
+                <div class="mask-left"></div>
+            </div>
+            <div class="conic-gradient-right">
+                <div class="mask-right"></div>
+                <div class="mask-bottom-right"></div>
+            </div>
+            <div class="blur-background"></div>
+            <div class="backdrop-blur"></div>
+            <div class="large-glow"></div>
+            <div class="medium-glow"></div>
+            <div class="light-bar"></div>
+            <div class="top-mask"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Illuminating Excellence<br/>Since 1952</h1>
+            <p class="hero-subtitle">Crafting premium lighting solutions that transform spaces and inspire innovation</p>
+            <div class="hero-cta">
+                <a href="#products" class="cta-button">Explore Our Collection</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section" id="about">
+        <h2 class="section-title scroll-reveal">About LuminarCraft</h2>
+        <div class="about-content">
+            <div class="about-text scroll-reveal">
+                <p>For over seven decades, LuminarCraft has been at the forefront of lighting innovation. Our commitment to excellence, sustainability, and cutting-edge design has made us the preferred choice for architects, designers, and homeowners worldwide.</p>
+                <p>From our humble beginnings in 1952 to becoming a global leader in premium lighting solutions, we continue to push the boundaries of what's possible in illumination technology.</p>
+            </div>
+            <div class="about-stats scroll-reveal">
+                <div class="stat-item">
+                    <span class="stat-number">70+</span>
+                    <span class="stat-label">Years of Excellence</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">500K+</span>
+                    <span class="stat-label">Happy Customers</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Countries Served</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Design Awards</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="section" id="products">
+        <h2 class="section-title scroll-reveal">Our Premium Collections</h2>
+        <div class="products-grid">
+            <div class="product-card scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?q=80&w=2069&auto=format&fit=crop" alt="Premium LED Bulbs" class="product-image">
+                <div class="product-card-content">
+                    <h3 class="product-title">LED Innovations</h3>
+                    <p class="product-description">Energy-efficient LED bulbs with cutting-edge technology, offering up to 25,000 hours of brilliant illumination with smart connectivity features and dimming capabilities.</p>
+                </div>
+            </div>
+            <div class="product-card scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1586076008819-33a28b54a158?q=80&w=2070&auto=format&fit=crop" alt="Smart Home Lighting" class="product-image">
+                <div class="product-card-content">
+                    <h3 class="product-title">Smart Lighting</h3>
+                    <p class="product-description">Intelligent lighting systems that adapt to your lifestyle, featuring voice control, automated scheduling, and personalized ambiance settings through advanced IoT integration.</p>
+                </div>
+            </div>
+            <div class="product-card scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1600121848594-d8644e57abab?q=80&w=2069&auto=format&fit=crop" alt="Architectural Lighting Solutions" class="product-image">
+                <div class="product-card-content">
+                    <h3 class="product-title">Architectural Solutions</h3>
+                    <p class="product-description">Professional-grade lighting for commercial and residential spaces, designed to enhance aesthetics while maximizing functionality and energy efficiency.</p>
+                </div>
+            </div>
+            <div class="product-card scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=2069&auto=format&fit=crop" alt="Eco-Friendly Sustainable Lighting" class="product-image">
+                <div class="product-card-content">
+                    <h3 class="product-title">Eco-Friendly Range</h3>
+                    <p class="product-description">Sustainable lighting solutions crafted from recycled materials, reducing environmental impact by 40% without compromising on quality, performance, or longevity.</p>
+                </div>
+            </div>
+            <div class="product-card scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=2069&auto=format&fit=crop" alt="Designer Pendant Lights" class="product-image">
+                <div class="product-card-content">
+                    <h3 class="product-title">Designer Collection</h3>
+                    <p class="product-description">Exclusive artistic lighting pieces created in collaboration with renowned international designers, perfect for those who appreciate luxury, sophistication, and unique aesthetics.</p>
+                </div>
+            </div>
+            <div class="product-card scroll-reveal">
+                <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=2069&auto=format&fit=crop" alt="Industrial LED Lighting" class="product-image">
+                <div class="product-card-content">
+                    <h3 class="product-title">Industrial Series</h3>
+                    <p class="product-description">Robust lighting solutions for industrial applications, engineered for durability and consistent performance in demanding environments with IP65 weather resistance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>LuminarCraft</h3>
+                <p>Illuminating excellence since 1952. We're passionate about creating lighting solutions that transform spaces and inspire innovation.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="#home">Home</a></p>
+                <p><a href="#about">About Us</a></p>
+                <p><a href="#products">Products</a></p>
+                <p><a href="#contact">Contact</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Products</h3>
+                <p><a href="#">LED Innovations</a></p>
+                <p><a href="#">Smart Lighting</a></p>
+                <p><a href="#">Architectural Solutions</a></p>
+                <p><a href="#">Eco-Friendly Range</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <p>📧 hello@luminarcraft.com</p>
+                <p>📞 +1 (555) 123-4567</p>
+                <p>📍 123 Innovation Drive, Tech City, TC 12345</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 LuminarCraft. All rights reserved. | Illuminating the future, one bulb at a time.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Enhanced scroll reveal animation with stagger
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.scroll-reveal');
+            
+            reveals.forEach((reveal, index) => {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveal.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    setTimeout(() => {
+                        reveal.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }
+
+        // Enhanced staggered animation for product cards with 3D effect
+        function staggerProductCards() {
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, index * 200);
+            });
+        }
+
+        // Parallax effect for hero content
+        function parallaxEffect() {
+            const scrolled = window.pageYOffset;
+            const heroContent = document.querySelector('.hero-content');
+            const lampInner = document.querySelector('.lamp-inner');
+            
+            if (heroContent && lampInner) {
+                const rate = scrolled * -0.5;
+                const lampRate = scrolled * -0.2;
+                heroContent.style.transform = `translateY(${-20 * 16 + rate}px)`;
+                lampInner.style.transform = `scaleY(1.25) translateY(${lampRate}px)`;
+            }
+        }
+
+        // Counter animation for statistics
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            counters.forEach(counter => {
+                const target = parseInt(counter.textContent.replace(/\D/g, ''));
+                const increment = target / 50;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = counter.textContent.replace(/\d+/, target);
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = counter.textContent.replace(/\d+/, Math.floor(current));
+                    }
+                }, 30);
+            });
+        }
+
+        // Initialize animations
+        window.addEventListener('scroll', () => {
+            revealOnScroll();
+            parallaxEffect();
+        });
+        
+        window.addEventListener('load', () => {
+            revealOnScroll();
+            setTimeout(staggerProductCards, 800);
+            setTimeout(animateCounters, 1200);
+        });
+
+        // Enhanced navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(2, 6, 23, 0.98)';
+                navbar.style.boxShadow = '0 8px 32px rgba(6, 182, 212, 0.15)';
+                navbar.style.borderBottom = '1px solid rgba(6, 182, 212, 0.3)';
+            } else {
+                navbar.style.background = 'rgba(2, 6, 23, 0.95)';
+                navbar.style.boxShadow = 'none';
+                navbar.style.borderBottom = '1px solid rgba(6, 182, 212, 0.15)';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

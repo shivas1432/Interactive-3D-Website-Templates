@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shivashanker - Full Stack Developer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 20;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            margin-bottom: 48px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        .logo svg {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+        }
+
+        .nav-links .btn-primary {
+            background: rgba(128, 128, 128, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-links .btn-primary:hover {
+            background: rgba(128, 128, 128, 0.6);
+        }
+
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 32px;
+            cursor: pointer;
+        }
+
+        /* Hue Slider */
+        .hue-slider-container {
+            position: relative;
+            width: 100%;
+            max-width: 200px;
+            margin: 0 auto 20px;
+            transform: scale(0.8);
+        }
+
+        .hue-slider-label {
+            color: #ccc;
+            font-size: 11px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .hue-slider-wrapper {
+            position: relative;
+            width: 100%;
+            height: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hue-slider {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            appearance: none;
+            cursor: pointer;
+            z-index: 20;
+            opacity: 0;
+        }
+
+        .hue-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .hue-track {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .hue-fill {
+            position: absolute;
+            height: 4px;
+            background: #4A90E2;
+            border-radius: 2px;
+            z-index: 10;
+            transition: width 0.1s ease;
+        }
+
+        .hue-thumb {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #fff;
+            border-radius: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .hue-thumb.dragging {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .hue-value {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+        }
+
+        /* Feature Items */
+        .feature-items {
+            position: absolute;
+            width: 100%;
+            top: 30%;
+            z-index: 200;
+        }
+
+        .feature-item {
+            position: absolute;
+            z-index: 10;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .feature-item:hover {
+            transform: scale(1.1);
+        }
+
+        .feature-item-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .feature-dot {
+            position: relative;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .feature-dot::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 16px;
+            height: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            filter: blur(2px);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-item:hover .feature-dot::after {
+            opacity: 1;
+        }
+
+        .feature-text {
+            color: #fff;
+            position: relative;
+        }
+
+        .feature-text::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            filter: blur(6px);
+            opacity: 0.7;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-item:hover .feature-text::before {
+            opacity: 1;
+        }
+
+        .feature-name {
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        .feature-value {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            transition: color 0.3s ease;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+        }
+
+        .feature-item:hover .feature-value {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Position classes */
+        .pos-1 { left: 0; top: 160px; }
+        .pos-2 { left: 25%; top: 96px; }
+        .pos-3 { right: 25%; top: 96px; }
+        .pos-4 { right: 0; top: 160px; }
+
+        /* Main Content */
+        .main-content {
+            position: relative;
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 100px;
+        }
+
+        .join-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 32px;
+            animation: fadeInUp 0.5s ease-out 0.2s both;
+        }
+
+        .join-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+
+        .join-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .join-btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        .main-title {
+            font-size: clamp(56px, 10vw, 120px);
+            font-weight: 200;
+            line-height: 0.95;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.5s ease-out 0.4s both;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.05em;
+        }
+
+        .main-subtitle {
+            font-size: clamp(32px, 6vw, 72px);
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 25%, #dee2e6 50%, #ced4da 75%, #adb5bd 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fadeInUp 0.5s ease-out 0.6s both;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        .main-description {
+            color: #a1a1aa;
+            margin-bottom: 48px;
+            max-width: 520px;
+            line-height: 1.7;
+            animation: fadeInUp 0.5s ease-out 0.8s both;
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+        }
+
+        .discover-btn {
+            margin-top: 100px;
+            padding: 14px 36px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out 1s both;
+        }
+
+        .discover-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Background Elements */
+        .background-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .dark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .glowing-circle {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(74, 144, 226, 0.2) 0%, rgba(128, 90, 213, 0.1) 100%);
+            filter: blur(60px);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .lightning-canvas {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .planet {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: url('dp.jpeg');
+            background-size: cover;
+            background-position: center;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+            overflow: hidden;
+            border: 2px solid rgba(74, 144, 226, 0.3);
+        }
+
+        .planet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 40%, rgba(74, 144, 226, 0.1) 0%, rgba(30, 56, 107, 0.2) 40%, rgba(0, 0, 0, 0.3) 100%);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .planet::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="12" height="12" patternUnits="userSpaceOnUse"><path d="M 12 0 L 0 0 0 12" fill="none" stroke="rgba(74,144,226,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            border-radius: 50%;
+            opacity: 0.2;
+            z-index: 2;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 120px 20px;
+            background: #111;
+            position: relative;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 32px;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        .about-content p {
+            color: #d1d5db;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            font-size: 17px;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .skill-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .skill-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .skill-item h3 {
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 17px;
+            font-weight: 500;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.01em;
+        }
+
+        .skill-item p {
+            color: #9ca3af;
+            font-size: 13px;
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 0.01em;
+        }
+
+        .about-visual {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(128, 90, 213, 0.1) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .about-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .code-snippet {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 28px;
+            border-radius: 16px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 13px;
+            font-weight: 400;
+            color: #64b5f6;
+            border: 1px solid rgba(74, 144, 226, 0.2);
+            line-height: 1.6;
+            letter-spacing: 0.02em;
+        }
+
+        /* Projects Section */
+        .projects-section {
+            padding: 120px 20px;
+            background: #000;
+        }
+
+        .projects-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .projects-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .projects-header h2 {
+            font-size: 48px;
+            font-weight: 300;
+            margin-bottom: 24px;
+            color: #fff;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.03em;
+        }
+
+        .projects-header p {
+            color: #9ca3af;
+            font-size: 17px;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+            line-height: 1.7;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.2) 0%, rgba(128, 90, 213, 0.2) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.3)"/><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="75" cy="25" r="1.5" fill="rgba(255,255,255,0.2)"/><circle cx="25" cy="75" r="1" fill="rgba(255,255,255,0.2)"/><circle cx="75" cy="75" r="1.5" fill="rgba(255,255,255,0.2)"/></svg>');
+            opacity: 0.6;
+        }
+
+        .project-content {
+            padding: 32px;
+        }
+
+        .project-content h3 {
+            color: #fff;
+            font-size: 22px;
+            margin-bottom: 16px;
+            font-weight: 500;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -0.02em;
+        }
+
+        .project-content p {
+            color: #d1d5db;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            font-size: 15px;
+            font-weight: 300;
+            letter-spacing: -0.01em;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .tech-tag {
+            background: rgba(74, 144, 226, 0.2);
+            color: #4A90E2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .project-link {
+            color: #4A90E2;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .project-link:hover {
+            color: #fff;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .pos-1 { left: 10px; top: 140px; }
+            .pos-2 { left: 20%; top: 80px; }
+            .pos-3 { right: 20%; top: 80px; }
+            .pos-4 { right: 10px; top: 140px; }
+
+            .main-content {
+                padding-top: 60px;
+            }
+
+            .discover-btn {
+                margin-top: 60px;
+            }
+
+            .glowing-circle {
+                width: 400px;
+                height: 400px;
+            }
+
+            .planet {
+                width: 300px;
+                height: 300px;
+            }
+
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .about-content h2 {
+                font-size: 36px;
+            }
+
+            .projects-header h2 {
+                font-size: 36px;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <!-- Navigation -->
+            <nav class="nav">
+                <div class="logo">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <path d="M20 5L5 20L20 35L35 20L20 5Z" stroke="white" stroke-width="2" />
+                    </svg>
+                    <span>Shivashanker</span>
+                </div>
+                <div class="nav-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#contact">Contact</a>
+                    <a href="#contact" class="btn-primary">Hire Me</a>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            </nav>
+
+            <!-- Mobile Menu -->
+            <div class="mobile-menu" id="mobileMenu">
+                <button class="mobile-menu-close" onclick="toggleMobileMenu()">×</button>
+                <a href="#home" onclick="toggleMobileMenu()">Home</a>
+                <a href="#about" onclick="toggleMobileMenu()">About</a>
+                <a href="#projects" onclick="toggleMobileMenu()">Projects</a>
+                <a href="#contact" onclick="toggleMobileMenu()">Contact</a>
+                <a href="#contact" onclick="toggleMobileMenu()">Hire Me</a>
+            </div>
+
+            <!-- Feature Items -->
+            <div class="feature-items">
+                <div class="feature-item pos-1">
+                    <div class="feature-item-content">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text">
+                            <div class="feature-name">React</div>
+                            <div class="feature-value">Frontend</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-item pos-2">
+                    <div class="feature-item-content">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text">
+                            <div class="feature-name">Node.js</div>
+                            <div class="feature-value">Backend</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-item pos-3">
+                    <div class="feature-item-content">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text">
+                            <div class="feature-name">MongoDB</div>
+                            <div class="feature-value">Database</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-item pos-4">
+                    <div class="feature-item-content">
+                        <div class="feature-dot"></div>
+                        <div class="feature-text">
+                            <div class="feature-name">AWS</div>
+                            <div class="feature-value">Cloud</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <div class="hue-slider-container">
+                    <div class="hue-slider-label">Adjust Lightning Hue</div>
+                    <div class="hue-slider-wrapper">
+                        <input type="range" class="hue-slider" min="0" max="360" value="220" id="hueSlider">
+                        <div class="hue-track"></div>
+                        <div class="hue-fill" id="hueFill"></div>
+                        <div class="hue-thumb" id="hueThumb"></div>
+                    </div>
+                    <div class="hue-value" id="hueValue">220°</div>
+                </div>
+
+                <button class="join-btn">
+                    <span>Available for freelance</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M8 3L13 8L8 13M13 8H3" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+
+                <h1 class="main-title">Shivashanker</h1>
+                <h2 class="main-subtitle">Full Stack Developer</h2>
+                <p class="main-description">
+                    Creating innovative web applications with modern technologies. 
+                    Specialized in React, Node.js, and cloud solutions.
+                </p>
+                <button class="discover-btn">View My Work</button>
+            </div>
+        </div>
+
+        <!-- Background Elements -->
+        <div class="background-elements">
+            <div class="dark-overlay"></div>
+            <div class="glowing-circle"></div>
+            <canvas class="lightning-canvas" id="lightningCanvas"></canvas>
+            <div class="planet"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <div class="about-content">
+                <h2>About Me</h2>
+                <p>
+                    I'm a passionate full-stack developer with 5+ years of experience creating 
+                    scalable web applications. I specialize in modern JavaScript frameworks 
+                    and have a strong background in both frontend and backend development.
+                </p>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <h3>Frontend</h3>
+                        <p>React, Vue.js, TypeScript, Tailwind CSS</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>Backend</h3>
+                        <p>Node.js, Python, Express, REST APIs</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>Database</h3>
+                        <p>MongoDB, PostgreSQL, Redis</p>
+                    </div>
+                    <div class="skill-item">
+                        <h3>Cloud</h3>
+                        <p>AWS, Docker, Kubernetes, CI/CD</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div class="code-snippet">
+                    <div>const developer = {</div>
+                    <div>&nbsp;&nbsp;name: "Shivashanker",</div>
+                    <div>&nbsp;&nbsp;role: "Full Stack Developer",</div>
+                    <div>&nbsp;&nbsp;skills: ["React", "Node.js", "AWS"],</div>
+                    <div>&nbsp;&nbsp;passion: "Creating amazing UX"</div>
+                    <div>};</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects-section" id="projects">
+        <div class="projects-container">
+            <div class="projects-header">
+                <h2>Featured Projects</h2>
+                <p>Here are some of my recent works that showcase my skills and experience in full-stack development.</p>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image"></div>
+                    <div class="project-content">
+                        <h3>E-Commerce Platform</h3>
+                        <p>A fully functional e-commerce platform with real-time inventory management, payment integration, and admin dashboard.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">Stripe</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Live Demo →</a>
+                            <a href="#" class="project-link">GitHub →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image"></div>
+                    <div class="project-content">
+                        <h3>Task Management App</h3>
+                        <p>A collaborative task management application with real-time updates, team collaboration features, and advanced analytics.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Vue.js</span>
+                            <span class="tech-tag">Express</span>
+                            <span class="tech-tag">Socket.io</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Live Demo →</a>
+                            <a href="#" class="project-link">GitHub →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image"></div>
+                    <div class="project-content">
+                        <h3>AI Chat Application</h3>
+                        <p>An intelligent chat application powered by AI with natural language processing and smart conversation flows.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">OpenAI</span>
+                            <span class="tech-tag">AWS</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Live Demo →</a>
+                            <a href="#" class="project-link">GitHub →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Lightning shader implementation
+        function initLightning() {
+            const canvas = document.getElementById('lightningCanvas');
+            const gl = canvas.getContext('webgl');
+            
+            if (!gl) {
+                console.error('WebGL not supported');
+                return;
+            }
+
+            function resizeCanvas() {
+                canvas.width = canvas.clientWidth;
+                canvas.height = canvas.clientHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const vertexShaderSource = `
+                attribute vec2 aPosition;
+                void main() {
+                    gl_Position = vec4(aPosition, 0.0, 1.0);
+                }
+            `;
+
+            const fragmentShaderSource = `
+                precision mediump float;
+                uniform vec2 iResolution;
+                uniform float iTime;
+                uniform float uHue;
+                uniform float uXOffset;
+                uniform float uSpeed;
+                uniform float uIntensity;
+                uniform float uSize;
+                
+                #define OCTAVE_COUNT 10
+
+                vec3 hsv2rgb(vec3 c) {
+                    vec3 rgb = clamp(abs(mod(c.x * 6.0 + vec3(0.0,4.0,2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
+                    return c.z * mix(vec3(1.0), rgb, c.y);
+                }
+
+                float hash11(float p) {
+                    p = fract(p * .1031);
+                    p *= p + 33.33;
+                    p *= p + p;
+                    return fract(p);
+                }
+
+                float hash12(vec2 p) {
+                    vec3 p3 = fract(vec3(p.xyx) * .1031);
+                    p3 += dot(p3, p3.yzx + 33.33);
+                    return fract((p3.x + p3.y) * p3.z);
+                }
+
+                mat2 rotate2d(float theta) {
+                    float c = cos(theta);
+                    float s = sin(theta);
+                    return mat2(c, -s, s, c);
+                }
+
+                float noise(vec2 p) {
+                    vec2 ip = floor(p);
+                    vec2 fp = fract(p);
+                    float a = hash12(ip);
+                    float b = hash12(ip + vec2(1.0, 0.0));
+                    float c = hash12(ip + vec2(0.0, 1.0));
+                    float d = hash12(ip + vec2(1.0, 1.0));
+                    
+                    vec2 t = smoothstep(0.0, 1.0, fp);
+                    return mix(mix(a, b, t.x), mix(c, d, t.x), t.y);
+                }
+
+                float fbm(vec2 p) {
+                    float value = 0.0;
+                    float amplitude = 0.5;
+                    for (int i = 0; i < OCTAVE_COUNT; ++i) {
+                        value += amplitude * noise(p);
+                        p *= rotate2d(0.45);
+                        p *= 2.0;
+                        amplitude *= 0.5;
+                    }
+                    return value;
+                }
+
+                void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+                    vec2 uv = fragCoord / iResolution.xy;
+                    uv = 2.0 * uv - 1.0;
+                    uv.x *= iResolution.x / iResolution.y;
+                    uv.x += uXOffset;
+                    
+                    uv += 2.0 * fbm(uv * uSize + 0.8 * iTime * uSpeed) - 1.0;
+                    
+                    float dist = abs(uv.x);
+                    vec3 baseColor = hsv2rgb(vec3(uHue / 360.0, 0.7, 0.8));
+                    vec3 col = baseColor * pow(mix(0.0, 0.07, hash11(iTime * uSpeed)) / dist, 1.0) * uIntensity;
+                    col = pow(col, vec3(1.0));
+                    fragColor = vec4(col, 1.0);
+                }
+
+                void main() {
+                    mainImage(gl_FragColor, gl_FragCoord.xy);
+                }
+            `;
+
+            function compileShader(source, type) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error('Shader compile error:', gl.getShaderInfoLog(shader));
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
+            }
+
+            const vertexShader = compileShader(vertexShaderSource, gl.VERTEX_SHADER);
+            const fragmentShader = compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER);
+            
+            if (!vertexShader || !fragmentShader) return;
+
+            const program = gl.createProgram();
+            gl.attachShader(program, vertexShader);
+            gl.attachShader(program, fragmentShader);
+            gl.linkProgram(program);
+            
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error('Program linking error:', gl.getProgramInfoLog(program));
+                return;
+            }
+            
+            gl.useProgram(program);
+
+            const vertices = new Float32Array([
+                -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1,
+            ]);
+            
+            const vertexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+            const aPosition = gl.getAttribLocation(program, 'aPosition');
+            gl.enableVertexAttribArray(aPosition);
+            gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+            const iResolutionLocation = gl.getUniformLocation(program, 'iResolution');
+            const iTimeLocation = gl.getUniformLocation(program, 'iTime');
+            const uHueLocation = gl.getUniformLocation(program, 'uHue');
+            const uXOffsetLocation = gl.getUniformLocation(program, 'uXOffset');
+            const uSpeedLocation = gl.getUniformLocation(program, 'uSpeed');
+            const uIntensityLocation = gl.getUniformLocation(program, 'uIntensity');
+            const uSizeLocation = gl.getUniformLocation(program, 'uSize');
+
+            let currentHue = 220;
+            const startTime = performance.now();
+
+            function render() {
+                resizeCanvas();
+                gl.uniform2f(iResolutionLocation, canvas.width, canvas.height);
+                const currentTime = performance.now();
+                gl.uniform1f(iTimeLocation, (currentTime - startTime) / 1000.0);
+                gl.uniform1f(uHueLocation, currentHue);
+                gl.uniform1f(uXOffsetLocation, 0);
+                gl.uniform1f(uSpeedLocation, 1.6);
+                gl.uniform1f(uIntensityLocation, 0.6);
+                gl.uniform1f(uSizeLocation, 2);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                requestAnimationFrame(render);
+            }
+
+            requestAnimationFrame(render);
+
+            // Hue slider functionality
+            const hueSlider = document.getElementById('hueSlider');
+            const hueFill = document.getElementById('hueFill');
+            const hueThumb = document.getElementById('hueThumb');
+            const hueValue = document.getElementById('hueValue');
+
+            function updateHue() {
+                const value = parseInt(hueSlider.value);
+                const progress = (value / 360) * 100;
+                
+                currentHue = value;
+                hueFill.style.width = progress + '%';
+                hueThumb.style.left = progress + '%';
+                hueValue.textContent = value + '°';
+            }
+
+            hueSlider.addEventListener('input', updateHue);
+            hueSlider.addEventListener('mousedown', () => {
+                hueThumb.classList.add('dragging');
+            });
+            hueSlider.addEventListener('mouseup', () => {
+                hueThumb.classList.remove('dragging');
+            });
+
+            updateHue();
+        }
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Smooth scrolling for navigation links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Initialize lightning effect
+            initLightning();
+
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements for animations
+            const animatedElements = document.querySelectorAll('.feature-item, .project-card, .skill-item');
+            animatedElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+
+        // Parallax effect for background elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const glowingCircle = document.querySelector('.glowing-circle');
+            const planet = document.querySelector('.planet');
+            
+            if (glowingCircle) {
+                glowingCircle.style.transform = `translate(-50%, -50%) translateY(${scrolled * 0.5}px)`;
+            }
+            if (planet) {
+                planet.style.transform = `translate(-50%, -50%) translateY(${scrolled * 0.3}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

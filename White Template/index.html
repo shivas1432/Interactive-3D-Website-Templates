@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Paths - Modern Website Template</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Global Animated Background Lines */
+        .global-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.08;
+        }
+
+        .global-background svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .animated-path {
+            stroke: #1a1a1a;
+            stroke-width: 1.5;
+            fill: none;
+            stroke-dasharray: 300 50;
+            animation: pathFlow 25s infinite linear;
+            opacity: 0.6;
+        }
+
+        .animated-path:nth-child(2) { animation-delay: -5s; stroke-width: 1; }
+        .animated-path:nth-child(3) { animation-delay: -10s; stroke-width: 0.8; }
+        .animated-path:nth-child(4) { animation-delay: -15s; stroke-width: 1.2; }
+        .animated-path:nth-child(5) { animation-delay: -20s; stroke-width: 0.9; }
+        .animated-path:nth-child(6) { animation-delay: -8s; stroke-width: 1.1; }
+        .animated-path:nth-child(7) { animation-delay: -12s; stroke-width: 0.7; }
+        .animated-path:nth-child(8) { animation-delay: -18s; stroke-width: 1.3; }
+
+        @keyframes pathFlow {
+            0% { 
+                stroke-dashoffset: 350; 
+                opacity: 0.3;
+            }
+            50% { 
+                stroke-dashoffset: 0; 
+                opacity: 0.8;
+            }
+            100% { 
+                stroke-dashoffset: -350; 
+                opacity: 0.3;
+            }
+        }
+
+        /* Ensure content is above background */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Typography */
+        .display-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .body-font {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #1a1a1a;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #1a1a1a;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: #1a1a1a;
+            margin: 4px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fafafa 0%, #ffffff 50%, #f8f9fa 100%);
+        }
+
+        .hero-background-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.12;
+        }
+
+        .hero-background-lines svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-path {
+            stroke: #1a1a1a;
+            stroke-width: 1;
+            fill: none;
+            opacity: 0.7;
+            stroke-dasharray: 200 30;
+            animation: heroPathAnimation 20s infinite linear;
+        }
+
+        .hero-path:nth-child(2) { animation-delay: -3s; stroke-width: 0.8; }
+        .hero-path:nth-child(3) { animation-delay: -6s; stroke-width: 1.2; }
+        .hero-path:nth-child(4) { animation-delay: -9s; stroke-width: 0.6; }
+        .hero-path:nth-child(5) { animation-delay: -12s; stroke-width: 1.1; }
+        .hero-path:nth-child(6) { animation-delay: -15s; stroke-width: 0.9; }
+
+        @keyframes heroPathAnimation {
+            0%, 100% { 
+                stroke-dashoffset: 0; 
+                opacity: 0.4;
+            }
+            50% { 
+                stroke-dashoffset: 230; 
+                opacity: 0.8;
+            }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            max-width: 900px;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3.5rem, 10vw, 9rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #4a5568 50%, #2d3748 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.08em;
+            line-height: 0.9;
+            animation: titleSlideUp 1.2s ease-out;
+        }
+
+        @keyframes titleSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
+            color: #4a5568;
+            margin-bottom: 3rem;
+            font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: 0.01em;
+            animation: subtitleFadeIn 1.2s ease-out 0.6s both;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @keyframes subtitleFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            animation: buttonFadeIn 1.2s ease-out 1.2s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .hero-button:hover::before {
+            left: 100%;
+        }
+
+        .hero-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .hero-button-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .hero-button:hover .hero-button-arrow {
+            transform: translateX(4px);
+        }
+
+        @keyframes buttonFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 4rem;
+            color: #1a1a1a;
+            letter-spacing: -0.04em;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+            margin-top: 4rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 3rem 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #1a1a1a, #4a5568, #1a1a1a);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .feature-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .feature-card:nth-child(2) { animation-delay: 0.3s; }
+        .feature-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            display: block;
+        }
+
+        .feature-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: #1a1a1a;
+            letter-spacing: -0.02em;
+        }
+
+        .feature-description {
+            font-family: 'Inter', sans-serif;
+            color: #4a5568;
+            line-height: 1.7;
+            font-size: 1.05rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* About Section */
+        .about {
+            padding: 8rem 0;
+            background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .about-text {
+            opacity: 0;
+            animation: fadeInLeft 1s ease-out forwards;
+        }
+
+        .about-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            color: #1a1a1a;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+        }
+
+        .about-text p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.15rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+        }
+
+        .about-image {
+            opacity: 0;
+            animation: fadeInRight 1s ease-out forwards;
+        }
+
+        .about-image-placeholder {
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(135deg, #f1f3f4 0%, #e8eaed 50%, #f8f9fa 100%);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: #9aa0a6;
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .about-image-placeholder:hover {
+            transform: scale(1.02);
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 50%, #1a1a1a 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></svg>') repeat;
+            animation: sparkle 20s infinite linear;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            letter-spacing: -0.04em;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 3.5rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+            letter-spacing: 0.01em;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.3s forwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.6s forwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn-primary {
+            padding: 1.2rem 2.5rem;
+            background: white;
+            color: #1a1a1a;
+            text-decoration: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary {
+            padding: 1.2rem 2.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: white;
+            text-decoration: none;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 0.02em;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #1a1a1a;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 5rem 0 2.5rem;
+            background: linear-gradient(180deg, #fafafa 0%, #f0f2f5 100%);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            font-family: 'Inter', sans-serif;
+            color: #4a5568;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+
+        .footer-section a:hover {
+            color: #1a1a1a;
+            transform: translateX(2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            color: #4a5568;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            letter-spacing: 0.01em;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 2rem;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+                border-radius: 0 0 16px 16px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 3.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn-primary, .btn-secondary {
+                display: block;
+                text-align: center;
+                min-width: 250px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .feature-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero-content {
+                padding: 0 15px;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .about-text h2 {
+                font-size: 2.5rem;
+            }
+
+            .cta h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Scroll animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease;
+        }
+
+        .scroll-animate.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Animated Background Lines -->
+    <div class="global-background">
+        <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+            <path class="animated-path" d="M-100,100 Q300,50 600,200 T1300,150" />
+            <path class="animated-path" d="M-50,300 Q400,250 700,400 T1350,350" />
+            <path class="animated-path" d="M-150,500 Q250,450 550,600 T1250,550" />
+            <path class="animated-path" d="M-75,200 Q350,150 650,300 T1375,250" />
+            <path class="animated-path" d="M-125,400 Q275,350 575,500 T1275,450" />
+            <path class="animated-path" d="M-25,600 Q425,550 725,700 T1425,650" />
+            <path class="animated-path" d="M-200,50 Q200,100 500,50 T1200,100" />
+            <path class="animated-path" d="M-175,700 Q325,650 625,800 T1325,750" />
+        </svg>
+    </div>
+
+    <div class="content-layer">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-container">
+                    <div class="logo">SS_WEB_INNOVATIONS</div>
+                    <ul class="nav-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                    <div class="menu-toggle">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-background-lines">
+                <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+                    <path class="hero-path" d="M-380,-189 Q-312,216 152,343 Q616,470 684,875" />
+                    <path class="hero-path" d="M-350,-150 Q-280,250 180,380 Q650,500 720,900" />
+                    <path class="hero-path" d="M-410,-220 Q-340,180 120,310 Q580,440 650,850" />
+                    <path class="hero-path" d="M-320,-120 Q-250,280 210,410 Q680,530 750,920" />
+                    <path class="hero-path" d="M-450,-250 Q-380,150 90,280 Q550,410 620,820" />
+                    <path class="hero-path" d="M-290,-90 Q-220,310 240,440 Q710,560 780,950" />
+                </svg>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title display-font">SHIVA </h1>
+                <p class="hero-subtitle body-font">Experience the perfect blend of modern design and cutting-edge technology with our innovative solutions that flow seamlessly across your digital landscape.</p>
+                <a href="#features" class="hero-button body-font">
+                    <span>Discover Excellence</span>
+                    <span class="hero-button-arrow">→</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <h2 class="section-title scroll-animate display-font">Exceptional Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">✨</div>
+                        <h3 class="feature-title display-font">Innovative Design</h3>
+                        <p class="feature-description body-font">Cutting-edge visual elements that captivate and engage your audience with modern aesthetics and flowing animations.</p>
+                    </div>
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">🎯</div>
+                        <h3 class="feature-title display-font">Smooth Animations</h3>
+                        <p class="feature-description body-font">Fluid transitions and micro-interactions that create an immersive user experience throughout your entire website.</p>
+                    </div>
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">📱</div>
+                        <h3 class="feature-title display-font">Responsive Layout</h3>
+                        <p class="feature-description body-font">Perfect adaptation across all devices and screen sizes for seamless accessibility and optimal user experience.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text scroll-animate">
+                        <h2 class="display-font">About Our Vision</h2>
+                        <p class="body-font">We believe in creating digital experiences that not only look beautiful but also function seamlessly across all platforms. Our approach combines innovative design with cutting-edge technology to deliver exceptional results.</p>
+                        <p class="body-font">Every project is crafted with attention to detail, ensuring that your brand stands out in the digital landscape while providing users with an intuitive and engaging experience that flows naturally.</p>
+                        <a href="#contact" class="hero-button body-font">
+                            <span>Learn More</span>
+                            <span class="hero-button-arrow">→</span>
+                        </a>
+                    </div>
+                    <div class="about-image scroll-animate">
+                        <div class="about-image-placeholder">
+                            🎨
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="container">
+                <h2 class="scroll-animate display-font">Ready to Get Started?</h2>
+                <p class="scroll-animate body-font">Join thousands of satisfied customers who have transformed their digital presence with our innovative solutions and flowing design systems.</p>
+                <div class="cta-buttons scroll-animate">
+                    <a href="#contact" class="btn-primary body-font">Get Started Today</a>
+                    <a href="#portfolio" class="btn-secondary body-font">View Portfolio</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="contact" class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3 class="display-font">Company</h3>
+                        <ul>
+                            <li><a href="#" class="body-font">About</a></li>
+                            <li><a href="#" class="body-font">Careers</a></li>
+                            <li><a href="#" class="body-font">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3 class="display-font">Services</h3>
+                        <ul>
+                            <li><a href="#" class="body-font">Design</a></li>
+                            <li><a href="#" class="body-font">Development</a></li>
+                            <li><a href="#" class="body-font">Consulting</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3 class="display-font">Resources</h3>
+                        <ul>
+                            <li><a href="#" class="body-font">Blog</a></li>
+                            <li><a href="#" class="body-font">Documentation</a></li>
+                            <li><a href="#" class="body-font">Support</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3 class="display-font">Connect</h3>
+                        <ul>
+                            <li><a href="#" class="body-font">Twitter</a></li>
+                            <li><a href="#" class="body-font">LinkedIn</a></li>
+                            <li><a href="#" class="body-font">GitHub</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="body-font">&copy; 2025 Background Paths. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            
+            // Animate hamburger menu
+            const spans = menuToggle.querySelectorAll('span');
+            if (navLinks.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'rotate(0) translate(0, 0)';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'rotate(0) translate(0, 0)';
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                // Close mobile menu after clicking
+                navLinks.classList.remove('active');
+                // Reset hamburger menu
+                const spans = menuToggle.querySelectorAll('span');
+                spans[0].style.transform = 'rotate(0) translate(0, 0)';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'rotate(0) translate(0, 0)';
+            });
+        });
+
+        // Enhanced scroll animations with stagger effect
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    
+                    // Add stagger effect for feature cards
+                    if (entry.target.classList.contains('feature-card')) {
+                        const cards = document.querySelectorAll('.feature-card');
+                        cards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('animate');
+                            }, index * 200);
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe all scroll-animate elements
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Enhanced navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            const scrolled = window.pageYOffset;
+            
+            if (scrolled > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.1)';
+                navbar.style.backdropFilter = 'blur(20px)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+                navbar.style.backdropFilter = 'blur(20px)';
+            }
+        });
+
+        // Enhanced parallax effect for background elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            const globalBg = document.querySelector('.global-background');
+            const heroBg = document.querySelector('.hero-background-lines');
+            
+            if (globalBg) {
+                globalBg.style.transform = `translateY(${rate * 0.3}px)`;
+            }
+            
+            if (heroBg && scrolled < window.innerHeight) {
+                heroBg.style.transform = `translateY(${rate * 0.8}px)`;
+            }
+        });
+
+        // Dynamic path animation with mouse interaction
+        document.addEventListener('mousemove', (e) => {
+            const paths = document.querySelectorAll('.animated-path, .hero-path');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            paths.forEach((path, index) => {
+                const speed = 1 + (mouseX * 0.5);
+                const opacity = 0.3 + (mouseY * 0.5);
+                path.style.animationDuration = `${20 / speed}s`;
+                path.style.opacity = opacity;
+            });
+        });
+
+        // Enhanced button hover effects with ripple
+        document.querySelectorAll('.hero-button, .btn-primary, .btn-secondary').forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+            
+            // Add ripple effect on click
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.cssText = `
+                    position: absolute;
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${x}px;
+                    top: ${y}px;
+                    background: rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    transform: scale(0);
+                    animation: ripple 0.6s ease-out;
+                    pointer-events: none;
+                `;
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Add ripple animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Loading animation with fade in
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+            document.body.style.transition = 'opacity 0.8s ease';
+            
+            // Trigger hero animations
+            setTimeout(() => {
+                const heroTitle = document.querySelector('.hero-title');
+                const heroSubtitle = document.querySelector('.hero-subtitle');
+                const heroButton = document.querySelector('.hero-button');
+                
+                if (heroTitle) heroTitle.style.animationPlayState = 'running';
+                if (heroSubtitle) heroSubtitle.style.animationPlayState = 'running';
+                if (heroButton) heroButton.style.animationPlayState = 'running';
+            }, 100);
+        });
+
+        // Resize handler for responsive design
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                navLinks.classList.remove('active');
+                // Reset hamburger menu
+                const spans = menuToggle.querySelectorAll('span');
+                spans[0].style.transform = 'rotate(0) translate(0, 0)';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'rotate(0) translate(0, 0)';
+            }
+        });
+
+        // Performance optimization: throttle scroll events
+        let ticking = false;
+        function updateOnScroll() {
+            // Your scroll-based animations here
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateOnScroll);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
+
+        // Add smooth page transitions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Preload important images/fonts
+            const link = document.createElement('link');
+            link.rel = 'preload';
+            link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap';
+            link.as = 'style';
+            document.head.appendChild(link);
+        });
+
+        // Enhanced feature card animations
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.3}s`;
+            
+            // Add hover sound effect (optional)
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) rotateX(5deg)';
+                card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0deg)';
+            });
+        });
+
+        // Text animation for hero title (letter by letter)
+        const heroTitle = document.querySelector('.hero-title');
+        if (heroTitle) {
+            const text = heroTitle.textContent;
+            heroTitle.innerHTML = text.split('').map((char, i) => 
+                `<span style="animation-delay: ${i * 0.1}s; display: inline-block;">${char}</span>`
+            ).join('');
+        }
+
+        // Add intersection observer for more animations
+        const animateOnScroll = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        });
+
+        document.querySelectorAll('[data-animate]').forEach(el => {
+            animateOnScroll.observe(el);
+        });
+    </script>
+</body>
+</html>

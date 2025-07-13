@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaForge - Advanced Digital Solutions</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chrome-grid-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            margin-bottom: 1rem;
+            font-weight: 300;
+        }
+
+        .hero .description {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Courier New', monospace;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Services */
+        .services {
+            background: #111;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .service-card p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* About */
+        .about {
+            background: #000;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .about-visual {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .visual-content {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .visual-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Contact */
+        .contact {
+            background: #111;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-info {
+            space-y: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item-icon {
+            width: 24px;
+            height: 24px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #000;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+        .footer-bottom {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">METAFORGE</div>
+            <ul class="nav-links">
+                <li><a href="#services">Services</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="chrome-grid-container" id="chromeGrid"></div>
+        <div class="hero-content">
+            <h1>METAFORGE</h1>
+            <p class="subtitle">Advanced Digital Solutions</p>
+            <p class="description">
+                Crafting immersive digital experiences that respond to human interaction. 
+                Where technology meets artistry.
+            </p>
+            <div class="cta-buttons">
+                <a href="#portfolio" class="btn btn-primary">Explore Our Work</a>
+                <a href="#contact" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section services">
+        <h2 class="section-title">Our Services</h2>
+        <p class="section-subtitle">
+            We specialize in creating digital experiences that blur the line between 
+            technology and human intuition.
+        </p>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🎨</div>
+                <h3>Interactive Design</h3>
+                <p>Create responsive digital experiences that adapt to user behavior and preferences.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">📊</div>
+                <h3>Advanced Analytics</h3>
+                <p>Deep insights into user engagement patterns and performance optimization.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">⚡</div>
+                <h3>Custom Development</h3>
+                <p>Tailored solutions built with cutting-edge technologies and frameworks.</p>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎯</div>
+                <h3>Strategic Consulting</h3>
+                <p>Expert guidance on digital transformation and technology implementation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section about">
+        <h2 class="section-title">About MetaForge</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>
+                    Founded on the principle that technology should respond intuitively to human 
+                    needs, MetaForge pushes the boundaries of what's possible in digital design 
+                    and development.
+                </p>
+                <p>
+                    Our team of visionary designers and developers creates immersive experiences 
+                    that adapt, learn, and evolve with user interaction. We believe in the power 
+                    of responsive design that goes beyond traditional interfaces.
+                </p>
+                <div class="stats">
+                    <div>
+                        <div class="stat-number">150+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Clients</div>
+                    </div>
+                    <div>
+                        <div class="stat-number">5+</div>
+                        <div class="stat-label">Years</div>
+                    </div>
+                </div>
+            </div>
+            <div class="about-visual">
+                <div>
+                    <div class="visual-content">🚀</div>
+                    <p class="visual-text">Innovation in Motion</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section contact">
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="section-subtitle">
+            Ready to transform your digital presence? Let's discuss how we can 
+            bring your vision to life.
+        </p>
+        <div class="contact-content">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <svg class="contact-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <div>
+                        <p>hello@metaforge.com</p>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">General inquiries</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <svg class="contact-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    <div>
+                        <p>+1 (555) 123-4567</p>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Direct line</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <svg class="contact-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <div>
+                        <p>San Francisco, CA</p>
+                        <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem;">Headquarters</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <input type="text" class="form-input" placeholder="Your Name">
+                <input type="email" class="form-input" placeholder="Your Email">
+                <textarea class="form-input form-textarea" placeholder="Your Message"></textarea>
+                <button class="btn btn-primary">Send Message</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="logo">METAFORGE</div>
+            <div class="footer-links">
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+                <a href="#">LinkedIn</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 MetaForge. All rights reserved. Crafted with precision.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Chrome Grid Implementation
+        class ChromeGrid {
+            constructor(container) {
+                this.container = container;
+                this.gridSize = 10;
+                this.boxes = [];
+                this.hoveredBox = null;
+                this.rippleScale = 2.5;
+                this.rippleRadius = 2;
+                this.mouse = new THREE.Vector2();
+                this.raycaster = new THREE.Raycaster();
+                
+                this.init();
+                this.animate();
+            }
+
+            init() {
+                // Scene setup
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera(
+                    35,
+                    window.innerWidth / window.innerHeight,
+                    0.1,
+                    1000
+                );
+                
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.setClearColor(0x000000);
+                this.renderer.shadowMap.enabled = true;
+                this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                
+                this.container.appendChild(this.renderer.domElement);
+
+                // Camera position
+                this.camera.position.set(-9.31, 12, 24.72);
+                this.camera.rotation.set(-0.65, -0.2, -0.13);
+
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+                this.scene.add(ambientLight);
+
+                const directionalLight1 = new THREE.DirectionalLight(0xffffff, 10);
+                directionalLight1.position.set(10, 15, 10);
+                directionalLight1.castShadow = true;
+                this.scene.add(directionalLight1);
+
+                const directionalLight2 = new THREE.DirectionalLight(0xffffff, 10);
+                directionalLight2.position.set(-10, 10, -5);
+                this.scene.add(directionalLight2);
+
+                const directionalLight3 = new THREE.DirectionalLight(0xf0f8ff, 5);
+                directionalLight3.position.set(5, -10, 15);
+                this.scene.add(directionalLight3);
+
+                const pointLight1 = new THREE.PointLight(0xffffff, 2, 50);
+                pointLight1.position.set(0, 20, 3);
+                this.scene.add(pointLight1);
+
+                const pointLight2 = new THREE.PointLight(0xffffff, 1.5, 40);
+                pointLight2.position.set(15, 5, 15);
+                this.scene.add(pointLight2);
+
+                // Create grid
+                this.createGrid();
+
+                // Event listeners
+                window.addEventListener('resize', this.onWindowResize.bind(this));
+                window.addEventListener('mousemove', this.onMouseMove.bind(this));
+            }
+
+            createRoundedRectGeometry(width, height, radius) {
+                const shape = new THREE.Shape();
+                const hw = width / 2;
+                const hh = height / 2;
+
+                shape.moveTo(-hw + radius, -hh);
+                shape.lineTo(hw - radius, -hh);
+                shape.quadraticCurveTo(hw, -hh, hw, -hh + radius);
+                shape.lineTo(hw, hh - radius);
+                shape.quadraticCurveTo(hw, hh, hw - radius, hh);
+                shape.lineTo(-hw + radius, hh);
+                shape.quadraticCurveTo(-hw, hh, -hw, hh - radius);
+                shape.lineTo(-hw, -hh + radius);
+                shape.quadraticCurveTo(-hw, -hh, -hw + radius, -hh);
+
+                const extrudeSettings = {
+                    depth: 0.3,
+                    bevelEnabled: true,
+                    bevelThickness: 0.05,
+                    bevelSize: 0.05,
+                    bevelSegments: 20,
+                    curveSegments: 20
+                };
+
+                return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+            }
+
+            createGrid() {
+                const boxWidth = 4;
+                const boxLength = 4;
+                const gap = 0.05;
+                const spacingX = boxWidth + gap;
+                const spacingZ = boxLength + gap;
+
+                const geometry = this.createRoundedRectGeometry(boxWidth, boxLength, 0.8);
+                const material = new THREE.MeshPhysicalMaterial({
+                    color: 0x232323,
+                    roughness: 0.5,
+                    metalness: 1,
+                    clearcoat: 1,
+                    clearcoatRoughness: 0
+                });
+
+                for (let x = 0; x < this.gridSize; x++) {
+                    for (let z = 0; z < this.gridSize; z++) {
+                        const mesh = new THREE.Mesh(geometry, material);
+                        
+                        const posX = (x - (this.gridSize - 1) / 2) * spacingX;
+                        const posZ = (z - (this.gridSize - 1) / 2) * spacingZ;
+                        
+                        mesh.position.set(posX, -0.85, posZ);
+                        mesh.rotation.x = Math.PI / 2;
+                        mesh.userData = { gridX: x, gridZ: z, targetScale: 1, currentScale: 1 };
+                        
+                        this.scene.add(mesh);
+                        this.boxes.push(mesh);
+                    }
+                }
+            }
+
+            onWindowResize() {
+                this.camera.aspect = window.innerWidth / window.innerHeight;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            onMouseMove(event) {
+                this.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            }
+
+            updateHover() {
+                this.raycaster.setFromCamera(this.mouse, this.camera);
+                const intersects = this.raycaster.intersectObjects(this.boxes);
+
+                if (intersects.length > 0) {
+                    const intersectedBox = intersects[0].object;
+                    this.hoveredBox = {
+                        x: intersectedBox.userData.gridX,
+                        z: intersectedBox.userData.gridZ
+                    };
+                } else {
+                    this.hoveredBox = null;
+                }
+            }
+
+            updateBoxes() {
+                this.boxes.forEach(box => {
+                    let targetScale = 1;
+                    
+                    if (this.hoveredBox) {
+                        const isHovered = box.userData.gridX === this.hoveredBox.x && 
+                                        box.userData.gridZ === this.hoveredBox.z;
+                        
+                        if (isHovered) {
+                            targetScale = 5;
+                        } else {
+                            const dx = box.userData.gridX - this.hoveredBox.x;
+                            const dz = box.userData.gridZ - this.hoveredBox.z;
+                            const distance = Math.sqrt(dx * dx + dz * dz);
+                            
+                            if (distance <= this.rippleRadius && distance > 0) {
+                                const falloff = Math.max(0, 1 - (distance / this.rippleRadius));
+                                const rippleEffect = falloff * this.rippleScale;
+                                targetScale = 1 + (rippleEffect * 3);
+                            }
+                        }
+                    }
+                    
+                    box.userData.targetScale = targetScale;
+                    const lerpFactor = 0.1;
+                    box.userData.currentScale += (box.userData.targetScale - box.userData.currentScale) * lerpFactor;
+                    box.scale.z = box.userData.currentScale;
+                });
+            }
+
+            animate() {
+                requestAnimationFrame(this.animate.bind(this));
+                
+                this.updateHover();
+                this.updateBoxes();
+                
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // Initialize Chrome Grid
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('chromeGrid');
+            new ChromeGrid(container);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Form submission
+        document.querySelector('.contact-form button').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Thank you for your message! We\'ll get back to you soon.');
+        });
+    </script>
+</body>
+</html>
