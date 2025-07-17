@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marry & Sweet - Exquisite Wedding Cake Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script:wght@400&family=Forum:wght@400&family=Manrope:wght@400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Forum', serif;
+            background-color: #0c0c0c;
+            color: #e2e0c3;
+            overflow-x: hidden;
+        }
+
+        /* Slider Revolution Core Styles */
+        .sr7-module {
+            position: relative;
+            width: 100%;
+            height: 730px;
+            background: #0c0c0c;
+            overflow: hidden;
+        }
+
+        .sr7-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .sr7-slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+        }
+
+        /* Slide Backgrounds */
+        .slide-bg-1 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl1-bg1.jpg'); }
+        .slide-bg-2 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl2-bg1.jpg'); }
+        .slide-bg-3 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl3-bg1.jpg'); }
+        .slide-bg-4 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl4-bg1.jpg'); }
+
+        /* Content Containers */
+        .sr7-zone {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            z-index: 8;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 0 120px;
+        }
+
+        .sr7-row {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sr7-col {
+            width: 66.67%;
+        }
+
+        .sr7-col-image {
+            width: 33.33%;
+            position: relative;
+        }
+
+        /* Cake Images */
+        .cake-image {
+            position: absolute;
+            right: -150px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .sr7-slide.active .cake-image {
+            opacity: 1;
+            right: -100px;
+        }
+
+        .cake-1 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake1.png'); width: 410px; height: 443px; }
+        .cake-2 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake2.png'); width: 585px; height: 437px; }
+        .cake-3 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake3.png'); width: 475px; height: 403px; }
+        .cake-4 { background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake4.png'); width: 322px; height: 442px; }
+
+        /* Text Elements */
+        .sr7-txt {
+            margin-bottom: 16px;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .sr7-slide.active .sr7-txt {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .sr7-slide.active .sr7-txt:nth-child(1) { transition-delay: 0.3s; }
+        .sr7-slide.active .sr7-txt:nth-child(2) { transition-delay: 0.6s; }
+        .sr7-slide.active .sr7-txt:nth-child(3) { transition-delay: 0.9s; }
+        .sr7-slide.active .sr7-txt:nth-child(4) { transition-delay: 1.2s; }
+
+        .script-title {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 80px;
+            font-weight: 400;
+            color: #e2e0c3;
+            line-height: 65px;
+            margin-bottom: -24px;
+        }
+
+        .main-title {
+            font-family: 'Forum', serif;
+            font-size: 100px;
+            font-weight: 400;
+            text-transform: uppercase;
+            line-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .slide-1 .main-title { color: #9cba68; }
+        .slide-2 .main-title, .slide-3 .main-title, .slide-4 .main-title { color: #e2e0c3; }
+
+        .description {
+            font-family: 'Forum', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: #e2e0c3;
+            line-height: 28px;
+            margin-bottom: 20px;
+            width: 70%;
+        }
+
+        .cta-button {
+            display: inline-block;
+            font-family: 'Forum', serif;
+            font-size: 22px;
+            font-weight: 400;
+            color: #161613;
+            text-decoration: none;
+            line-height: 60px;
+            padding: 0 30px;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform: translateY(100%);
+            opacity: 0;
+        }
+
+        .sr7-slide.active .cta-button {
+            transform: translateY(0);
+            opacity: 1;
+            transition-delay: 1.5s;
+        }
+
+        .slide-1 .cta-button { background-color: #9cba68; }
+        .slide-2 .cta-button, .slide-3 .cta-button, .slide-4 .cta-button { background-color: #e2e0c3; }
+
+        .cta-button:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .sr7-navigation {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            z-index: 15;
+            width: 120px;
+            height: 85%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .sr7-navigation:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-prev { left: 0; }
+        .nav-next { right: 0; }
+
+        .nav-text {
+            font-family: 'Forum', serif;
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(226, 224, 195, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transform: rotate(-90deg);
+            white-space: nowrap;
+        }
+
+        .nav-line {
+            width: 1px;
+            height: 50%;
+            position: absolute;
+        }
+
+        .nav-line-top {
+            top: 0;
+            background: linear-gradient(rgba(226, 224, 195, 0) 0%, rgba(226, 224, 195, 0.5) 100%);
+        }
+
+        .nav-line-bottom {
+            bottom: 0;
+            background: linear-gradient(rgba(226, 224, 195, 0.5) 0%, rgba(226, 224, 195, 0) 100%);
+        }
+
+        .nav-prev .nav-line { right: 0; }
+        .nav-next .nav-line { left: 0; }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: absolute;
+            bottom: 50px;
+            left: 120px;
+            font-family: 'Forum', serif;
+            color: rgba(226, 224, 195, 0.75);
+            z-index: 10;
+        }
+
+        .current-slide {
+            font-size: 50px;
+            line-height: 50px;
+        }
+
+        .total-slides {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.55);
+            margin-left: 4px;
+            vertical-align: top;
+            padding-top: 4px;
+        }
+
+        /* Header */
+        .sr7-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20;
+            padding: 30px 120px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .logo-section {
+            width: 75%;
+        }
+
+        .logo-title {
+            font-family: 'Forum', serif;
+            font-size: 36px;
+            font-weight: 400;
+            color: rgba(226, 224, 195, 0.85);
+            letter-spacing: -1px;
+            line-height: 45px;
+            margin-bottom: 0;
+        }
+
+        .logo-subtitle {
+            font-family: 'Forum', serif;
+            font-size: 13px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 20px;
+        }
+
+        .menu-trigger {
+            width: 25%;
+            text-align: right;
+            position: relative;
+        }
+
+        .menu-lines {
+            display: inline-block;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-line {
+            display: block;
+            height: 1px;
+            background-color: rgba(226, 224, 195, 0.7);
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-line:nth-child(1) { width: 40px; margin-right: 12px; }
+        .menu-line:nth-child(2) { width: 30px; margin-right: 0; }
+        .menu-line:nth-child(3) { width: 40px; margin-right: 0; margin-bottom: 0; }
+
+        .menu-lines:hover .menu-line { background-color: rgba(226, 224, 195, 1); }
+
+        /* Overlay Menu */
+        .overlay-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(19, 19, 20, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .overlay-menu.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .menu-content {
+            text-align: center;
+            transform: translateY(50px);
+            transition: transform 0.8s ease;
+        }
+
+        .overlay-menu.active .menu-content {
+            transform: translateY(0);
+        }
+
+        .menu-item {
+            display: block;
+            font-family: 'Forum', serif;
+            font-size: 60px;
+            font-weight: 400;
+            color: rgba(226, 224, 195, 0.65);
+            text-decoration: none;
+            line-height: 80px;
+            margin-bottom: 0;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item:hover {
+            color: rgba(226, 224, 195, 1);
+        }
+
+        .social-links {
+            margin-top: 60px;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .social-link {
+            font-family: 'Manrope', sans-serif;
+            font-size: 20px;
+            color: rgba(226, 224, 195, 0.6);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: rgba(226, 224, 195, 1);
+        }
+
+        /* Mouse Indicator */
+        .mouse-indicator {
+            position: absolute;
+            bottom: 43px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 12;
+        }
+
+        .mouse-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.03);
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        .mouse-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 7px;
+            height: 7px;
+            border-radius: 50px;
+            background: #e2e0c3;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Decorative Elements */
+        .wood-board {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/wood-board.png');
+            background-size: cover;
+            width: 1297px;
+            height: 155px;
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .slide-1.active .wood-board {
+            opacity: 0.8;
+            transition-delay: 0.2s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sr7-zone { padding: 0 60px; }
+            .sr7-header { padding: 30px 60px 0; }
+            .slide-counter { left: 60px; }
+            .script-title { font-size: 66px; }
+            .main-title { font-size: 82px; }
+        }
+
+        @media (max-width: 768px) {
+            .sr7-module { height: 600px; }
+            .sr7-zone { padding: 0 30px; }
+            .sr7-header { padding: 20px 30px 0; }
+            .sr7-row { flex-direction: column; text-align: center; }
+            .sr7-col, .sr7-col-image { width: 100%; }
+            .cake-image { position: relative; right: 0; top: 0; transform: none; margin: 20px auto; }
+            .script-title { font-size: 50px; }
+            .main-title { font-size: 60px; }
+            .description { width: 100%; font-size: 18px; }
+            .menu-item { font-size: 40px; line-height: 60px; }
+            .slide-counter { left: 30px; }
+            .sr7-navigation { display: none; }
+        }
+
+        /* Custom Animations */
+        .sr7-slide:not(.active) .sr7-txt { transform: translateY(100%); opacity: 0; }
+        .sr7-slide:not(.active) .cake-image { opacity: 0; right: -200px; }
+        .sr7-slide:not(.active) .cta-button { transform: translateY(100%); opacity: 0; }
+        .sr7-slide:not(.active) .wood-board { opacity: 0; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="sr7-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <h1 class="logo-title">Marry & Sweet</h1>
+                <p class="logo-subtitle">premium wedding cakes</p>
+            </div>
+            <div class="menu-trigger">
+                <div class="menu-lines" onclick="toggleMenu()">
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                    <span class="menu-line"></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Slider Container -->
+    <div class="sr7-module" id="slider">
+        <!-- Slide 1: Timeless Elegance -->
+        <div class="sr7-slide slide-1 slide-bg-1 active">
+            <div class="sr7-zone">
+                <div class="sr7-row">
+                    <div class="sr7-col">
+                        <div class="sr7-txt script-title">Timeless</div>
+                        <div class="sr7-txt main-title">Elegance</div>
+                        <div class="sr7-txt description">Simplicity meets sophistication with cakes that are as timeless as your love story. Perfect for any wedding theme</div>
+                        <a href="https://shivashanker.com/services" target="_blank" class="cta-button sr7-txt">View Classic Designs</a>
+                    </div>
+                    <div class="sr7-col-image">
+                        <div class="cake-image cake-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="wood-board"></div>
+        </div>
+
+        <!-- Slide 2: True Romance -->
+        <div class="sr7-slide slide-2 slide-bg-2">
+            <div class="sr7-zone">
+                <div class="sr7-row">
+                    <div class="sr7-col">
+                        <div class="sr7-txt script-title">True</div>
+                        <div class="sr7-txt main-title">Romance</div>
+                        <div class="sr7-txt description">Bring nature to your celebration with floral designs that are fresh, romantic, and full of charm.</div>
+                        <a href="https://shivashanker.com/services" target="_blank" class="cta-button sr7-txt">Explore Our Designs</a>
+                    </div>
+                    <div class="sr7-col-image">
+                        <div class="cake-image cake-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Bold Artistry -->
+        <div class="sr7-slide slide-3 slide-bg-3">
+            <div class="sr7-zone">
+                <div class="sr7-row">
+                    <div class="sr7-col">
+                        <div class="sr7-txt script-title">Bold</div>
+                        <div class="sr7-txt main-title">Artistry</div>
+                        <div class="sr7-txt description">Celebrate your modern romance with bold, artistic cakes that make a statement.</div>
+                        <a href="https://shivashanker.com/services" target="_blank" class="cta-button sr7-txt">Discover Modern Styles</a>
+                    </div>
+                    <div class="sr7-col-image">
+                        <div class="cake-image cake-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Custom Creations -->
+        <div class="sr7-slide slide-4 slide-bg-4">
+            <div class="sr7-zone">
+                <div class="sr7-row">
+                    <div class="sr7-col">
+                        <div class="sr7-txt script-title">Custom</div>
+                        <div class="sr7-txt main-title">Creations</div>
+                        <div class="sr7-txt description">Every couple is unique, and so is every cake we create. Let us bring your dream cake to life.</div>
+                        <a href="https://shivashanker.com/services" target="_blank" class="cta-button sr7-txt">Start Your Custom Order</a>
+                    </div>
+                    <div class="sr7-col-image">
+                        <div class="cake-image cake-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="sr7-navigation nav-prev" onclick="prevSlide()">
+            <div class="nav-text">previous</div>
+            <div class="nav-line nav-line-top"></div>
+            <div class="nav-line nav-line-bottom"></div>
+        </div>
+
+        <div class="sr7-navigation nav-next" onclick="nextSlide()">
+            <div class="nav-text">next</div>
+            <div class="nav-line nav-line-top"></div>
+            <div class="nav-line nav-line-bottom"></div>
+        </div>
+
+        <!-- Slide Counter -->
+        <div class="slide-counter">
+            <span class="current-slide" id="currentSlide">01</span>
+            <span class="total-slides">/04</span>
+        </div>
+
+        <!-- Mouse Indicator -->
+        <div class="mouse-indicator">
+            <div class="mouse-circle">
+                <div class="mouse-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay Menu -->
+    <div class="overlay-menu" id="overlayMenu">
+        <div class="menu-content">
+            <a href="https://shivashanker.com/services" target="_blank" class="menu-item">Home</a>
+            <a href="https://shivashanker.com/services" target="_blank" class="menu-item">Cakes</a>
+            <a href="https://shivashanker.com/services" target="_blank" class="menu-item">Our Journey</a>
+            <a href="https://shivashanker.com/services" target="_blank" class="menu-item">Awards</a>
+            <a href="https://shivashanker.com/services" target="_blank" class="menu-item">Get in Touch</a>
+            
+            <div class="social-links">
+                <a href="https://shivashanker.com/services" target="_blank" class="social-link">Facebook</a>
+                <a href="https://shivashanker.com/services" target="_blank" class="social-link">Youtube</a>
+                <a href="https://shivashanker.com/services" target="_blank" class="social-link">Instagram</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Slider Revolution inspired animation system
+        class WeddingCakeSlider {
+            constructor() {
+                this.currentSlide = 0;
+                this.totalSlides = 4;
+                this.slides = document.querySelectorAll('.sr7-slide');
+                this.isAnimating = false;
+                this.autoPlayInterval = null;
+                this.init();
+            }
+
+            init() {
+                this.updateSlideCounter();
+                this.startAutoPlay();
+                this.bindEvents();
+            }
+
+            bindEvents() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                    if (e.key === 'Escape') this.closeMenu();
+                });
+
+                // Touch/Swipe support
+                let startX = 0;
+                let endX = 0;
+                
+                document.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+
+                document.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    const diff = startX - endX;
+                    
+                    if (Math.abs(diff) > 50) {
+                        if (diff > 0) this.nextSlide();
+                        else this.prevSlide();
+                    }
+                });
+            }
+
+            showSlide(index, direction = 'next') {
+                if (this.isAnimating) return;
+                
+                this.isAnimating = true;
+                this.stopAutoPlay();
+
+                const currentSlideEl = this.slides[this.currentSlide];
+                const nextSlideEl = this.slides[index];
+
+                // Remove active class from current slide
+                currentSlideEl.classList.remove('active');
+
+                // Add active class to next slide with delay for smooth transition
+                setTimeout(() => {
+                    nextSlideEl.classList.add('active');
+                    this.currentSlide = index;
+                    this.updateSlideCounter();
+                    
+                    setTimeout(() => {
+                        this.isAnimating = false;
+                        this.startAutoPlay();
+                    }, 1200);
+                }, 100);
+            }
+
+            nextSlide() {
+                const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+                this.showSlide(nextIndex, 'next');
+            }
+
+            prevSlide() {
+                const prevIndex = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+                this.showSlide(prevIndex, 'prev');
+            }
+
+            updateSlideCounter() {
+                const counter = document.getElementById('currentSlide');
+                if (counter) {
+                    counter.textContent = `0${this.currentSlide + 1}`;
+                }
+            }
+
+            startAutoPlay() {
+                this.autoPlayInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 6000);
+            }
+
+            stopAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                    this.autoPlayInterval = null;
+                }
+            }
+
+            closeMenu() {
+                const menu = document.getElementById('overlayMenu');
+                if (menu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
+        }
+
+        // Menu functionality
+        function toggleMenu() {
+            const menu = document.getElementById('overlayMenu');
+            menu.classList.toggle('active');
+            
+            if (menu.classList.contains('active')) {
+                slider.stopAutoPlay();
+            } else {
+                slider.startAutoPlay();
+            }
+        }
+
+        // Global functions for navigation
+        function nextSlide() {
+            slider.nextSlide();
+        }
+
+        function prevSlide() {
+            slider.prevSlide();
+        }
+
+        // Initialize slider when DOM is ready
+        let slider;
+        document.addEventListener('DOMContentLoaded', function() {
+            slider = new WeddingCakeSlider();
+        });
+
+        // Close menu when clicking outside or on links
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById('overlayMenu');
+            const menuContent = document.querySelector('.menu-content');
+            
+            if (menu.classList.contains('active')) {
+                if (e.target === menu || e.target.classList.contains('menu-item')) {
+                    toggleMenu();
+                }
+            }
+        });
+
+        // Intersection Observer for performance optimization
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.willChange = 'transform, opacity';
+                    } else {
+                        entry.target.style.willChange = 'auto';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.sr7-slide').forEach(slide => {
+                observer.observe(slide);
+            });
+        }
+
+        // Preload images for smooth transitions
+        const imageUrls = [
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl1-bg1.jpg',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl2-bg1.jpg',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl3-bg1.jpg',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/sl4-bg1.jpg',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake1.png',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake2.png',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake3.png',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/cake4.png',
+            'https://www.sliderrevolution.com/wp-content/uploads/revslider/Exquisite-Wedding-Cake-Gallery-Slider/wood-board.png'
+        ];
+
+        // Preload images
+        imageUrls.forEach(url => {
+            const img = new Image();
+            img.src = url;
+        });
+
+        // Advanced easing functions for smooth animations
+        const easing = {
+            easeInOutCubic: function(t) {
+                return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+            },
+            easeOutBack: function(t) {
+                const c1 = 1.70158;
+                const c3 = c1 + 1;
+                return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+            }
+        };
+
+        // Parallax effect for mouse movement
+        document.addEventListener('mousemove', function(e) {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            // Subtle parallax effect on cake images
+            document.querySelectorAll('.cake-image').forEach(cake => {
+                const moveX = (mouseX - 0.5) * 20;
+                const moveY = (mouseY - 0.5) * 10;
+                cake.style.transform = `translateY(-50%) translate(${moveX}px, ${moveY}px)`;
+            });
+            
+            // Parallax effect on mouse indicator
+            const mouseIndicator = document.querySelector('.mouse-indicator');
+            if (mouseIndicator) {
+                const moveX = (mouseX - 0.5) * 30;
+                const moveY = (mouseY - 0.5) * 15;
+                mouseIndicator.style.transform = `translateX(-50%) translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+
+        // Performance optimization: Pause animations when tab is not visible
+        document.addEventListener('visibilitychange', function() {
+            if (slider) {
+                if (document.hidden) {
+                    slider.stopAutoPlay();
+                } else {
+                    slider.startAutoPlay();
+                }
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Loading animation
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.5s ease';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+
+        // Advanced touch gestures
+        let touchStartTime = 0;
+        let touchStartPosition = { x: 0, y: 0 };
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartTime = Date.now();
+            touchStartPosition = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY
+            };
+        });
+
+        document.addEventListener('touchend', function(e) {
+            const touchEndTime = Date.now();
+            const touchDuration = touchEndTime - touchStartTime;
+            const touchEndPosition = {
+                x: e.changedTouches[0].clientX,
+                y: e.changedTouches[0].clientY
+            };
+
+            const deltaX = touchEndPosition.x - touchStartPosition.x;
+            const deltaY = touchEndPosition.y - touchStartPosition.y;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            // Swipe detection
+            if (touchDuration < 500 && distance > 50) {
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    // Horizontal swipe
+                    if (deltaX > 0) {
+                        slider.prevSlide();
+                    } else {
+                        slider.nextSlide();
+                    }
+                }
+            }
+        });
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', function(e) {
+            const menu = document.getElementById('overlayMenu');
+            
+            if (menu.classList.contains('active')) {
+                // Menu navigation with arrow keys
+                const menuItems = menu.querySelectorAll('.menu-item');
+                const currentFocus = document.activeElement;
+                const currentIndex = Array.from(menuItems).indexOf(currentFocus);
+                
+                switch(e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        const nextIndex = (currentIndex + 1) % menuItems.length;
+                        menuItems[nextIndex].focus();
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        const prevIndex = (currentIndex - 1 + menuItems.length) % menuItems.length;
+                        menuItems[prevIndex].focus();
+                        break;
+                    case 'Enter':
+                        if (currentFocus && currentFocus.classList.contains('menu-item')) {
+                            currentFocus.click();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Enhanced error handling
+        window.addEventListener('error', function(e) {
+            console.warn('Image failed to load:', e.target.src);
+            // Fallback for failed images
+            if (e.target.tagName === 'IMG') {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Resize handler for responsive behavior
+        window.addEventListener('resize', function() {
+            // Recalculate positions on resize
+            clearTimeout(window.resizeTimeout);
+            window.resizeTimeout = setTimeout(() => {
+                if (slider) {
+                    slider.updateSlideCounter();
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

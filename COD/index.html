@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mecha Sci-Fi Showcase Slider</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Oxanium', sans-serif;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background: #000;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: radial-gradient(circle at center, rgba(5, 5, 6, 1) 0%, rgba(24, 25, 29, 0.08) 60%, rgba(27, 28, 33, 0) 65%, rgba(50, 52, 57, 0) 100%);
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px) brightness(25%);
+            z-index: 1;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 60px;
+            gap: 60px;
+        }
+
+        .mech-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mech-image img {
+            max-width: 500px;
+            max-height: 700px;
+            object-fit: contain;
+            filter: brightness(100%);
+        }
+
+        .mech-info {
+            flex: 1;
+            max-width: 650px;
+        }
+
+        .brand-text {
+            position: absolute;
+            top: 50%;
+            left: -400px;
+            transform: translateY(-50%) rotate(90deg);
+            font-size: clamp(120px, 15vw, 200px);
+            font-weight: 800;
+            text-transform: uppercase;
+            opacity: 0.8;
+            z-index: 5;
+            white-space: nowrap;
+        }
+
+        .mech-title {
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .mech-description {
+            font-size: clamp(14px, 1.5vw, 16px);
+            font-weight: 400;
+            color: #fff;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .specs-container {
+            background: rgba(5, 5, 6, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            backdrop-filter: blur(15px);
+            margin-bottom: 40px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .spec-icon {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 8px;
+        }
+
+        .spec-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .spec-description {
+            font-size: 13px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent-color);
+            color: #050506;
+            font-family: 'Oxanium', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 15px 50px;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(var(--accent-rgb), 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(var(--accent-rgb), 0.5);
+        }
+
+        /* Slide-specific colors */
+        .slide-1 {
+            --accent-color: #e96718;
+            --accent-rgb: 233, 103, 24;
+        }
+
+        .slide-1 .brand-text {
+            color: #e96718;
+        }
+
+        .slide-1 .spec-icon svg path {
+            fill: #e96718;
+        }
+
+        .slide-2 {
+            --accent-color: #8bef17;
+            --accent-rgb: 139, 239, 23;
+        }
+
+        .slide-2 .brand-text {
+            color: #8bef17;
+        }
+
+        .slide-2 .spec-icon svg path {
+            fill: #8bef17;
+        }
+
+        .slide-3 {
+            --accent-color: #f20000;
+            --accent-rgb: 242, 0, 0;
+        }
+
+        .slide-3 .brand-text {
+            color: #f20000;
+        }
+
+        .slide-3 .spec-icon svg path {
+            fill: #f20000;
+        }
+
+        .slide-4 {
+            --accent-color: #3052ff;
+            --accent-rgb: 48, 82, 255;
+        }
+
+        .slide-4 .brand-text {
+            color: #3052ff;
+        }
+
+        .slide-4 .spec-icon svg path {
+            fill: #3052ff;
+        }
+
+        /* Navigation */
+        .navigation {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 20;
+        }
+
+        .nav-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(5, 5, 6, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-button svg path {
+            fill: #fff;
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 10px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 25;
+        }
+
+        .progress-fill {
+            width: 100%;
+            height: 0%;
+            background: var(--accent-color);
+            transition: height 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .slide-content {
+                flex-direction: column;
+                padding: 40px 20px;
+                gap: 30px;
+            }
+
+            .mech-image img {
+                max-width: 300px;
+                max-height: 400px;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .brand-text {
+                display: none;
+            }
+
+            .navigation {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <!-- Slide 1: Tenrou Mk. VII -->
+        <div class="slide slide-1 active" data-slide="1">
+            <div class="slide-background" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/mech1flip-sized.webp');"></div>
+            
+            <div class="brand-text">mekanizumu</div>
+            
+            <div class="slide-content">
+                <div class="mech-image">
+                    <img src="https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/mech1flip-sized.webp" alt="Tenrou Mk. VII">
+                </div>
+                
+                <div class="mech-info">
+                    <h2 class="mech-title">Tenrou Mk. VII</h2>
+                    
+                    <p class="mech-description">
+                        The Tenrou Mk. VII, developed by Shinryu Heavy Industries, is a 12-meter tactical assault mech with a sleek, robust frame optimized for mobility and long-range combat. Its reinforced titanium-alloy exoskeleton ensures durability while maintaining battlefield agility.
+                    </p>
+                    
+                    <div class="specs-container">
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="m452-160 200-390H512v-250L312-410h140v250Zm28 80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Power Source</div>
+                                <div class="spec-description">Dual-core NEO-Plasma reactor, enabling sustainable energy output for prolonged combat scenarios without overheating.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="M280-280v-80h240q-14-17-22.5-37T484-440H360v-80h124q5-23 13.5-43t22.5-37H120v-80h560q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H280Zm400-80q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM80-440v-80h240v80H80Zm40 160v-80h120v80H120Zm560-200Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Weapon Systems</div>
+                                <div class="spec-description">Equipped with an ARK-05 Rail Cannon for high-velocity projectile attacks and a pair of Vulcan Pulse Gauntlets for close combat.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="m480-193 85-85 57 56L480-80 338-222l57-56 85 85ZM193-480l85 85-56 57L80-480l142-142 56 57-85 85Zm574 0-85-85 56-57 142 142-142 142-56-57 85-85ZM480-767l-85 85-57-56 142-142 142 142-57 56-85-85Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Movement Capabilities</div>
+                                <div class="spec-description">Advanced gyro-stabilization and EXO-Boost thrusters for rapid evasion and vertical mobility.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Defense</div>
+                                <div class="spec-description">Modular armor plating with adaptive shielding technology, capable of absorbing and redistributing incoming energy attacks.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="cta-button">GET STARTED</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Hayate Mk. II -->
+        <div class="slide slide-2" data-slide="2">
+            <div class="slide-background" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/hovermech-reduced.webp');"></div>
+            
+            <div class="brand-text">mekanizumu</div>
+            
+            <div class="slide-content">
+                <div class="mech-image">
+                    <img src="https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/hovermech-reduced.webp" alt="Hayate Mk. II">
+                </div>
+                
+                <div class="mech-info">
+                    <h2 class="mech-title">Hayate Mk. II</h2>
+                    
+                    <p class="mech-description">
+                        The Hayate Mk. II, created by Asahiro Dynamics, is an 8-meter light recon mech built for speed, agility, and reconnaissance. This lightweight mech excels in maneuverability and flight capabilities, making it ideal for scouting and intel gathering.
+                    </p>
+                    
+                    <div class="specs-container">
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="m452-160 200-390H512v-250L312-410h140v250Zm28 80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Power Source</div>
+                                <div class="spec-description">Compact YS-Fusion Cell, balancing power and efficiency for long-duration missions with minimal refueling requirements.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="M280-280v-80h240q-14-17-22.5-37T484-440H360v-80h124q5-23 13.5-43t22.5-37H120v-80h560q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H280Zm400-80q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM80-440v-80h240v80H80Zm40 160v-80h120v80H120Zm560-200Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Weapon Systems</div>
+                                <div class="spec-description">Outfitted with a precision MM-02 Pulse Carbine for long-range scouting and light engagement, as well as a kinetic-response EMP launcher.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="m480-193 85-85 57 56L480-80 338-222l57-56 85 85ZM193-480l85 85-56 57L80-480l142-142 56 57-85 85Zm574 0-85-85 56-57 142 142-142 142-56-57 85-85ZM480-767l-85 85-57-56 142-142 142 142-57 56-85-85Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Flight Systems</div>
+                                <div class="spec-description">Equipped with dual-stage Ion-Rotor Wings and adjustable plasma stabilizers, it can achieve sustained aerial hover and short bursts of high-speed flight.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Stealth & Recon Tech</div>
+                                <div class="spec-description">Features adaptive camo plating to blend seamlessly with its environment, along with an array of multi-spectrum sensors for thermal & night vision.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="cta-button">GET STARTED</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Raijin Mk. IV -->
+        <div class="slide slide-3" data-slide="3">
+    <div class="slide-background" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/dronemech-reduced.webp');"></div>
+    
+    <div class="brand-text">maximals</div>
+    
+    <div class="slide-content">
+        <div class="mech-image">
+            <img src="https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/dronemech-reduced.webp" alt="Optimus Primal">
+        </div>
+        
+        <div class="mech-info">
+            <h2 class="mech-title">Optimus Primal </h2>
+            
+            <p class="mech-description">
+                Optimus Primal, leader of the Maximals, is a powerful and noble warrior from the distant future. Modeled after a mighty gorilla, he blends primal strength with advanced Cybertronian technology to defend Earth and its inhabitants from the rising threat of the Terrorcons.
+            </p>
+            
+            <div class="specs-container">
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <!-- icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                <path d="m452-160 200-390H512v-250L312-410h140v250Zm28 80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
+                            </svg>
+                        </div>
+                        <div class="spec-title">Core Spark</div>
+                        <div class="spec-description">Ancient Maximal Energon Core, resistant to dark matter interference and capable of autonomous regeneration protocols.</div>
+                    </div>
+                    
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <!-- icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                <path d="M280-280v-80h240q-14-17-22.5-37T484-440H360v-80h124q5-23 13.5-43t22.5-37H120v-80h560q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H280Zm400-80q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM80-440v-80h240v80H80Zm40 160v-80h120v80H120Zm560-200Z"/>
+                            </svg>
+                        </div>
+                        <div class="spec-title">Combat Arsenal</div>
+                        <div class="spec-description">Dual Energon Blades and Plasma Gauntlets, designed for high-impact melee in both beast and robot modes.</div>
+                    </div>
+                    
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <!-- icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                <path d="m480-193 85-85 57 56L480-80 338-222l57-56 85 85ZM193-480l85 85-56 57L80-480l142-142 56 57-85 85Zm574 0-85-85 56-57 142 142-142 142-56-57 85-85ZM480-767l-85 85-57-56 142-142 142 142-57 56-85-85Z"/>
+                            </svg>
+                        </div>
+                        <div class="spec-title">Agility</div>
+                        <div class="spec-description">Enhanced primal reflexes paired with Cybertronian hydraulics for fast-paced movement and vertical leaps.</div>
+                    </div>
+                    
+                    <div class="spec-item">
+                        <div class="spec-icon">
+                            <!-- icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                <path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
+                            </svg>
+                        </div>
+                        <div class="spec-title">Tactical Roar</div>
+                        <div class="spec-description">Primal Resonance Blast — a sonic-based ability that disrupts enemy comms and temporarily stuns hostile electronics.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#" class="cta-button">JOIN THE MAXIMALS</a>
+        </div>
+    </div>
+</div>
+
+
+        <!-- Slide 4: Araki Mk. III -->
+        <div class="slide slide-4" data-slide="4">
+            <div class="slide-background" style="background-image: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/tankmech-reduced2.webp');"></div>
+            
+            <div class="brand-text">mekanizumu</div>
+            
+            <div class="slide-content">
+                <div class="mech-image">
+                    <img src="https://www.sliderrevolution.com/wp-content/uploads/revslider/Mecha-Sci-Fi-Showcase-Slider/tankmech-reduced2.webp" alt="Araki Mk. III">
+                </div>
+                
+                <div class="mech-info">
+                    <h2 class="mech-title">Araki Mk. III</h2>
+                    
+                    <p class="mech-description">
+                        The Araki Mk. III, from Takemura Heavy Systems, is a heavily armored tank mech built for front-line combat and defense. This 15-meter behemoth combines reinforced armor, powerful weaponry, and resilience, thriving in extreme conditions and high-threat zones.
+                    </p>
+                    
+                    <div class="specs-container">
+                        <div class="specs-grid">
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="m452-160 200-390H512v-250L312-410h140v250Zm28 80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-400Zm0 320q133 0 226.5-93.5T800-480q0-133-93.5-226.5T480-800q-133 0-226.5 93.5T160-480q0 133 93.5 226.5T480-160Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Power Source</div>
+                                <div class="spec-description">Dual-core Xenium Reactor, providing immense power output for continuous heavy combat operations with minimal cool-down.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="M280-280v-80h240q-14-17-22.5-37T484-440H360v-80h124q5-23 13.5-43t22.5-37H120v-80h560q83 0 141.5 58.5T880-480q0 83-58.5 141.5T680-280H280Zm400-80q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM80-440v-80h240v80H80Zm40 160v-80h120v80H120Zm560-200Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Weapon Systems</div>
+                                <div class="spec-description">Twin Mjolnir-Class Gatling Cannons mounted on each arm for high-velocity suppression fire, and an Inferno-Lance flamethrower system for close-quarters crowd control.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="m480-193 85-85 57 56L480-80 338-222l57-56 85 85ZM193-480l85 85-56 57L80-480l142-142 56 57-85 85Zm574 0-85-85 56-57 142 142-142 142-56-57 85-85ZM480-767l-85 85-57-56 142-142 142 142-57 56-85-85Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Defense Mechanisms</div>
+                                <div class="spec-description">Vanguard Shield Projector, generating a forward-facing energy barrier that absorbs and disperses incoming projectiles.</div>
+                            </div>
+                            
+                            <div class="spec-item">
+                                <div class="spec-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                                        <path d="M480-80q-139-35-229.5-159.5T160-516v-244l320-120 320 120v244q0 152-90.5 276.5T480-80Zm0-84q104-33 172-132t68-220v-189l-240-90-240 90v189q0 121 68 220t172 132Zm0-316Z"/>
+                                    </svg>
+                                </div>
+                                <div class="spec-title">Armor</div>
+                                <div class="spec-description">Layered alloy composite plating with ablative outer shells, giving exceptional resistance to ballistic, explosive, and energy-based attacks.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="cta-button">GET STARTED</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <div class="nav-button" id="prevBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" style="transform: rotate(180deg);"/>
+                </svg>
+            </div>
+            <div class="nav-button" id="nextBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px">
+                    <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MechSlider {
+            constructor() {
+                this.currentSlide = 1;
+                this.totalSlides = 4;
+                this.slides = document.querySelectorAll('.slide');
+                this.progressFill = document.querySelector('.progress-fill');
+                this.autoPlayInterval = null;
+                this.autoPlayDelay = 5000; // 5 seconds
+
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateProgressBar();
+                this.startAutoPlay();
+            }
+
+            bindEvents() {
+                const prevBtn = document.getElementById('prevBtn');
+                const nextBtn = document.getElementById('nextBtn');
+
+                prevBtn.addEventListener('click', () => this.prevSlide());
+                nextBtn.addEventListener('click', () => this.nextSlide());
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowLeft') this.prevSlide();
+                    if (e.key === 'ArrowRight') this.nextSlide();
+                });
+
+                // Pause autoplay on hover
+                const sliderContainer = document.querySelector('.slider-container');
+                sliderContainer.addEventListener('mouseenter', () => this.stopAutoPlay());
+                sliderContainer.addEventListener('mouseleave', () => this.startAutoPlay());
+
+                // Touch events for mobile
+                let startX = 0;
+                let endX = 0;
+
+                sliderContainer.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                });
+
+                sliderContainer.addEventListener('touchend', (e) => {
+                    endX = e.changedTouches[0].clientX;
+                    this.handleSwipe();
+                });
+
+                const handleSwipe = () => {
+                    const threshold = 50;
+                    const diff = startX - endX;
+
+                    if (Math.abs(diff) > threshold) {
+                        if (diff > 0) {
+                            this.nextSlide();
+                        } else {
+                            this.prevSlide();
+                        }
+                    }
+                };
+
+                this.handleSwipe = handleSwipe;
+            }
+
+            showSlide(slideNumber) {
+                // Remove active class from all slides
+                this.slides.forEach(slide => slide.classList.remove('active'));
+                
+                // Add active class to current slide
+                const targetSlide = document.querySelector(`.slide[data-slide="${slideNumber}"]`);
+                if (targetSlide) {
+                    targetSlide.classList.add('active');
+                }
+
+                this.currentSlide = slideNumber;
+                this.updateProgressBar();
+                this.updateSliderColor();
+            }
+
+            nextSlide() {
+                const nextSlideNumber = this.currentSlide >= this.totalSlides ? 1 : this.currentSlide + 1;
+                this.showSlide(nextSlideNumber);
+                this.resetAutoPlay();
+            }
+
+            prevSlide() {
+                const prevSlideNumber = this.currentSlide <= 1 ? this.totalSlides : this.currentSlide - 1;
+                this.showSlide(prevSlideNumber);
+                this.resetAutoPlay();
+            }
+
+            updateProgressBar() {
+                const progressPercentage = (this.currentSlide / this.totalSlides) * 100;
+                this.progressFill.style.height = `${progressPercentage}%`;
+            }
+
+            updateSliderColor() {
+                const currentSlideElement = document.querySelector(`.slide[data-slide="${this.currentSlide}"]`);
+                const accentColor = getComputedStyle(currentSlideElement).getPropertyValue('--accent-color');
+                this.progressFill.style.background = accentColor;
+            }
+
+            startAutoPlay() {
+                this.autoPlayInterval = setInterval(() => {
+                    this.nextSlide();
+                }, this.autoPlayDelay);
+            }
+
+            stopAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                    this.autoPlayInterval = null;
+                }
+            }
+
+            resetAutoPlay() {
+                this.stopAutoPlay();
+                this.startAutoPlay();
+            }
+        }
+
+        // Initialize slider when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new MechSlider();
+        });
+
+        // Add smooth animations and transitions
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add animation classes for smoother transitions
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach(slide => {
+                slide.style.transition = 'opacity 0.5s ease-in-out';
+            });
+
+            // Add hover effects for interactive elements
+            const buttons = document.querySelectorAll('.cta-button, .nav-button');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+
+            // Add floating animation to mech images
+            const mechImages = document.querySelectorAll('.mech-image img');
+            mechImages.forEach(img => {
+                img.style.animation = 'float 6s ease-in-out infinite';
+            });
+
+            // Add CSS animation for floating effect
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px); }
+                    50% { transform: translateY(-10px); }
+                }
+                
+                .slide {
+                    opacity: 0;
+                    transition: opacity 0.5s ease-in-out;
+                }
+                
+                .slide.active {
+                    opacity: 1;
+                }
+                
+                .spec-item {
+                    opacity: 0;
+                    transform: translateY(20px);
+                    animation: slideInUp 0.6s ease forwards;
+                }
+                
+                .spec-item:nth-child(2) { animation-delay: 0.1s; }
+                .spec-item:nth-child(3) { animation-delay: 0.2s; }
+                .spec-item:nth-child(4) { animation-delay: 0.3s; }
+                
+                @keyframes slideInUp {
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+                
+                .mech-title {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                    animation: slideInLeft 0.8s ease forwards;
+                }
+                
+                .mech-description {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                    animation: slideInLeft 0.8s ease forwards;
+                    animation-delay: 0.2s;
+                }
+                
+                @keyframes slideInLeft {
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+                
+                .brand-text {
+                    opacity: 0;
+                    animation: fadeIn 1s ease forwards;
+                    animation-delay: 0.5s;
+                }
+                
+                @keyframes fadeIn {
+                    to { opacity: 0.8; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

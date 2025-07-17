@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Odyssey Slider</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Kanit', sans-serif;
+      background: #0c0808;
+      overflow: hidden;
+      height: 100vh;
+    }
+    
+    .cosmic-slider {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .slide {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .slide.active {
+      opacity: 1;
+    }
+    
+    .slide-1 {
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/nightskybg2.jpg') center/cover;
+    }
+    
+    .slide-2 {
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/skybg23.jpg') center/cover;
+    }
+    
+    .slide-3 {
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/skybg33.jpg') center/cover;
+    }
+    
+    .slide-container {
+      position: relative;
+      width: 90%;
+      height: 80%;
+      left: 5%;
+      top: 10%;
+      border: 2px solid white;
+      background: transparent;
+      overflow: hidden;
+    }
+    
+    .content-area {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .background-planet {
+      position: absolute;
+      width: 120%;
+      height: 120%;
+      left: -10%;
+      top: -10%;
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+    }
+    
+    .slide-1 .background-planet {
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planetbg2-resized.webp') center/cover;
+    }
+    
+    .slide-2 .background-planet {
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/frontscene1-reduced.webp') center/cover;
+    }
+    
+    .slide-3 .background-planet {
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planetsurface-reduced.webp') center/cover;
+    }
+    
+    .main-planet {
+      position: absolute;
+      z-index: 3;
+      background-size: cover;
+      background-position: center;
+    }
+    
+    .slide-1 .main-planet {
+      width: 466px;
+      height: 470px;
+      right: 20%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planet-resized.webp') center/cover;
+      animation: float-planet 8s ease-in-out infinite;
+    }
+    
+    .slide-3 .main-planet {
+      width: 447px;
+      height: 444px;
+      right: 25%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/planet3-reduced.webp') center/cover;
+      animation: float-planet 8s ease-in-out infinite;
+    }
+    
+    .gradient-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      z-index: 2;
+    }
+    
+    .slide-1 .gradient-overlay {
+      background: linear-gradient(rgba(13, 10, 8, 0) 0%, rgb(13, 10, 8) 50%, rgb(13, 10, 8) 100%);
+    }
+    
+    .slide-2 .gradient-overlay {
+      background: linear-gradient(rgba(17, 16, 21, 0) 0%, rgb(17, 16, 21) 50%, rgb(17, 16, 21) 100%);
+    }
+    
+    .slide-3 .gradient-overlay {
+      background: linear-gradient(rgba(13, 10, 8, 0) 0%, rgb(13, 10, 8) 50%, rgb(13, 10, 8) 100%);
+    }
+    
+    .color-effect {
+      position: absolute;
+      width: 699px;
+      height: 311px;
+      left: 50%;
+      top: 30%;
+      transform: translateX(-50%);
+      z-index: 2;
+      opacity: 0.5;
+      filter: blur(70px);
+    }
+    
+    .slide-1 .color-effect {
+      background: linear-gradient(90deg, rgba(7, 7, 7, 0.75) 0%, rgba(7, 7, 7, 0.75) 9%, rgba(214, 61, 74, 0.75) 24%, rgba(246, 118, 20, 0.75) 31%, rgba(120, 254, 255, 0.75) 56%, rgba(7, 7, 7, 0.75) 76%, rgba(7, 7, 7, 0.75) 100%);
+    }
+    
+    .slide-2 .color-effect {
+      background: linear-gradient(90deg, rgba(7, 7, 7, 0.75) 0%, rgba(7, 7, 7, 0.75) 9%, rgba(236, 103, 219, 0.75) 31%, rgba(7, 7, 7, 0.75) 47%, rgba(7, 7, 7, 0.75) 100%);
+      filter: blur(70px);
+    }
+    
+    .slide-3 .color-effect {
+      background: linear-gradient(90deg, rgba(7, 7, 7, 0.75) 0%, rgba(7, 7, 7, 0.75) 15%, rgba(74, 255, 247, 0.75) 54%, rgba(7, 7, 7, 0.75) 85%, rgba(7, 7, 7, 0.75) 100%);
+      filter: blur(0px);
+      opacity: 1;
+    }
+    
+    .title-background {
+      position: absolute;
+      font-size: 150px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+      z-index: 4;
+      left: 50%;
+      top: 20%;
+      transform: translateX(-50%);
+      line-height: 155px;
+    }
+    
+    .slide-1 .title-background {
+      color: rgb(28, 21, 16);
+    }
+    
+    .slide-2 .title-background {
+      color: rgb(29, 28, 45);
+    }
+    
+    .slide-3 .title-background {
+      color: rgb(22, 28, 43);
+    }
+    
+    .title-foreground {
+      position: absolute;
+      font-size: 155px;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+      white-space: nowrap;
+      z-index: 5;
+      left: 50%;
+      top: 32%;
+      transform: translateX(-50%);
+      line-height: 155px;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+    }
+    
+    .description-box {
+      position: absolute;
+      bottom: 12%;
+      left: 0;
+      width: 35%;
+      background: rgba(12, 8, 8, 0.9);
+      border: 2px solid white;
+      border-right: none;
+      border-bottom: none;
+      padding: 31px 31px 23px;
+      transform: skew(-7deg) scale(1, 0.9925);
+      z-index: 6;
+    }
+    
+    .slide-2 .description-box {
+      background: rgba(17, 16, 21, 0.9);
+    }
+    
+    .slide-3 .description-box {
+      background: rgba(11, 11, 17, 0.9);
+    }
+    
+    .description-text {
+      font-size: 16px;
+      font-weight: 200;
+      color: white;
+      line-height: 20px;
+      transform: skew(7deg);
+    }
+    
+    .cta-button {
+      position: absolute;
+      bottom: 12%;
+      right: 15%;
+      background: rgba(12, 8, 8, 0.9);
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 19px;
+      border: 2px solid white;
+      border-left: none;
+      border-bottom: none;
+      padding: 0 31px;
+      line-height: 54px;
+      transform: skew(-7deg) scale(1, 0.9925);
+      transition: all 0.3s ease;
+      z-index: 6;
+    }
+    
+    .slide-2 .cta-button {
+      background: rgba(17, 16, 21, 0.9);
+    }
+    
+    .slide-3 .cta-button {
+      background: rgba(11, 11, 17, 0.9);
+    }
+    
+    .cta-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+    }
+    
+    .navigation {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%) skew(-7deg) scale(1, 0.9925);
+      z-index: 10;
+      background: rgba(12, 8, 8, 0.9);
+      border: 2px solid white;
+      width: 54px;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .slide-2.active ~ .navigation,
+    .slide-2.active ~ .nav-prev {
+      background: rgba(17, 16, 21, 0.9);
+    }
+    
+    .slide-3.active ~ .navigation,
+    .slide-3.active ~ .nav-next {
+      background: rgba(11, 11, 17, 0.9);
+    }
+    
+    .navigation:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav-prev {
+      left: 5%;
+      border-right: none;
+    }
+    
+    .nav-next {
+      right: 5%;
+      border-left: none;
+    }
+    
+    .nav-icon {
+      color: white;
+      font-size: 24px;
+      transform: skew(7deg);
+    }
+    
+    .probe {
+      position: absolute;
+      z-index: 7;
+      background-size: cover;
+      background-position: center;
+      animation: float-probe 6s ease-in-out infinite;
+    }
+    
+    .slide-1 .probe {
+      width: 194px;
+      height: 200px;
+      top: -2%;
+      left: 3.5%;
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/probe1reduced.webp') center/cover;
+    }
+    
+    .slide-2 .probe {
+      width: 194px;
+      height: 194px;
+      top: 3%;
+      right: 10%;
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/probe2-reduced.webp') center/cover;
+      animation-delay: 2s;
+    }
+    
+    .slide-3 .probe {
+      width: 194px;
+      height: 194px;
+      top: 21%;
+      right: 20%;
+      background: url('https://www.sliderrevolution.com/wp-content/uploads/revslider/Cosmic-Odyssey-Animated-Slider-Template/probe33-reduced.webp') center/cover;
+      animation-delay: 4s;
+    }
+    
+    @keyframes float-planet {
+      0%, 100% { transform: translateY(-50%) translate(0, 0px); }
+      25% { transform: translateY(-50%) translate(-5px, -10px); }
+      50% { transform: translateY(-50%) translate(5px, -5px); }
+      75% { transform: translateY(-50%) translate(-3px, -8px); }
+    }
+    
+    @keyframes float-probe {
+      0%, 100% { transform: translate(0, 0px) rotate(0deg); }
+      25% { transform: translate(-10px, -15px) rotate(2deg); }
+      50% { transform: translate(5px, -10px) rotate(-1deg); }
+      75% { transform: translate(-5px, -5px) rotate(1deg); }
+    }
+    
+    @media (max-width: 1200px) {
+      .title-background { font-size: 120px; }
+      .title-foreground { font-size: 125px; }
+      .main-planet { width: 350px; height: 350px; }
+      .probe { width: 150px; height: 150px; }
+    }
+    
+    @media (max-width: 768px) {
+      .slide-container { width: 95%; left: 2.5%; }
+      .title-background { font-size: 80px; }
+      .title-foreground { font-size: 85px; }
+      .description-box { width: 50%; padding: 20px; }
+      .description-text { font-size: 14px; line-height: 18px; }
+      .main-planet { width: 250px; height: 250px; right: 10%; }
+      .probe { width: 100px; height: 100px; }
+      .navigation { width: 44px; height: 44px; }
+      .nav-prev { left: 2%; }
+      .nav-next { right: 2%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cosmic-slider">
+    
+    <div class="slide slide-1 active">
+      <div class="slide-container">
+        <div class="content-area">
+          <div class="background-planet"></div>
+          <div class="color-effect"></div>
+          <div class="gradient-overlay"></div>
+          <div class="main-planet"></div>
+          
+          <div class="title-background">STELLAR</div>
+          <div class="title-foreground">ODYSSEY</div>
+          
+          <div class="description-box">
+            <div class="description-text">Beneath the shimmering glow of a nebular tide, the world of Elarion spins silently, cloaked in an atmosphere of iridescent haze and forgotten history.</div>
+          </div>
+          
+          <div class="probe"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slide slide-2">
+      <div class="slide-container">
+        <div class="content-area">
+          <div class="background-planet"></div>
+          <div class="color-effect"></div>
+          <div class="gradient-overlay"></div>
+          
+          <div class="title-background">CELESTIAL</div>
+          <div class="title-foreground">RELICS</div>
+          
+          <div class="description-box">
+            <div class="description-text">Among drifting asteroid fields, remnants of a long-extinct civilization pulse faintly with energy — their secrets encoded in crystalline archives untouched for millennia.</div>
+          </div>
+          
+          <div class="probe"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="slide slide-3">
+      <div class="slide-container">
+        <div class="content-area">
+          <div class="background-planet"></div>
+          <div class="color-effect"></div>
+          <div class="gradient-overlay"></div>
+          <div class="main-planet"></div>
+          
+          <div class="title-background">COSMIC</div>
+          <div class="title-foreground">FRONTIER</div>
+          
+          <div class="description-box">
+            <div class="description-text">Shrouded in polar storms and endless auroras, the rogue planet Zenthra drifts through interstellar voids, hiding lifeforms forged in total darkness.</div>
+          </div>
+          
+          <div class="probe"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="navigation nav-prev" onclick="previousSlide()">
+      <div class="nav-icon">‹</div>
+    </div>
+    
+    <div class="navigation nav-next" onclick="nextSlide()">
+      <div class="nav-icon">›</div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      slides[index].classList.add('active');
+    }
+    
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % totalSlides;
+      showSlide(currentSlide);
+    }
+    
+    function previousSlide() {
+      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+      showSlide(currentSlide);
+    }
+    
+    setInterval(nextSlide, 9000);
+  </script>
+</body>
+
+</html>
